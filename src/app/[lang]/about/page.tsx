@@ -2,8 +2,10 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { PageHeader } from "@/components/section";
 import { getContent } from "@/content";
+import { withRegion } from "@/content/locations";
 import { fmt, hasLocale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
+import { getRegion } from "@/lib/region";
 
 export async function generateMetadata(props: PageProps<"/[lang]/about">): Promise<Metadata> {
   const { lang } = await props.params;
@@ -16,7 +18,8 @@ export async function generateMetadata(props: PageProps<"/[lang]/about">): Promi
 export default async function AboutPage(props: PageProps<"/[lang]/about">) {
   const { lang } = await props.params;
   if (!hasLocale(lang)) notFound();
-  const { profile } = getContent(lang);
+  // The closing paragraph follows the visitor region (see src/content/locations.ts).
+  const profile = withRegion(getContent(lang).profile, lang, await getRegion());
 
   return (
     <div>

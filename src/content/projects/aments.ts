@@ -4,8 +4,7 @@ export const aments: Project = {
   slug: "aments",
   title: "Aments Storefront",
   tagline: "A server-rendered Next.js storefront with a strict Route → Query → Mapper → UI data architecture.",
-  category: "engineering",
-  status: "active",
+  kind: "freelance",
   year: 2026,
   links: { repo: "https://github.com/RzayevTaleh01/aments-nextjs" },
   facts: [

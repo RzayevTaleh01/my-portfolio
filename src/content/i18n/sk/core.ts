@@ -58,6 +58,20 @@ export const core: ContentOverrides = {
       location: "Baku, Azerbajdžan",
     },
   ],
+  educationIntl: [
+    {
+      degree: "Magister",
+      field: "Systémové programovanie",
+      institution: "Azerbajdžanská technická univerzita",
+      location: "Baku, Azerbajdžan",
+    },
+    {
+      degree: "Bakalár",
+      field: "Informačné technológie",
+      institution: "Azerbajdžanská štátna univerzita ropy a priemyslu",
+      location: "Baku, Azerbajdžan",
+    },
+  ],
   certificates: [
     { title: "Frontend vývojár - certifikát s vyznamenaním (stáž)" },
     {},

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Fragment } from "react";
 import { PrintButton } from "@/components/print-button";
+import { Timeline, TimelineDot } from "@/components/timeline";
 import { getContent } from "@/content";
 import { fmt, hasLocale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
@@ -39,8 +40,11 @@ export default async function CvPage(props: PageProps<"/[lang]/cv">) {
   if (!hasLocale(lang)) notFound();
   const t = getDictionary(lang).cv;
   const content = getContent(lang);
-  const { experience, education, skills, publications, certificates, languages } = content;
-  const profile = withRegion(content.profile, lang, await getRegion());
+  const { experience, skills, publications, certificates, languages } = content;
+  const region = await getRegion();
+  const profile = withRegion(content.profile, lang, region);
+  // Visitors from Slovakia see the TU Košice studies, everyone else the Baku ones.
+  const education = region === "sk" ? content.education : content.educationIntl;
   const links = profile.socials.filter((s) => s.platform !== "email");
 
   return (
@@ -71,28 +75,36 @@ export default async function CvPage(props: PageProps<"/[lang]/cv">) {
       </CvSection>
 
       <CvSection title={t.experience}>
-        {experience.map((e) => (
-          <Row key={`${e.organization}-${e.role}`} when={e.period}>
-            <p className="font-medium">
-              {e.role} · {e.organization}
-            </p>
-            <p className="text-muted-foreground">{e.summary}</p>
-            {e.stack && <p className="text-xs text-subtle-foreground">{e.stack.join(", ")}</p>}
-          </Row>
-        ))}
+        <Timeline gap="space-y-7">
+          {experience.map((e) => (
+            <div key={`${e.organization}-${e.role}`} className="relative break-inside-avoid text-sm leading-6">
+              <TimelineDot />
+              <p className="font-mono text-xs text-muted-foreground">{e.period}</p>
+              <p className="font-medium">
+                {e.role} · {e.organization}
+              </p>
+              <p className="text-muted-foreground">{e.summary}</p>
+              {e.stack && <p className="text-xs text-subtle-foreground">{e.stack.join(", ")}</p>}
+            </div>
+          ))}
+        </Timeline>
       </CvSection>
 
       <CvSection title={t.education}>
-        {education.map((e) => (
-          <Row key={e.institution} when={e.period}>
-            <p className="font-medium">
-              {e.degree} - {e.field}
-            </p>
-            <p className="text-muted-foreground">
-              {e.institution}, {e.location}
-            </p>
-          </Row>
-        ))}
+        <Timeline gap="space-y-7">
+          {education.map((e) => (
+            <div key={e.institution} className="relative break-inside-avoid text-sm leading-6">
+              <TimelineDot />
+              <p className="font-mono text-xs text-muted-foreground">{e.period}</p>
+              <p className="font-medium">
+                {e.degree} - {e.field}
+              </p>
+              <p className="text-muted-foreground">
+                {e.institution}, {e.location}
+              </p>
+            </div>
+          ))}
+        </Timeline>
       </CvSection>
 
       <CvSection title={t.skills}>

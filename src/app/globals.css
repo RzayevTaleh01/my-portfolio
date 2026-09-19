@@ -220,4 +220,8 @@ code[data-theme] span,
     opacity: 1 !important;
     transform: none !important;
   }
+  /* The scroll-filled timeline line would print half-drawn; the static line stays. */
+  .timeline-fill {
+    display: none !important;
+  }
 }

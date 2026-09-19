@@ -29,20 +29,18 @@ export default async function ProjectsPage(props: PageProps<"/[lang]/projects">)
   const repos = await getRepos(profile.githubUsername);
   const githubUrl = `https://github.com/${profile.githubUsername}`;
 
-  const groups = [
-    { category: "engineering", title: t.engineeringTitle, intro: t.engineeringIntro },
-    { category: "ai", title: t.aiTitle, intro: t.aiIntro },
-  ] as const;
+  // Display order; a kind with no projects is skipped.
+  const groups = (["work", "freelance", "research", "hobby"] as const).map((kind) => ({ kind, ...t.groups[kind] }));
 
   return (
     <div className="space-y-20">
       <PageHeader title={t.title} description={t.description} />
 
-      {groups.map(({ category, title, intro }) => {
-        const items = projects.filter((p) => p.category === category);
+      {groups.map(({ kind, title, intro }) => {
+        const items = projects.filter((p) => p.kind === kind);
         if (items.length === 0) return null;
         return (
-          <Section key={category} id={category} title={title}>
+          <Section key={kind} id={kind} title={title}>
             <p className="-mt-2 mb-5 text-sm text-muted-foreground">{intro}</p>
             <div className="grid gap-3 sm:grid-cols-2">
               {items.map((p) => (

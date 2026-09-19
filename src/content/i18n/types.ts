@@ -16,6 +16,7 @@ export interface ContentOverrides {
   profile?: DeepPartial<Profile>;
   experience?: DeepPartial<Experience>[];
   education?: DeepPartial<Education>[];
+  educationIntl?: DeepPartial<Education>[];
   certificates?: DeepPartial<Certificate>[];
   languages?: DeepPartial<Language>[];
   skills?: DeepPartial<SkillGroup>[];

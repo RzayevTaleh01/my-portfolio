@@ -18,7 +18,7 @@ export function Timeline({ children, gap = "space-y-12" }: { children: React.Rea
       <span aria-hidden className="absolute bottom-2 left-[7px] top-2 w-px bg-border" />
       <motion.span
         aria-hidden
-        className="absolute bottom-2 left-[7px] top-2 w-px origin-top bg-accent"
+        className="timeline-fill absolute bottom-2 left-[7px] top-2 w-px origin-top bg-accent"
         style={{ scaleY: reduce ? 1 : progress }}
       />
       <div className={gap}>{children}</div>

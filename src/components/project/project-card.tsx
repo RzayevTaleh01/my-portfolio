@@ -10,11 +10,9 @@ export function ProjectMeta({ project, lang, className }: { project: Project; la
   const t = getDictionary(lang).projects;
   return (
     <p className={cn("flex items-center gap-2 text-xs text-subtle-foreground", className)}>
-      <span className={project.category === "ai" ? "font-medium text-accent" : "font-medium"}>{t.category[project.category]}</span>
+      <span className={project.kind === "research" ? "font-medium text-accent" : "font-medium"}>{t.kind[project.kind]}</span>
       <span aria-hidden>·</span>
       <span>{project.year}</span>
-      <span aria-hidden>·</span>
-      <span>{t.status[project.status]}</span>
     </p>
   );
 }

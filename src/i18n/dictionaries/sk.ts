@@ -51,10 +51,13 @@ export const sk: Dictionary = {
     title: "Projekty",
     description:
       "Každý projekt je spracovaný ako prípadová štúdia: problém, architektúra vrstvu po vrstve, tok dát a rozhodnutia, ktoré za ňou stoja.",
-    engineeringTitle: "Inžinierstvo",
-    engineeringIntro: "Klientske projekty a full-stack platformy - od multi-tenant publikovania po obchodovanie v reálnom čase.",
-    aiTitle: "Výskum AI",
-    aiIntro: "Adaptívne učenie so sledovaním znalostí, posilňovaným učením a LLM tútormi opretými o zdroje.",
+    groups: {
+      work: { title: "Práca", intro: "Projekty vytvorené vo firmách, kde som pracoval." },
+      freelance: { title: "Freelance", intro: "Klientske projekty navrhnuté a dodané od začiatku do konca." },
+      research: { title: "Výskum AI", intro: "Adaptívne učenie so sledovaním znalostí, posilňovaným učením a LLM tútormi opretými o zdroje." },
+      hobby: { title: "Hobby", intro: "Vlastné projekty, na ktorých sa učím a riešim si vlastné problémy." },
+    },
+    kind: { work: "Práca", freelance: "Freelance", research: "Výskum AI", hobby: "Hobby" },
     archive: "Staršie práce",
     github: "Nedávno na GitHube",
     live: "Naživo",
@@ -62,8 +65,6 @@ export const sk: Dictionary = {
     reposError: "Repozitáre sa nepodarilo načítať - pozrite si ich na GitHube",
     noDescription: "Bez popisu.",
     caseStudy: "Prípadová štúdia",
-    category: { ai: "Výskum AI", engineering: "Inžinierstvo" },
-    status: { active: "Aktívny", delivered: "Odovzdaný", stable: "Stabilný", archived: "Archivovaný" },
   },
   caseStudy: {
     allProjects: "Všetky projekty",

@@ -58,6 +58,20 @@ export const core: ContentOverrides = {
       location: "Bakı, Azərbaycan",
     },
   ],
+  educationIntl: [
+    {
+      degree: "Magistr",
+      field: "Sistem proqramlaşdırma",
+      institution: "Azərbaycan Texniki Universiteti",
+      location: "Bakı, Azərbaycan",
+    },
+    {
+      degree: "Bakalavr",
+      field: "İnformasiya texnologiyaları",
+      institution: "Azərbaycan Dövlət Neft və Sənaye Universiteti",
+      location: "Bakı, Azərbaycan",
+    },
+  ],
   certificates: [
     { title: "Frontend Developer - Fərqlənmə sertifikatı (təcrübə proqramı)" },
     {},

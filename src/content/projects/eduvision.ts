@@ -4,8 +4,7 @@ export const eduvision: Project = {
   slug: "eduvision",
   title: "EduVision",
   tagline: "An adaptive intelligent tutoring system with a neuro-symbolic architecture.",
-  category: "ai",
-  status: "active",
+  kind: "research",
   year: 2026,
   featured: true,
   links: {

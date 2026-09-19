@@ -50,10 +50,14 @@ export const en = {
     title: "Projects",
     description:
       "Each project is written up as a case study: the problem, the architecture layer by layer, how data flows, and the decisions behind it.",
-    engineeringTitle: "Engineering",
-    engineeringIntro: "Client work and full-stack platforms - from multi-tenant publishing to real-time trading.",
-    aiTitle: "AI research",
-    aiIntro: "Adaptive learning with knowledge tracing, reinforcement learning and grounded LLM tutors.",
+    // One group per project kind; empty groups are skipped.
+    groups: {
+      work: { title: "Work", intro: "Built at the companies I worked for." },
+      freelance: { title: "Freelance", intro: "Client projects designed and delivered end to end." },
+      research: { title: "AI research", intro: "Adaptive learning with knowledge tracing, reinforcement learning and grounded LLM tutors." },
+      hobby: { title: "Hobby", intro: "Side projects built to learn and to solve my own problems." },
+    },
+    kind: { work: "Work", freelance: "Freelance", research: "AI research", hobby: "Hobby" },
     archive: "Earlier work",
     github: "Recently on GitHub",
     live: "Live",
@@ -61,8 +65,6 @@ export const en = {
     reposError: "Repositories could not be loaded - view them on GitHub",
     noDescription: "No description.",
     caseStudy: "Case study",
-    category: { ai: "AI research", engineering: "Engineering" },
-    status: { active: "Active", delivered: "Delivered", stable: "Stable", archived: "Archived" },
   },
   caseStudy: {
     allProjects: "All projects",

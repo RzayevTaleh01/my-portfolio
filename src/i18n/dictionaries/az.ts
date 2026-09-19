@@ -51,10 +51,13 @@ export const az: Dictionary = {
     title: "Layihələr",
     description:
       "Hər layihə case study kimi yazılıb: problem, qat-qat arxitektura, məlumatın axını və verilən qərarların səbəbləri.",
-    engineeringTitle: "Mühəndislik",
-    engineeringIntro: "Müştəri layihələri və full-stack platformalar - multi-tenant nəşr sistemindən real vaxt ticarətinə qədər.",
-    aiTitle: "AI tədqiqatı",
-    aiIntro: "Bilik izləmə, gücləndirmə ilə öyrənmə və mənbəyə əsaslanan LLM tutorlar ilə adaptiv təhsil.",
+    groups: {
+      work: { title: "İş", intro: "İşlədiyim şirkətlərdə hazırladığım layihələr." },
+      freelance: { title: "Freelance", intro: "Müştərilər üçün başdan sona hazırladığım layihələr." },
+      research: { title: "AI tədqiqatı", intro: "Bilik izləmə, gücləndirmə ilə öyrənmə və mənbəyə əsaslanan LLM tutorlar ilə adaptiv təhsil." },
+      hobby: { title: "Hobbi", intro: "Öyrənmək və öz ehtiyaclarımı həll etmək üçün qurduğum layihələr." },
+    },
+    kind: { work: "İş", freelance: "Freelance", research: "AI tədqiqatı", hobby: "Hobbi" },
     archive: "Əvvəlki işlər",
     github: "GitHub-da son fəaliyyət",
     live: "Canlı",
@@ -62,8 +65,6 @@ export const az: Dictionary = {
     reposError: "Repozitoriyalar yüklənmədi - GitHub-da bax",
     noDescription: "Təsvir yoxdur.",
     caseStudy: "Case study",
-    category: { ai: "AI tədqiqatı", engineering: "Mühəndislik" },
-    status: { active: "Aktiv", delivered: "Təhvil verilib", stable: "Stabil", archived: "Arxivdə" },
   },
   caseStudy: {
     allProjects: "Bütün layihələr",

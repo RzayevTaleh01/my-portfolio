@@ -3,9 +3,11 @@ import type { Region } from "@/i18n/region";
 import type { Profile } from "./types";
 
 /**
- * The location shown on the site depends on where the visitor is:
- * visitors from Slovakia see Prešov, everyone else sees Riga.
- * `location` is used in the footer and CV header, `now` under the name in the sidebar.
+ * What the visitor sees depends on where they are:
+ *   sk   - visitors from Slovakia: Prešov, the Slovak CV, the TU Košice studies
+ *   intl - everyone else: Riga, the international CV, the Baku studies
+ * `location` appears in the footer and CV header, `now` under the name in the sidebar.
+ * The education list itself lives in ./experience.ts (`education` / `educationIntl`).
  */
 const locations: Record<Region, Record<Locale, { location: string; now: string }>> = {
   sk: {
@@ -20,6 +22,12 @@ const locations: Record<Region, Record<Locale, { location: string; now: string }
   },
 };
 
+/** Both save as the same file name; see PrintButton. */
+const cvPdf: Record<Region, string> = {
+  sk: "/taleh-rzayev-cv-sk.pdf",
+  intl: "/taleh-rzayev-cv.pdf",
+};
+
 export function withRegion(profile: Profile, locale: Locale, region: Region): Profile {
-  return { ...profile, ...locations[region][locale] };
+  return { ...profile, ...locations[region][locale], cvPdf: cvPdf[region] };
 }

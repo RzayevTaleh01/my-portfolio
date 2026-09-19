@@ -20,8 +20,8 @@ export default async function HomePage(props: PageProps<"/[lang]">) {
   const { profile, experience, skills, projects, researchStatement, researchDirections } = getContent(lang);
   const featured = projects.filter((p) => p.featured).slice(0, 4);
   const posts = getAllPosts(lang).slice(0, 3);
-  const engCount = projects.filter((p) => p.category === "engineering").length;
-  const aiCount = projects.filter((p) => p.category === "ai").length;
+  const aiCount = projects.filter((p) => p.kind === "research").length;
+  const engCount = projects.length - aiCount;
 
   const tracks = [
     {
@@ -29,7 +29,7 @@ export default async function HomePage(props: PageProps<"/[lang]">) {
       title: t.home.engineeringTitle,
       text: t.home.engineeringText,
       meta: fmt(t.home.engineeringMeta, { count: engCount }),
-      href: localize(lang, "/projects#engineering"),
+      href: localize(lang, "/projects"),
     },
     {
       icon: BrainCircuit,

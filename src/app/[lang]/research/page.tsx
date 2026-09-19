@@ -22,7 +22,7 @@ export default async function ResearchPage(props: PageProps<"/[lang]/research">)
   if (!hasLocale(lang)) notFound();
   const t = getDictionary(lang);
   const { profile, projects, publications, researchDirections, researchStatement, getProject } = getContent(lang);
-  const systems = projects.filter((p) => p.category === "ai");
+  const systems = projects.filter((p) => p.kind === "research");
   const articles = getAllPosts(lang).filter((p) => p.category === "research");
 
   return (

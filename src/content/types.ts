@@ -105,8 +105,8 @@ export interface Publication {
 
 // ─── Projects (case studies) ───────────────────────────────
 
-export type ProjectCategory = "ai" | "engineering";
-export type ProjectStatus = "active" | "delivered" | "stable" | "archived";
+/** How the project came about. Groups the Projects page. */
+export type ProjectKind = "work" | "freelance" | "research" | "hobby";
 
 export interface ArchNode {
   name: string;
@@ -138,8 +138,7 @@ export interface Project {
   slug: string;
   title: string;
   tagline: string;
-  category: ProjectCategory;
-  status: ProjectStatus;
+  kind: ProjectKind;
   year: number;
   featured?: boolean;
   links: { repo?: string; demo?: string; docs?: string };

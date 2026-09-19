@@ -45,6 +45,11 @@ export const experience: Experience[] = [
   },
 ];
 
+/**
+ * Two versions, picked by visitor region (see src/content/locations.ts):
+ * `education` for visitors from Slovakia, `educationIntl` for everyone else.
+ * Source: Taleh_Rzayev_Resume_2026_09.pdf and Taleh_Rzayev_FlowCV_Resume_2026-03-10.pdf.
+ */
 export const education: Education[] = [
   {
     degree: "Bachelor",
@@ -52,6 +57,23 @@ export const education: Education[] = [
     institution: "Technical University of Košice",
     location: "Košice, Slovakia",
     period: "09/2026 - Present",
+  },
+  {
+    degree: "Bachelor",
+    field: "Information Technologies",
+    institution: "Azerbaijan Oil and Industry University",
+    location: "Baku, Azerbaijan",
+    period: "09/2019 - 07/2023",
+  },
+];
+
+export const educationIntl: Education[] = [
+  {
+    degree: "Master",
+    field: "System Programming",
+    institution: "Azerbaijan Technical University",
+    location: "Baku, Azerbaijan",
+    period: "09/2023 - 07/2025",
   },
   {
     degree: "Bachelor",

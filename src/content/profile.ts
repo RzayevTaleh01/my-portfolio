@@ -1,6 +1,6 @@
 import type { Profile } from "./types";
 
-// Source: Taleh_Rzayev_Resume_2026_09.pdf (public/Taleh_Rzayev_CV.pdf)
+// Source: Taleh_Rzayev_Resume_2026_09.pdf and Taleh_Rzayev_FlowCV_Resume_2026-03-10.pdf
 
 export const profile: Profile = {
   name: "Taleh Rzayev",
@@ -20,7 +20,8 @@ export const profile: Profile = {
   now: "Based in Riga, Latvia",
   highlights: ["4 years frontend experience", "Backend: Node.js · Spring Boot", "AI research · adaptive learning", "English B2 · Slovak A2"],
   avatar: "/avatar.jpg",
-  cvPdf: "/Taleh_Rzayev_CV.pdf",
+  // Replaced per visitor region in ./locations.ts
+  cvPdf: "/taleh-rzayev-cv.pdf",
   githubUsername: "RzayevTaleh01",
   // Set NEXT_PUBLIC_SITE_URL to your domain when you deploy (used for SEO and the sitemap).
   siteUrl: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",

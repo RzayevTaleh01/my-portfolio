@@ -1,5 +1,5 @@
 import type { Locale } from "@/i18n/config";
-import { certificates, education, experience, languages } from "./experience";
+import { certificates, education, educationIntl, experience, languages } from "./experience";
 import { core as azCore } from "./i18n/az/core";
 import { projects as azProjects } from "./i18n/az/projects";
 import { core as skCore } from "./i18n/sk/core";
@@ -18,6 +18,7 @@ const english = {
   profile,
   experience,
   education,
+  educationIntl,
   certificates,
   languages,
   skills,
@@ -45,6 +46,7 @@ function build(locale: Locale): SiteContent {
     profile: mergeOverride(english.profile, o.profile, `${locale}.profile`),
     experience: mergeOverride(english.experience, o.experience, `${locale}.experience`),
     education: mergeOverride(english.education, o.education, `${locale}.education`),
+    educationIntl: mergeOverride(english.educationIntl, o.educationIntl, `${locale}.educationIntl`),
     certificates: mergeOverride(english.certificates, o.certificates, `${locale}.certificates`),
     languages: mergeOverride(english.languages, o.languages, `${locale}.languages`),
     skills: mergeOverride(english.skills, o.skills, `${locale}.skills`),

@@ -35,7 +35,7 @@ Pages only render data - all content lives in `src/content/` and `content/posts/
 | Project case studies - one file per project | `src/content/projects/*.ts` |
 | Earlier/smaller projects | `src/content/projects/index.ts` (`archive`) |
 | Articles | `content/posts/*.mdx` |
-| CV download | `public/Taleh_Rzayev_CV.pdf` |
+| CV downloads (per region) | `public/taleh-rzayev-cv.pdf`, `public/taleh-rzayev-cv-sk.pdf` |
 
 Types in `src/content/types.ts` make the build fail on missing or misspelled fields.
 

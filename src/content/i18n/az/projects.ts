@@ -261,7 +261,7 @@ export const projects: Projects = {
         detail: "A/B eksperiment və bandit modulları RL siyasətini statik çətinlik ardıcıllığı ilə öyrənmə qazancı, cəlb olunma və tərk etmə göstəricilərinə görə müqayisə edir.",
       },
     ],
-    stack: [{ group: "Süni intellekt" }, {}, { group: "Data" }, { group: "Əməliyyat və sənədlər" }],
+    stack: [{ group: "AI" }, {}, { group: "Data" }, { group: "Əməliyyat və sənədlər" }],
     next: [
       "Multimodal tutorluq üçün səs və şəkil girişi (Whisper, vision).",
       "Real vaxtda mənimsəmə xəritələri olan müəllim analitika paneli.",
@@ -414,7 +414,7 @@ export const projects: Projects = {
         detail: "Yeni dil əlavə etmək onun bacarıqlarını və mərhələlərini kurikuluma yazmaq və söz səviyyəli detektor əlavə etmək deməkdir - interfeys artıq hazırdır.",
       },
     ],
-    stack: [{ group: "Süni intellekt" }, { group: "Tətbiq" }, { group: "Saxlama" }],
+    stack: [{ group: "AI" }, { group: "Tətbiq" }, { group: "Saxlama" }],
     next: ["Slovak dili kursu (kurikulum və detektor artıq planlaşdırılıb).", "Audio axınından tələffüzün qiymətləndirilməsi."],
   },
 

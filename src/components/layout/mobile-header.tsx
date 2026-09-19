@@ -20,53 +20,6 @@ export function MobileHeader({ lang, profile, menu }: ChromeProps) {
   return (
     <header className="no-print sticky top-0 z-40 -mx-5 border-b bg-background/85 px-5 backdrop-blur-md lg:hidden">
       <div className="flex h-14 items-center gap-2">
-        <Dialog.Root open={open} onOpenChange={setOpen}>
-          <Dialog.Trigger
-            aria-label={menu.t.openMenu}
-            className="-ml-1.5 flex size-8 items-center justify-center rounded-lg hover:bg-muted"
-          >
-            <Menu className="size-4" />
-          </Dialog.Trigger>
-
-          <Dialog.Portal>
-            <Dialog.Overlay className="sheet-overlay fixed inset-0 z-50 bg-black/30 backdrop-blur-[2px]" />
-            <Dialog.Content
-              aria-describedby={undefined}
-              className="sheet-content fixed inset-y-0 left-0 z-50 flex w-[82%] max-w-xs flex-col border-r bg-background px-5 py-5 shadow-[16px_0_40px_-20px_rgb(0_0_0/0.3)]"
-            >
-              <div className="flex items-center justify-between">
-                <Link href={home} onClick={() => setOpen(false)} className="flex items-center gap-3">
-                  <Image
-                    src={profile.avatar}
-                    alt=""
-                    width={40}
-                    height={40}
-                    className="size-10 rounded-xl border object-cover object-[50%_30%]"
-                  />
-                  <div>
-                    <Dialog.Title className="text-[15px] font-semibold leading-tight tracking-tight">{profile.name}</Dialog.Title>
-                    <p className="text-xs text-muted-foreground">{profile.headline}</p>
-                  </div>
-                </Link>
-                <Dialog.Close
-                  aria-label={menu.t.closeMenu}
-                  className="flex size-8 shrink-0 items-center justify-center rounded-lg text-muted-foreground hover:bg-muted hover:text-foreground"
-                >
-                  <X className="size-4" />
-                </Dialog.Close>
-              </div>
-
-              <div className="-mx-3 mt-8">
-                <SidebarNav id="mobile" items={menu.nav} onNavigate={() => setOpen(false)} />
-              </div>
-
-              <div className="mt-auto border-t pt-4">
-                <Socials socials={profile.socials} className="-ml-2" />
-              </div>
-            </Dialog.Content>
-          </Dialog.Portal>
-        </Dialog.Root>
-
         <Link href={home} className="flex min-w-0 items-center gap-2.5">
           <Image
             src={profile.avatar}
@@ -82,6 +35,55 @@ export function MobileHeader({ lang, profile, menu }: ChromeProps) {
           <CommandMenu {...menu} variant="icon" />
           <LanguageSwitcher current={lang} label={menu.t.language} className="px-2" />
           <ThemeToggle label={menu.t.toggleTheme} bordered />
+
+          <Dialog.Root open={open} onOpenChange={setOpen}>
+            <Dialog.Trigger
+              aria-label={menu.t.openMenu}
+              className="flex size-8 items-center justify-center rounded-lg border bg-surface text-muted-foreground transition-colors hover:border-border-strong hover:text-foreground"
+            >
+              <Menu className="size-4" />
+            </Dialog.Trigger>
+
+            <Dialog.Portal>
+              <Dialog.Overlay className="sheet-overlay fixed inset-0 z-50 bg-black/30 backdrop-blur-[2px]" />
+              <Dialog.Content
+                aria-describedby={undefined}
+                className="sheet-content fixed inset-y-0 left-0 z-50 flex w-[82%] max-w-xs flex-col border-r bg-background px-5 py-5 shadow-[16px_0_40px_-20px_rgb(0_0_0/0.3)]"
+              >
+                <div className="flex items-center justify-between gap-3">
+                  <Link href={home} onClick={() => setOpen(false)} className="flex min-w-0 items-center gap-3">
+                    <Image
+                      src={profile.avatar}
+                      alt=""
+                      width={40}
+                      height={40}
+                      className="size-10 shrink-0 rounded-xl border object-cover object-[50%_30%]"
+                    />
+                    <div className="min-w-0">
+                      <Dialog.Title className="truncate text-[15px] font-semibold leading-tight tracking-tight">
+                        {profile.name}
+                      </Dialog.Title>
+                      <p className="truncate text-xs text-muted-foreground">{profile.headline}</p>
+                    </div>
+                  </Link>
+                  <Dialog.Close
+                    aria-label={menu.t.closeMenu}
+                    className="flex size-8 shrink-0 items-center justify-center rounded-lg border bg-surface text-muted-foreground transition-colors hover:border-border-strong hover:text-foreground"
+                  >
+                    <X className="size-4" />
+                  </Dialog.Close>
+                </div>
+
+                <div className="-mx-3 mt-8">
+                  <SidebarNav id="mobile" items={menu.nav} onNavigate={() => setOpen(false)} />
+                </div>
+
+                <div className="mt-auto border-t pt-4">
+                  <Socials socials={profile.socials} className="-ml-2" />
+                </div>
+              </Dialog.Content>
+            </Dialog.Portal>
+          </Dialog.Root>
         </div>
       </div>
     </header>

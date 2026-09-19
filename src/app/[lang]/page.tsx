@@ -50,9 +50,10 @@ export default async function HomePage(props: PageProps<"/[lang]">) {
           <span className="text-muted-foreground">{t.home.role}</span>
         </h1>
         <p className="max-w-xl text-[16px] leading-relaxed text-muted-foreground">{profile.intro}</p>
-        <ul className="flex flex-wrap gap-2">
+        {/* Two per row on phones, free-flowing from sm up. */}
+        <ul className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap">
           {profile.highlights.map((h) => (
-            <li key={h} className="rounded-md border px-2.5 py-1 text-[13px] text-muted-foreground">
+            <li key={h} className="rounded-md border px-2 py-1 text-xs leading-snug text-muted-foreground sm:px-2.5 sm:text-[13px]">
               {h}
             </li>
           ))}

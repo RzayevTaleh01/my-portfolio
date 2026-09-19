@@ -52,7 +52,7 @@ export function WritingFilter({ posts, lang }: { posts: PostMeta[]; lang: Locale
           );
         })}
       </div>
-      <PostList posts={visible} lang={lang} className="border-t-0" />
+      <PostList posts={visible} lang={lang} />
     </div>
   );
 }

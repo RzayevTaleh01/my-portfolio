@@ -16,8 +16,9 @@ export function PostList({ posts, lang, className }: { posts: PostMeta[]; lang: 
   if (posts.length === 0) {
     return <p className="text-sm text-muted-foreground">{t.empty}</p>;
   }
+  // No top border: the list always sits under a section heading or tabs that already draw one.
   return (
-    <ul className={cn("divide-y border-y", className)}>
+    <ul className={cn("divide-y border-b", className)}>
       {posts.map((post) => (
         <li key={post.slug}>
           <Link

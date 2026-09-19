@@ -2,16 +2,16 @@ import type { ContentOverrides } from "../types";
 
 export const core: ContentOverrides = {
   profile: {
-    headline: "Proqram mühəndisi · Süni intellekt tədqiqatçısı",
+    headline: "Software Engineer · AI üzrə tədqiqatçı",
     intro:
-      "React və Next.js ilə production veb tətbiqlər qurmaqda 4 illik frontend təcrübəm var, həmçinin backend üzrə praktiki təcrübəm var - REST API-lər, verilənlər bazaları və deploy. Süni intellekt tədqiqatçısı kimi adaptiv təhsil sistemləri qururam: bilik izləmə, gücləndirmə ilə öyrənmə və mənbəyə əsaslanan LLM tutorlar.",
+      "React və Next.js ilə production veb tətbiqlər qurmaqda 4 illik frontend təcrübəm var, həmçinin backend üzrə praktiki təcrübəm var - REST API-lər, verilənlər bazaları və deploy. AI tədqiqatçısı kimi adaptiv təhsil sistemləri qururam: bilik izləmə, gücləndirmə ilə öyrənmə və mənbəyə əsaslanan LLM tutorlar.",
     bio: [
       "Karyerama 2022-ci ildə AzInTelecom-da frontend təcrübəçisi kimi başladım və Sima Hesabat Sisteminin müştəri və admin panellərini hazırladım. 2023–2026-cı illərdə Edumedia-Azerbaijan-da milli təhsil platformaları üzərində işlədim - o cümlədən Next.js ilə qurulmuş yeni Video.edu.az versiyası, Portal.edu.az və Pts.edu.az üçün yeni xidmətlər.",
       "Frontenddən kənarda tam sistemlər layihələndirirəm. Diaspor.org üçün multi-tenant nəşr platformasını başdan sona qurdum: Spring Boot REST API, React admin paneli, server tərəfdə render olunan Next.js ictimai saytı, versiyalı miqrasiyalarla PostgreSQL və media üçün S3.",
       "Tədqiqatım təhsildə süni intellekt haqqındadır: öyrənənin nə bildiyini modelləşdirmək, növbəti nəyi öyrətməyə qərar vermək və bunu mənbəyə əsaslanan təbii dildə izah etmək. Adaptiv tutor sistemim EduVision Bayes bilik izləməsini (BKT), PPO gücləndirmə ilə öyrənmə agentini və RAG əsaslı LLM-ləri birləşdirir; LangVis isə danışıq praktikası üçün real vaxtda işləyən səsli tutordur.",
       "Gündəlik mühəndislik işində inkişafı sürətləndirmək üçün süni intellektdən istifadə edirəm və prompt engineering-ə proqramçı yanaşması ilə baxıram. Hazırda Slovakiyada yaşayıram və Košice Texniki Universitetində Sənaye menecmenti ixtisası üzrə təhsil alıram.",
     ],
-    highlights: ["4 il frontend təcrübəsi", "Backend: Node.js · Spring Boot", "Süni intellekt tədqiqatı · adaptiv təhsil", "İngilis B2 · Slovak A2"],
+    highlights: ["4 il frontend təcrübəsi", "Backend: Node.js · Spring Boot", "AI tədqiqatı · adaptiv təhsil", "İngilis B2 · Slovak A2"],
     socials: [{}, {}, { label: "E-poçt" }],
   },
   experience: [
@@ -73,7 +73,7 @@ export const core: ContentOverrides = {
     { title: "UI və dizayn" },
     { title: "Backend və verilənlər bazaları" },
     { title: "DevOps və alətlər" },
-    { title: "Süni intellekt" },
+    { title: "AI" },
   ],
   researchStatement:
     "Adaptiv, süni intellektə əsaslanan təhsili tədqiq edirəm: sistem öyrənənin nə bildiyini necə modelləşdirə, növbəti nəyi öyrədəcəyinə necə qərar verə və bunu kurs materialına əsaslanan təbii dildə necə izah edə bilər.",

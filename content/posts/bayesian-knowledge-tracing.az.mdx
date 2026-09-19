@@ -1,0 +1,74 @@
+---
+title: "Bayes bilik izləmə (BKT), kodla izah"
+summary: "EduVision tələbənin nə bildiyini səs-küylü cavablardan necə qiymətləndirir - dörd parametr, iki tənlik və bir neçə sətir Python."
+date: 2026-09-18
+category: research
+tags: [knowledge-tracing, eduvision, bayesian]
+---
+
+Tutor eyni suala dəfələrlə cavab verməlidir: *bu tələbə artıq bu bacarığı bilirmi?* Biliyi birbaşa müşahidə edə bilmirik - yalnız cavabları görürük, cavablar isə səs-küylüdür. Tələbələr təsadüfən düz cavab verir və bildikləri şeylərdə səhv edirlər.
+
+Bayes bilik izləmə (BKT) mənimsəməni gizli dəyişən kimi qəbul edir və hər cavabdan sonra ehtimalı yeniləyir. [EduVision](/projects/eduvision)-da bu, Öyrənən mühərrikidir.
+
+## Dörd parametr
+
+| Parametr | Mənası | EduVision-da standart dəyər |
+| --- | --- | --- |
+| $P(L_0)$ | Məşqdən əvvəl bacarığın bilinmə ehtimalı | 0.1 |
+| $T$ | Bir cəhd zamanı öyrənmə ehtimalı | 0.1 |
+| $G$ | Təxmin: bilmədən düz cavab | 0.2 |
+| $S$ | Sürüşmə: bildiyi halda səhv cavab | 0.1 |
+
+## Addım 1 - sübuta görə yeniləmə
+
+**Düz** cavabdan sonra Bayes qaydası belədir:
+
+$$
+P(L_t \mid \text{correct}) = \frac{P(L_t)(1-S)}{P(L_t)(1-S) + (1-P(L_t))\,G}
+$$
+
+**Səhv** cavabdan sonra:
+
+$$
+P(L_t \mid \text{incorrect}) = \frac{P(L_t)\,S}{P(L_t)\,S + (1-P(L_t))(1-G)}
+$$
+
+## Addım 2 - öyrənməni nəzərə almaq
+
+Cəhdin özü də öyrənmə imkanıdır, ona görə ehtimalın bir hissəsi "bilinmir"dən "bilinir"ə keçir:
+
+$$
+P(L_{t+1}) = P(L_t \mid \text{obs}) + \big(1 - P(L_t \mid \text{obs})\big)\,T
+$$
+
+## İmplementasiya
+
+```python title="src/core/adaptive/bkt.py"
+L_prev = skill.p_mastery
+
+if is_correct:
+    numerator = L_prev * (1 - skill.p_slip)
+    denominator = numerator + (1 - L_prev) * skill.p_guess
+else:
+    numerator = L_prev * skill.p_slip
+    denominator = numerator + (1 - L_prev) * (1 - skill.p_guess)
+
+L_given_evidence = numerator / (denominator + 1e-10)
+L_new = L_given_evidence + (1 - L_given_evidence) * skill.p_learn
+
+skill.p_mastery = min(0.99, max(0.01, L_new))
+```
+
+<Callout>
+Sonda [0.01, 0.99] aralığına məhdudlaşdırmaq vacibdir: tam 0 və ya 1 olan ehtimal tələbə nə etsə də, bir daha dəyişə bilməz.
+</Callout>
+
+## Niyə neyron model yox, BKT?
+
+Dərin bilik izləmə modelləri böyük data üzərində daha dəqiq ola bilər, amma BKT-nin tutor daxilində vacib olan xüsusiyyətləri var:
+
+- **İzah oluna bilən** - hər bacarıq üçün müəllimin başa düşə biləcəyi dörd rəqəm.
+- **Ucuz** - hər cavaba sabit vaxtda bir yeniləmə, GPU lazım deyil.
+- **Az data ilə işləyir** - ilk cavabdan etibarən ağlabatan nəticə verir.
+
+EduVision-da mənimsəmə qiyməti növbəti tapşırığın daha asan, eyni və ya daha çətin olmasına qərar verən gücləndirmə ilə öyrənmə agentinə ötürülür.

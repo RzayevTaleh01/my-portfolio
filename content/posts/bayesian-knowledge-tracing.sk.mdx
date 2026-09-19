@@ -1,0 +1,74 @@
+---
+title: "Bayesovské sledovanie znalostí (BKT) vysvetlené na kóde"
+summary: "Ako EduVision odhaduje, čo študent vie, z nepresných odpovedí - štyri parametre, dve rovnice a pár riadkov Pythonu."
+date: 2026-09-18
+category: research
+tags: [knowledge-tracing, eduvision, bayesian]
+---
+
+Tútor musí stále dookola odpovedať na jednu otázku: *ovláda už tento študent túto zručnosť?* Vedomosti nevidíme priamo - vidíme len odpovede a tie sú nepresné. Študenti niekedy uhádnu správnu odpoveď a inokedy sa pomýlia v niečom, čo vedia.
+
+Bayesovské sledovanie znalostí (BKT) chápe zvládnutie ako skrytú premennú a po každej odpovedi aktualizuje pravdepodobnosť. V [EduVision](/projects/eduvision) je to modul študenta.
+
+## Štyri parametre
+
+| Parameter | Význam | Predvolená hodnota v EduVision |
+| --- | --- | --- |
+| $P(L_0)$ | Pravdepodobnosť, že zručnosť je známa pred cvičením | 0.1 |
+| $T$ | Pravdepodobnosť naučenia sa počas jedného pokusu | 0.1 |
+| $G$ | Uhádnutie: správna odpoveď bez vedomostí | 0.2 |
+| $S$ | Pošmyknutie: nesprávna odpoveď napriek vedomostiam | 0.1 |
+
+## Krok 1 - aktualizácia podľa dôkazu
+
+Po **správnej** odpovedi dáva Bayesova veta:
+
+$$
+P(L_t \mid \text{correct}) = \frac{P(L_t)(1-S)}{P(L_t)(1-S) + (1-P(L_t))\,G}
+$$
+
+Po **nesprávnej** odpovedi:
+
+$$
+P(L_t \mid \text{incorrect}) = \frac{P(L_t)\,S}{P(L_t)\,S + (1-P(L_t))(1-G)}
+$$
+
+## Krok 2 - zohľadnenie učenia
+
+Samotný pokus je príležitosťou učiť sa, preto sa časť pravdepodobnosti presunie z „nevie“ na „vie“:
+
+$$
+P(L_{t+1}) = P(L_t \mid \text{obs}) + \big(1 - P(L_t \mid \text{obs})\big)\,T
+$$
+
+## Implementácia
+
+```python title="src/core/adaptive/bkt.py"
+L_prev = skill.p_mastery
+
+if is_correct:
+    numerator = L_prev * (1 - skill.p_slip)
+    denominator = numerator + (1 - L_prev) * skill.p_guess
+else:
+    numerator = L_prev * skill.p_slip
+    denominator = numerator + (1 - L_prev) * (1 - skill.p_guess)
+
+L_given_evidence = numerator / (denominator + 1e-10)
+L_new = L_given_evidence + (1 - L_given_evidence) * skill.p_learn
+
+skill.p_mastery = min(0.99, max(0.01, L_new))
+```
+
+<Callout>
+Záverečné obmedzenie na interval [0.01, 0.99] je dôležité: pravdepodobnosť presne 0 alebo 1 sa už nikdy nezmení, nech študent urobí čokoľvek.
+</Callout>
+
+## Prečo BKT a nie neurónový model?
+
+Modely hlbokého sledovania znalostí môžu byť na veľkých dátach presnejšie, no BKT má vlastnosti, na ktorých v tútorovi záleží:
+
+- **Interpretovateľnosť** - štyri čísla na zručnosť, ktorým učiteľ rozumie.
+- **Nízka cena** - jedna aktualizácia v konštantnom čase na odpoveď, bez GPU.
+- **Úspornosť na dáta** - rozumné výsledky už od prvej odpovede.
+
+V EduVision odhad zvládnutia vstupuje do agenta posilňovaného učenia, ktorý rozhoduje, či má byť ďalšia úloha ľahšia, rovnaká alebo ťažšia.

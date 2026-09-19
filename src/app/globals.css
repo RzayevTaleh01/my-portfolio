@@ -1,0 +1,223 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
+ * Design tokens - flat colours only, no gradients.
+ * Soft slate off-white page, white cards, one quiet accent.
+ */
+:root {
+  --background: oklch(0.983 0.003 248);
+  --surface: oklch(1 0 0);
+  --foreground: oklch(0.21 0.025 265);
+  --muted: oklch(0.955 0.006 248);
+  --muted-foreground: oklch(0.52 0.02 257);
+  --subtle-foreground: oklch(0.64 0.018 257);
+  --border: oklch(0.918 0.008 255);
+  --border-strong: oklch(0.83 0.012 255);
+  --accent: oklch(0.5 0.09 190);
+  --accent-soft: oklch(0.94 0.03 190);
+  --primary: oklch(0.21 0.025 265);
+  --primary-foreground: oklch(0.985 0.002 248);
+  --ring: oklch(0.5 0.09 190);
+}
+
+.dark {
+  --background: oklch(0.19 0.012 265);
+  --surface: oklch(0.225 0.013 265);
+  --foreground: oklch(0.94 0.005 250);
+  --muted: oklch(0.26 0.013 265);
+  --muted-foreground: oklch(0.71 0.015 257);
+  --subtle-foreground: oklch(0.57 0.015 257);
+  --border: oklch(0.3 0.013 265);
+  --border-strong: oklch(0.38 0.015 265);
+  --accent: oklch(0.76 0.09 190);
+  --accent-soft: oklch(0.28 0.03 190);
+  --primary: oklch(0.94 0.005 250);
+  --primary-foreground: oklch(0.19 0.012 265);
+  --ring: oklch(0.76 0.09 190);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-subtle-foreground: var(--subtle-foreground);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-ring: var(--ring);
+  --font-sans: var(--font-jakarta);
+  --font-mono: var(--font-jetbrains);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  html {
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+  }
+  body {
+    @apply bg-background text-foreground;
+    text-rendering: optimizeLegibility;
+  }
+  ::selection {
+    @apply bg-accent-soft text-foreground;
+  }
+  :focus-visible {
+    @apply rounded-sm outline-2 outline-offset-2 outline-ring;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* Page transition - a short, quiet fade on every route change. */
+@keyframes page-in {
+  from {
+    opacity: 0;
+  }
+}
+.page-in {
+  animation: page-in 0.3s ease-out both;
+}
+
+/* Dialog (command menu) open animation */
+@keyframes overlay-in {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes dialog-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 8px) scale(0.98);
+  }
+}
+.dialog-overlay[data-state="open"] {
+  animation: overlay-in 0.25s ease-out;
+}
+.dialog-content[data-state="open"] {
+  animation: dialog-in 0.2s ease-out;
+}
+
+/* Mobile menu drawer - slides in from the left, out to the left. */
+@keyframes sheet-in {
+  from {
+    transform: translateX(-100%);
+  }
+}
+@keyframes sheet-out {
+  to {
+    transform: translateX(-100%);
+  }
+}
+@keyframes overlay-out {
+  to {
+    opacity: 0;
+  }
+}
+.sheet-content[data-state="open"] {
+  animation: sheet-in 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.sheet-content[data-state="closed"] {
+  animation: sheet-out 0.2s ease-in;
+}
+.sheet-overlay[data-state="open"] {
+  animation: overlay-in 0.25s ease-out;
+}
+.sheet-overlay[data-state="closed"] {
+  animation: overlay-out 0.2s ease-in;
+}
+
+/* Long-form writing */
+.prose {
+  --tw-prose-body: var(--foreground);
+  --tw-prose-headings: var(--foreground);
+  --tw-prose-links: var(--foreground);
+  --tw-prose-bold: var(--foreground);
+  --tw-prose-code: var(--foreground);
+  --tw-prose-quotes: var(--muted-foreground);
+  --tw-prose-quote-borders: var(--border-strong);
+  --tw-prose-hr: var(--border);
+  --tw-prose-bullets: var(--subtle-foreground);
+  --tw-prose-counters: var(--muted-foreground);
+  --tw-prose-th-borders: var(--border-strong);
+  --tw-prose-td-borders: var(--border);
+  --tw-prose-captions: var(--muted-foreground);
+}
+.prose :where(h2, h3) {
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+.prose a {
+  @apply underline decoration-border-strong underline-offset-4 transition-colors hover:decoration-accent;
+}
+.prose :where(code):not(:where(pre code)) {
+  @apply rounded-md border bg-muted px-1.5 py-0.5 text-[0.85em] font-normal before:content-none after:content-none;
+}
+.prose :where(h2, h3) a {
+  @apply no-underline;
+}
+
+/* Code blocks - rehype-pretty-code (posts) and shiki (case studies) */
+.prose pre,
+.code-block pre {
+  @apply overflow-x-auto bg-transparent px-4 py-3.5 text-[13px] leading-relaxed;
+}
+[data-rehype-pretty-code-figure] {
+  @apply my-6 overflow-hidden rounded-xl border bg-surface;
+}
+[data-rehype-pretty-code-figure] pre {
+  @apply my-0 rounded-none border-0;
+}
+[data-rehype-pretty-code-title] {
+  @apply border-b bg-muted/60 px-4 py-2 font-mono text-xs text-muted-foreground;
+}
+code[data-theme] span,
+.shiki span {
+  color: var(--shiki-light);
+}
+.dark code[data-theme] span,
+.dark .shiki span {
+  color: var(--shiki-dark);
+}
+.shiki {
+  background-color: transparent !important;
+}
+
+.katex-display {
+  @apply my-0 overflow-x-auto overflow-y-hidden py-1;
+}
+.katex {
+  font-size: 1.05em;
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  body {
+    @apply bg-white text-black;
+  }
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}

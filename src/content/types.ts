@@ -148,6 +148,8 @@ export interface Project {
   title: string;
   tagline: string;
   kind: ProjectKind;
+  /** Who it was built for. Shown next to the kind - set it on `work` projects. */
+  organization?: string;
   year: number;
   featured?: boolean;
   links: { repo?: string; demo?: string; docs?: string };

@@ -625,6 +625,273 @@ export const projects: Projects = {
     stack: [{ group: "Runtime" }, { group: "Zber dát" }, { group: "Dáta" }],
   },
 
+  "unec-ttj": {
+    tagline:
+      "Platforma akademického časopisu na OJS: dvadsať fakúlt posiela články, každý prejde recenzným redakčným procesom a zverejnené číslo je indexované a citovateľné.",
+    facts: [{ label: "Rola", value: "Full-stack · ITM" }, { label: "Stav", value: "Prebieha" }, { label: "Platforma" }, { label: "Indexovanie" }],
+    overview: [
+      "Študentská vedecká spoločnosť UNEC vydáva študentský vedecký časopis univerzity dvakrát ročne. Prispieva doň zhruba dvadsať fakúlt, v azerbajdžančine, turečtine, angličtine alebo ruštine, a každý článok musí prejsť rovnakým redakčným procesom, než sa dostane do čísla.",
+      "Platforma beží na Open Journal Systems, open-source softvéri pre časopisy od Public Knowledge Project. OJS nesie redakčný workflow a metadátové štandardy; mojou prácou je Laravel okolo neho - verejný web časopisu, téma a integrácia, ktorá oboje drží v súlade.",
+    ],
+    problem: [
+      "Časopis nie je blog. Článok nie je dokument, ktorý sa nahrá a objaví - je to záznam prechádzajúci stavmi a v každom stave smie iný človek vidieť a robiť niečo iné. Postaviť to od nuly znamená znovu vytvoriť sledovanie podaní, prideľovanie recenzentov, kolá revízií, redakčnú úpravu, výrobu galejí, zostavenie čísla, registráciu DOI aj indexovacie metadáta.",
+      "Druhou polovicou problému je nájditeľnosť. Ak sú metadáta zlé, Google Scholar článok neindexuje, DOI sa nerozlíši a článok mimo stránky vlastne neexistuje.",
+    ],
+    architecture: {
+      summary:
+        "OJS vlastní redakčný záznam, Laravel vlastní verejný zážitok. Oboje číta rovnaké dáta časopisu, takže článok sa zverejní na jednom mieste a objaví sa všade.",
+      layers: [
+        {
+          name: "Čitatelia",
+          nodes: [
+            { name: "Verejný web časopisu", detail: "Čísla, články, abstrakty, PDF galeje" },
+            { name: "Vyhľadávače", detail: "Google Scholar a indexovacie crawlery" },
+          ],
+        },
+        {
+          name: "Prezentácia",
+          nodes: [
+            { name: "Laravel front", detail: "Blade šablóny, viacjazyčné cesty, statické stránky" },
+            { name: "OJS téma", detail: "Vzhľad časopisu - stránky čísla, článku a podania" },
+          ],
+        },
+        {
+          name: "Redakcia",
+          nodes: [
+            { name: "Workflow OJS 3.4", detail: "Podanie → recenzia → redakčná úprava → produkcia" },
+            { name: "Role", detail: "Autor, redaktor, redaktor sekcie, recenzent, korektor" },
+          ],
+        },
+        {
+          name: "Metadáta",
+          nodes: [
+            { name: "DOI plugin", detail: "Registruje DOI pre každý článok a číslo" },
+            { name: "OAI-PMH", detail: "Endpoint na zber dát pre indexovacie služby" },
+            { name: "Citačné tagy", detail: "Meta tagy Highwire Press, ktoré číta Google Scholar" },
+          ],
+        },
+        {
+          name: "Dáta",
+          nodes: [
+            { name: "MySQL", detail: "Podania, používatelia, čísla, metadáta" },
+            { name: "Úložisko súborov", detail: "Rukopisy, revízie a galeje mimo webového koreňa" },
+          ],
+        },
+      ],
+    },
+    components: [
+      {
+        name: "Proces podania",
+        role: "Stavový automat, ktorým článok prechádza",
+        points: [
+          "Článok vstúpi ako podanie a čaká: redaktor najprv urobí vstupnú kontrolu voči zameraniu časopisu a správe o plagiáte.",
+          "Články, ktoré prejdú, dostane redaktor sekcie, ktorý pozve recenzentov; kolo recenzie končí prijatím, revíziami alebo zamietnutím.",
+          "Revízie sa vracajú autorovi a môžu prebehnúť v niekoľkých kolách, než rozhodnutie platí.",
+          "Prijaté články idú na redakčnú úpravu a potom do produkcie, kde sa vygeneruje a pripojí PDF galej.",
+        ],
+      },
+      {
+        name: "Role a oprávnenia",
+        role: "Kto smie článok v danom stave vidieť",
+        points: [
+          "Autori vidia vlastné podania a rozhodnutia o nich, nič iné.",
+          "Recenzenti vidia anonymizovaný rukopis pre kolo, do ktorého boli pozvaní.",
+          "Redaktori sekcií pôsobia vo svojej sekcii; výkonný redaktor vidí celý front.",
+        ],
+      },
+      {
+        name: "Zostavenie čísla",
+        role: "Z prijatých článkov sa stáva zverejnené číslo",
+        points: [
+          "Články sa zaradia do ročníka a čísla, zoradia a stránkujú - rozsah strán vytlačený pri článku pochádza odtiaľto.",
+          "Zverejnenie čísla je jedna akcia; v tom istom okamihu sprístupní všetky články v ňom.",
+        ],
+      },
+      {
+        name: "Indexovacia vrstva",
+        role: "Aby bola práca nájditeľná a citovateľná",
+        points: [
+          "Každý článok a číslo dostane registrované DOI, takže citácie sa rozlíšia natrvalo.",
+          "Stránky článkov vydávajú citačné meta tagy, ktoré Google Scholar hľadá, a endpoint OAI-PMH umožňuje agregátorom zbierať katalóg.",
+          "Časopis má ISSN - práve to mení webovú stránku na citovateľnú publikáciu.",
+        ],
+      },
+      {
+        name: "Verejný web",
+        role: "To, kam čitateľ skutočne príde",
+        points: [
+          "Laravel obsluhuje vlastné stránky časopisu - o časopise, redakčná rada, pokyny pre autorov, archív - v rovnakom vzhľade ako stránky OJS.",
+          "Frontend je ručne písané HTML, CSS a JavaScript, takže téma zostáva blízko šablónam OJS, ktorým sa musí prispôsobiť.",
+        ],
+      },
+    ],
+    flow: [
+      { title: "Podanie", detail: "Autor nahrá rukopis, vyplní metadáta a potvrdí kontrolný zoznam podania." },
+      { title: "Vstupná kontrola", detail: "Redaktor preverí zameranie, formát a plagiát a článok buď zamietne, alebo pošle ďalej." },
+      { title: "Recenzné konanie", detail: "Redaktor sekcie pozve recenzentov; každý vráti odporúčanie a pripomienky." },
+      { title: "Rozhodnutie", detail: "Prijať, prepracovať alebo zamietnuť. Revízie idú späť autorovi a kolo sa opakuje." },
+      { title: "Produkcia", detail: "Redakčná úprava, potom sa vygeneruje a skoriguje PDF galej." },
+      { title: "Zverejnenie", detail: "Článok sa zaradí do čísla; zverejnenie čísla ho sprístupní a vyrazí DOI." },
+      { title: "Indexovanie", detail: "Metadáta odchádzajú cez citačné tagy a OAI-PMH a článok sa začne objavovať vo vyhľadávaní." },
+    ],
+    decisions: [
+      {
+        title: "OJS namiesto vlastného CMS",
+        detail:
+          "Redakčný workflow, model rolí a indexovacie štandardy sú desaťročia nazbieraných doménových znalostí. Postaviť ich nanovo by trvalo dlhšie a aj tak by boli menej správne než implementácia od PKP.",
+      },
+      {
+        title: "Laravel okolo neho, nie v ňom",
+        detail:
+          "Verejný web a statický obsah časopisu žijú v Laraveli, takže sa dajú meniť bez zásahu do inštalácie OJS - a aktualizácia OJS neohrozí web.",
+      },
+      {
+        title: "Metadáta ako plnohodnotná funkcia",
+        detail:
+          "Registrácia DOI a citačné tagy nie sú dodatok. Sú rozdielom medzi PDF na serveri a článkom, ktorý sa dá citovať.",
+      },
+      {
+        title: "Štyri jazyky podania",
+        detail:
+          "Články prichádzajú v azerbajdžančine, turečtine, angličtine alebo ruštine, takže rozhranie, metadátové polia aj archív musia byť viacjazyčné, nie raz preložené.",
+      },
+    ],
+    stack: [{}, { group: "Platforma časopisu" }, {}],
+    next: [
+      "Dokončiť zvyšné redakčné obrazovky a redizajn archívu.",
+      "Rozšíriť indexovanie za Google Scholar do odborných databáz, na ktorých fakultám záleží.",
+      "Reporting pre Študentskú vedeckú spoločnosť: podania, miera prijatia a rýchlosť recenzií podľa fakulty.",
+    ],
+  },
+
+  etacxi: {
+    tagline:
+      "Prepis webu verejného zdravotníckeho inštitútu od nuly: natvrdo zapísané stránky a mŕtvy layout z roku 2019 nahradil Laravel portál, ktorý zamestnanci naozaj vedia spravovať.",
+    facts: [{ label: "Rola", value: "Full-stack · ITM" }, { label: "Stav", value: "Prebieha" }, { label: "Klient", value: "Verejná právnická osoba" }, { label: "Prístup", value: "Prepis, nie nový vzhľad" }],
+    overview: [
+      "Vedecko-výskumný inštitút pľúcnych chorôb je verejná právnická osoba v Baku s koreňmi siahajúcimi k protituberkulóznemu inštitútu z roku 1944. Jeho web etacxi.az je miesto, kde občania hľadajú štruktúru inštitútu, jeho vedenie, správy a praktické informácie pred návštevou.",
+      "Web, ktorý dnes stojí, vznikol v roku 2019 a odvtedy sa nepohol. Prepisujem ho od nuly: tá istá inštitúcia, tá istá verejná úloha, ale platforma, ktorú zamestnanci udržia aktuálnu bez vývojára.",
+    ],
+    problem: [
+      "Sekcia správ nie je sekcia. Každá správa má vlastnú natvrdo zapísanú cestu - /xeber1, /xeber2, /xeber3 - takže čokoľvek zverejniť znamená upraviť kód a nasadiť. Najnovšia položka je z roku 2023, čo sa stáva, keď je publikovanie úlohou vývojára.",
+      "Odkazy v pätičke sú zástupné texty, ktoré doteraz hlásia \"link 1\" až \"link 6\" a nevedú nikam. Stránka sa deklaruje ako anglická, hoci podáva azerbajdžančinu. Beží po nezabezpečenom HTTP.",
+      "Obsah sedí v šablónach namiesto v databáze, takže sa nedá vypísať, filtrovať, vyhľadávať ani zobraziť vo viacerých jazykoch bez duplikovania šablóny.",
+    ],
+    architecture: {
+      summary:
+        "Obsah sa sťahuje zo šablón do databázy. Všetko, čo návštevník číta, sa stáva záznamom, ktorý vlastní redaktor, a verejný web je tenká vykresľovacia vrstva nad ním.",
+      layers: [
+        {
+          name: "Návštevníci",
+          nodes: [
+            { name: "Občania", detail: "Služby, kontakty, vedenie, správy" },
+            { name: "Médiá a partneri", detail: "Oznamy, galéria, medzinárodné vzťahy" },
+          ],
+        },
+        {
+          name: "Verejný web",
+          nodes: [
+            { name: "Blade šablóny", detail: "Responzívny layout, postavený nanovo" },
+            { name: "Jazykové cesty", detail: "/az a /en z jedného obsahového modelu" },
+          ],
+        },
+        {
+          name: "Aplikácia",
+          nodes: [
+            { name: "Laravel kontroléry", detail: "Stránky, správy, galéria, kontaktný formulár" },
+            { name: "Administrácia", detail: "Prihlásený CRUD pre každý typ obsahu" },
+            { name: "Validácia", detail: "Form requesty, CSRF, kontaktný formulár chránený pred spamom" },
+          ],
+        },
+        {
+          name: "Dáta",
+          nodes: [
+            { name: "MySQL", detail: "Stránky, správy, zamestnanci, galéria, preklady" },
+            { name: "Úložisko médií", detail: "Nahraté obrázky a dokumenty" },
+          ],
+        },
+      ],
+    },
+    components: [
+      {
+        name: "Obsahový model",
+        role: "Zo stránok sa stávajú záznamy",
+        points: [
+          "Statické stránky - všeobecné informácie, vedenie, štruktúra, medzinárodné vzťahy - sa menia na editovateľné záznamy namiesto šablón.",
+          "Záznam o vedení nesie fotku, funkciu a životopis, takže zmena riaditeľa je formulár, nie commit.",
+          "Každé textové pole je pre daný jazyk, takže azerbajdžančina a angličtina sú ten istý záznam, nie dve kópie stránky.",
+        ],
+      },
+      {
+        name: "Správy a oznamy",
+        role: "Náhrada natvrdo zapísaných ciest",
+        points: [
+          "Jedna tabuľka správ s dátumom zverejnenia, slugom a stavom, vypísaná so stránkovaním a čitateľná na stabilnej URL.",
+          "Koncepty zostávajú neviditeľné až do zverejnenia, takže redaktor si môže správu pripraviť dopredu.",
+        ],
+      },
+      {
+        name: "Administrácia",
+        role: "Kto web udržiava pri živote",
+        points: [
+          "Prihlásenie oddelené podľa rolí: redaktori zverejňujú správy a galériu, administrátor spravuje stránky, zamestnancov a používateľov.",
+          "Nahraté obrázky sa zmenšujú a ukladajú mimo kódu, takže médiá nikdy nie sú súčasťou nasadenia.",
+        ],
+      },
+      {
+        name: "Služby pre občanov",
+        role: "To, prečo ľudia naozaj prídu",
+        points: [
+          "Praktické stránky - povinné zdravotné poistenie, kontakty, adresa a telefónne čísla - dostávajú vlastnú štruktúru namiesto toho, aby boli pochované v texte.",
+          "Kontaktný formulár sa validuje na serveri a má obmedzenie frekvencie; správy sa ukladajú aj odosielajú mailom.",
+        ],
+      },
+      {
+        name: "Frontend",
+        role: "Layout, ktorý prežije telefón",
+        points: [
+          "Ručne písané HTML, CSS a JavaScript, postavené responzívne nanovo namiesto záplat na starom markupe z čias jQuery.",
+          "Externé vloženia, ktoré starý web načítaval na každej stránke, sú preč; galéria a video sekcie sa obsluhujú lokálne.",
+        ],
+      },
+    ],
+    flow: [
+      { title: "Redaktor píše", detail: "Zamestnanec vytvorí správu alebo upraví stránku v administrácii, v oboch jazykoch." },
+      { title: "Validovať a uložiť", detail: "Form request skontroluje vstup; text ide do MySQL, obrázky do úložiska médií." },
+      { title: "Zverejniť", detail: "Nastavenie stavu na zverejnené okamžite zaradí záznam do verejných výpisov." },
+      { title: "Požiadavka", detail: "Návštevník príde na jazykovú cestu; kontrolér načíta záznam pre daný jazyk." },
+      { title: "Vykreslenie", detail: "Blade vykreslí stránku v layoute inštitútu, responzívne až po šírku telefónu." },
+    ],
+    decisions: [
+      {
+        title: "Prepis namiesto nového vzhľadu",
+        detail:
+          "Problémom nie je, ako web z roku 2019 vyzerá. Problémom je, že obsah žije v kóde - nový náter CSS by nechal inštitút rovnako neschopný publikovať ako dnes.",
+      },
+      {
+        title: "Laravel pre verejnú inštitúciu",
+        detail:
+          "Dlhodobo udržiavateľný PHP stack, ktorý si vedia ľudia inštitútu prevziať a prevádzkovať, s už vyriešenou autentifikáciou, validáciou, migráciami a administračnou vrstvou.",
+      },
+      {
+        title: "Dvojjazyčnosť dátami, nie duplikovaním",
+        detail:
+          "Preklady sú stĺpce záznamu, nie druhá kópia webu. Práve to bráni azerbajdžanskej a anglickej verzii rozísť sa tak, ako sa rozišla tá stará.",
+      },
+      {
+        title: "HTTPS a poriadne nastavenie domény",
+        detail:
+          "Verejná zdravotnícka inštitúcia, ktorá pýta od občanov kontaktné údaje po nezabezpečenom HTTP, je neprijateľná; TLS je súčasťou prepisu, nie neskoršou úlohou.",
+      },
+    ],
+    stack: [{}, {}, { group: "Prevádzka" }],
+    next: [
+      "Migrovať existujúce stránky, archív správ a galériu do nového obsahového modelu.",
+      "Dokončiť anglickú jazykovú verziu, aby oba jazyky vyšli naraz.",
+      "Prejsť prístupnosť - verejný zdravotnícky web musí fungovať pre ľudí, ktorí s ním najmenej vládzu bojovať.",
+    ],
+  },
+
   aments: {
     tagline: "E-shop v Next.js so serverovým renderovaním a prísnou dátovou architektúrou Route → Query → Mapper → UI.",
     facts: [{ label: "Renderovanie" }, { label: "Dátové vrstvy" }, { value: "Jazyk na serveri" }],

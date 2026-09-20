@@ -10,13 +10,13 @@ export const experience: Experience[] = [
     period: "05/2026 - Present",
     location: "Baku, Azerbaijan · Remote",
     summary:
-      "Full-stack work on the centre's web platforms. Diaspor.org is a multi-site publishing platform: every organisation gets its own branded subdomain news site, and a main portal aggregates approved news into a national feed.",
+      "Full-stack development on the centre's web platforms - a multi-tenant publishing platform, an academic journal system and a public health institute portal.",
     highlights: [
-      "Diaspor.org - designed the architecture end to end: Spring Boot REST API, React admin panel, Next.js SSR public site.",
-      "PostgreSQL with versioned migrations, S3 for media, Dockerized backend.",
-      "Implemented role-based access.",
+      "Diaspor.org - multi-tenant publishing platform designed end to end: Spring Boot REST API, React admin panel, Next.js SSR public site, PostgreSQL with versioned migrations, S3 for media and role-based access.",
+      "UNEC Student Research Journal - academic journal platform on OJS with a Laravel front: submission, peer review and production workflow for around twenty faculties, DOI registration and Google Scholar indexing.",
+      "Institute of Lung Diseases (etacxi.az) - rebuilding the public portal from scratch in Laravel, moving hard-coded pages into an editable, bilingual content model with an admin panel.",
     ],
-    stack: ["Java", "Spring Boot", "PostgreSQL", "React", "TypeScript", "Next.js", "AWS S3", "Docker"],
+    stack: ["Java", "Spring Boot", "PHP", "Laravel", "PostgreSQL", "MySQL", "React", "Next.js", "OJS", "AWS S3", "Docker"],
     caseStudy: "diaspor",
   },
   {

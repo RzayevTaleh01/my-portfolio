@@ -11,6 +11,12 @@ export function ProjectMeta({ project, lang, className }: { project: Project; la
   return (
     <p className={cn("flex items-center gap-2 text-xs text-subtle-foreground", className)}>
       <span className={project.kind === "research" ? "font-medium text-accent" : "font-medium"}>{t.kind[project.kind]}</span>
+      {project.organization && (
+        <>
+          <span aria-hidden>·</span>
+          <span>{project.organization}</span>
+        </>
+      )}
       <span aria-hidden>·</span>
       <span>{project.year}</span>
     </p>

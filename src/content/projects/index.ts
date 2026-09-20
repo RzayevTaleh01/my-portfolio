@@ -3,12 +3,14 @@ import { aments } from "./aments";
 import { cryptoTrader } from "./crypto-trader";
 import { devcodeLms } from "./devcode-lms";
 import { diaspor } from "./diaspor";
+import { etacxi } from "./etacxi";
 import { eduvision } from "./eduvision";
 import { langvis } from "./langvis";
+import { unecTtj } from "./unec-ttj";
 import { vacancyBot } from "./vacancy-bot";
 
 // Order here is the display order.
-export const projects: Project[] = [diaspor, eduvision, langvis, devcodeLms, cryptoTrader, vacancyBot, aments];
+export const projects: Project[] = [diaspor, unecTtj, etacxi, eduvision, langvis, devcodeLms, cryptoTrader, vacancyBot, aments];
 
 export function getProject(slug: string) {
   return projects.find((p) => p.slug === slug) ?? null;

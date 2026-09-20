@@ -20,11 +20,11 @@ export const core: ContentOverrides = {
       period: "05/2026 - súčasnosť",
       location: "Baku, Azerbajdžan · Na diaľku",
       summary:
-        "Full-stack vývoj webových platforiem centra. Diaspor.org je publikačná platforma: každá organizácia má vlastný spravodajský web na subdoméne so svojou značkou a hlavný portál zhromažďuje schválené správy do národného kanála.",
+        "Full-stack vývoj webových platforiem centra - multi-tenant publikačná platforma, systém pre akademický časopis a portál verejného zdravotníckeho inštitútu.",
       highlights: [
-        "Diaspor.org - navrhol som architektúru od začiatku do konca: Spring Boot REST API, administrácia v Reacte, verejný web v Next.js (SSR).",
-        "PostgreSQL s verzovanými migráciami, S3 pre médiá, backend v Dockeri.",
-        "Implementoval som prístup na základe rolí.",
+        "Diaspor.org - multi-tenant publikačnú platformu som navrhol od začiatku do konca: Spring Boot REST API, administrácia v Reacte, verejný web v Next.js (SSR), PostgreSQL s verzovanými migráciami, S3 pre médiá a prístup na základe rolí.",
+        "UNEC Student Research Journal - platforma akademického časopisu na OJS s frontom v Laraveli: workflow podania, recenzného konania a produkcie pre zhruba dvadsať fakúlt, registrácia DOI a indexovanie v Google Scholar.",
+        "Institute of Lung Diseases (etacxi.az) - verejný portál prepisujem od nuly v Laraveli a natvrdo zapísané stránky presúvam do editovateľného dvojjazyčného obsahového modelu s administráciou.",
       ],
     },
     {

@@ -7,6 +7,7 @@ export const diaspor: Project = {
   title: "Diaspor.org",
   tagline: "A multi-tenant publishing platform: a branded news site for every diaspora organisation, and one national feed.",
   kind: "work",
+  organization: "ITM",
   year: 2026,
   featured: true,
   links: {},

@@ -1,7 +1,7 @@
 import { ArrowRight, BrainCircuit, Code2, FileText, Mail } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ExperienceItem } from "@/components/experience-item";
+import { ExperienceItem, VolunteeringItem } from "@/components/experience-item";
 import { PostList } from "@/components/post-list";
 import { ProjectRow } from "@/components/project/project-card";
 import { Section } from "@/components/section";
@@ -17,7 +17,7 @@ export default async function HomePage(props: PageProps<"/[lang]">) {
   if (!hasLocale(lang)) notFound();
 
   const t = getDictionary(lang);
-  const { profile, experience, skills, projects, researchStatement, researchDirections } = getContent(lang);
+  const { profile, experience, volunteering, skills, projects, researchStatement, researchDirections } = getContent(lang);
   const featured = projects.filter((p) => p.featured).slice(0, 4);
   const posts = getAllPosts(lang).slice(0, 3);
   const aiCount = projects.filter((p) => p.kind === "research").length;
@@ -88,6 +88,14 @@ export default async function HomePage(props: PageProps<"/[lang]">) {
         <Timeline>
           {experience.map((e) => (
             <ExperienceItem key={`${e.organization}-${e.period}`} item={e} lang={lang} />
+          ))}
+        </Timeline>
+      </Section>
+
+      <Section id="volunteering" title={t.home.volunteering}>
+        <Timeline>
+          {volunteering.map((v) => (
+            <VolunteeringItem key={`${v.organization}-${v.period}`} item={v} lang={lang} />
           ))}
         </Timeline>
       </Section>

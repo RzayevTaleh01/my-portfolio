@@ -41,7 +41,7 @@ export default async function CvPage(props: PageProps<"/[lang]/cv">) {
   if (!hasLocale(lang)) notFound();
   const t = getDictionary(lang).cv;
   const content = getContent(lang);
-  const { experience, skills, publications, certificates, languages } = content;
+  const { experience, volunteering, skills, publications, certificates, languages } = content;
   const region = await getRegion();
   const profile = withRegion(content.profile, lang, region);
   // Visitors from Slovakia see the TU Košice studies, everyone else the Baku ones.
@@ -78,14 +78,38 @@ export default async function CvPage(props: PageProps<"/[lang]/cv">) {
       <CvSection title={t.experience}>
         <Timeline gap="space-y-7">
           {experience.map((e) => (
-            <div key={`${e.organization}-${e.role}`} className="relative break-inside-avoid text-sm leading-6">
+            <div key={`${e.organization}-${e.period}`} className="relative break-inside-avoid text-sm leading-6">
               <TimelineDot />
               <p className="font-mono text-xs text-muted-foreground">{e.period}</p>
+              <p className="font-medium">{e.organization}</p>
+              <div className="mt-1 space-y-3">
+                {e.roles.map((r) => (
+                  <div key={r.title}>
+                    <p>
+                      {r.title}
+                      <span className="font-mono text-xs text-muted-foreground"> · {r.period}</span>
+                    </p>
+                    <p className="text-muted-foreground">{r.summary}</p>
+                    {r.stack && <p className="text-xs text-subtle-foreground">{r.stack.join(", ")}</p>}
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </Timeline>
+      </CvSection>
+
+      <CvSection title={t.volunteering}>
+        <Timeline gap="space-y-7">
+          {volunteering.map((v) => (
+            <div key={`${v.organization}-${v.period}`} className="relative break-inside-avoid text-sm leading-6">
+              <TimelineDot />
+              <p className="font-mono text-xs text-muted-foreground">{v.period}</p>
               <p className="font-medium">
-                {e.role} · {e.organization}
+                {v.role} · {v.organization}
               </p>
-              <p className="text-muted-foreground">{e.summary}</p>
-              {e.stack && <p className="text-xs text-subtle-foreground">{e.stack.join(", ")}</p>}
+              <p className="text-muted-foreground">{v.summary}</p>
+              {v.stack && <p className="text-xs text-subtle-foreground">{v.stack.join(", ")}</p>}
             </div>
           ))}
         </Timeline>

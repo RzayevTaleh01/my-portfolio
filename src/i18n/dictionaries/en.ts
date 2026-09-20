@@ -29,7 +29,7 @@ export const en = {
   },
   home: {
     greeting: "Hi, I'm {name}.",
-    role: "Software engineer, learning to research NLP.",
+    role: "Software engineer and AI researcher.",
     viewCv: "View CV",
     contact: "Contact",
     engineeringTitle: "Software engineering",
@@ -39,6 +39,7 @@ export const en = {
     researchTitle: "AI research",
     researchMeta: "{count} research projects",
     experience: "Experience",
+    volunteering: "Volunteering & training",
     skills: "Skills",
     projects: "Projects",
     allProjects: "All projects",
@@ -49,6 +50,7 @@ export const en = {
   experience: {
     kinds: { "full-time": "Full-time", internship: "Internship", freelance: "Freelance" },
     caseStudy: "Read the architecture case study",
+    credential: "View certificate",
   },
   projects: {
     title: "Projects",
@@ -111,6 +113,7 @@ export const en = {
     description: "Curriculum vitae of {name}.",
     profile: "Profile",
     experience: "Experience",
+    volunteering: "Volunteering & training",
     education: "Education",
     skills: "Skills",
     publications: "Publications",

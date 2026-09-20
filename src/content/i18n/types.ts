@@ -9,12 +9,14 @@ import type {
   Project,
   ResearchDirection,
   SkillGroup,
+  Volunteering,
 } from "../types";
 
 /** Text-only translation of the English content. See src/content/localize.ts. */
 export interface ContentOverrides {
   profile?: DeepPartial<Profile>;
   experience?: DeepPartial<Experience>[];
+  volunteering?: DeepPartial<Volunteering>[];
   education?: DeepPartial<Education>[];
   educationIntl?: DeepPartial<Education>[];
   certificates?: DeepPartial<Certificate>[];

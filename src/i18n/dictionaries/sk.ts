@@ -30,7 +30,7 @@ export const sk: Dictionary = {
   },
   home: {
     greeting: "Ahoj, som {name}.",
-    role: "Softvérový inžinier, učím sa výskumu NLP.",
+    role: "Softvérový inžinier a výskumník v oblasti AI.",
     viewCv: "Zobraziť životopis",
     contact: "Kontakt",
     engineeringTitle: "Softvérové inžinierstvo",
@@ -40,6 +40,7 @@ export const sk: Dictionary = {
     researchTitle: "Výskum AI",
     researchMeta: "Výskumné projekty: {count}",
     experience: "Pracovné skúsenosti",
+    volunteering: "Dobrovoľníctvo a školenia",
     skills: "Zručnosti",
     projects: "Projekty",
     allProjects: "Všetky projekty",
@@ -50,6 +51,7 @@ export const sk: Dictionary = {
   experience: {
     kinds: { "full-time": "Plný úväzok", internship: "Stáž", freelance: "Freelance" },
     caseStudy: "Prečítať prípadovú štúdiu architektúry",
+    credential: "Zobraziť certifikát",
   },
   projects: {
     title: "Projekty",
@@ -111,6 +113,7 @@ export const sk: Dictionary = {
     description: "Životopis - {name}.",
     profile: "Profil",
     experience: "Pracovné skúsenosti",
+    volunteering: "Dobrovoľníctvo a školenia",
     education: "Vzdelanie",
     skills: "Zručnosti",
     publications: "Publikácie",

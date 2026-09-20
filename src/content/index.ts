@@ -1,5 +1,5 @@
 import type { Locale } from "@/i18n/config";
-import { certificates, education, educationIntl, experience, languages } from "./experience";
+import { certificates, education, educationIntl, experience, languages, volunteering } from "./experience";
 import { core as skCore } from "./i18n/sk/core";
 import { projects as skProjects } from "./i18n/sk/projects";
 import type { ContentOverrides } from "./i18n/types";
@@ -15,6 +15,7 @@ export * from "./types";
 const english = {
   profile,
   experience,
+  volunteering,
   education,
   educationIntl,
   certificates,
@@ -42,6 +43,7 @@ function build(locale: Locale): SiteContent {
   const content = {
     profile: mergeOverride(english.profile, o.profile, `${locale}.profile`),
     experience: mergeOverride(english.experience, o.experience, `${locale}.experience`),
+    volunteering: mergeOverride(english.volunteering, o.volunteering, `${locale}.volunteering`),
     education: mergeOverride(english.education, o.education, `${locale}.education`),
     educationIntl: mergeOverride(english.educationIntl, o.educationIntl, `${locale}.educationIntl`),
     certificates: mergeOverride(english.certificates, o.certificates, `${locale}.certificates`),

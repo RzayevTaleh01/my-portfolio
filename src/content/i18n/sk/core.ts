@@ -2,7 +2,7 @@ import type { ContentOverrides } from "../types";
 
 export const core: ContentOverrides = {
   profile: {
-    headline: "Softvérový inžinier · Výskum NLP",
+    headline: "Softvérový inžinier · Výskumník v oblasti AI",
     intro:
       "Mám 4 roky frontendových skúseností s vývojom produkčných webových aplikácií v Reacte a Next.js a praktické skúsenosti s backendom - REST API, databázy a nasadzovanie. Vo voľnom čase sa venujem spracovaniu prirodzeného jazyka pre jazyky s malým množstvom dát: azerbajdžančine a širšej turkickej rodine, češtine a slovenčine.",
     bio: [
@@ -13,44 +13,81 @@ export const core: ContentOverrides = {
       "Pri každodennej práci používam AI na zrýchlenie vývoja a k prompt engineeringu pristupujem ako programátor. Teraz žijem na Slovensku a študujem Priemyselný manažment na Technickej univerzite v Košiciach.",
     ],
     highlights: ["4 roky frontend skúseností", "Backend: Node.js · Spring Boot", "NLP · jazyky s malým množstvom dát", "Angličtina B2 · Slovenčina A2"],
-    socials: [{}, {}, {}, { label: "E-mail" }],
+    socials: [{}, {}, {}, {}, { label: "E-mail" }],
   },
   experience: [
     {
-      role: "Full-Stack vývojár",
-      period: "05/2026 - súčasnosť",
       location: "Baku, Azerbajdžan · Na diaľku",
-      summary:
-        "Full-stack vývoj webových platforiem centra - multi-tenant publikačná platforma, systém pre akademický časopis a portál verejného zdravotníckeho inštitútu.",
-      highlights: [
-        "Diaspor.org - multi-tenant publikačnú platformu som navrhol od začiatku do konca: Spring Boot REST API, administrácia v Reacte, verejný web v Next.js (SSR), PostgreSQL s verzovanými migráciami, S3 pre médiá a prístup na základe rolí.",
-        "UNEC Student Research Journal - platforma akademického časopisu na OJS s frontom v Laraveli: workflow podania, recenzného konania a produkcie pre zhruba dvadsať fakúlt, registrácia DOI a indexovanie v Google Scholar.",
-        "Institute of Lung Diseases (etacxi.az) - verejný portál prepisujem od nuly v Laraveli a natvrdo zapísané stránky presúvam do editovateľného dvojjazyčného obsahového modelu s administráciou.",
+      period: "05/2026 - súčasnosť",
+      roles: [
+        {
+          title: "Full-Stack vývojár",
+          period: "05/2026 - súčasnosť",
+          summary:
+            "Full-stack vývoj webových platforiem centra - multi-tenant publikačná platforma, systém pre akademický časopis a portál verejného zdravotníckeho inštitútu.",
+          highlights: [
+            "Diaspor.org - multi-tenant publikačnú platformu som navrhol od začiatku do konca: Spring Boot REST API, administrácia v Reacte, verejný web v Next.js (SSR), PostgreSQL s verzovanými migráciami, S3 pre médiá a prístup na základe rolí.",
+            "UNEC Student Research Journal - platforma akademického časopisu na OJS s frontom v Laraveli: workflow podania, recenzného konania a produkcie pre zhruba dvadsať fakúlt, registrácia DOI a indexovanie v Google Scholar.",
+            "Institute of Lung Diseases (etacxi.az) - verejný portál prepisujem od nuly v Laraveli a natvrdo zapísané stránky presúvam do editovateľného dvojjazyčného obsahového modelu s administráciou.",
+          ],
+        },
       ],
     },
     {
-      role: "Frontend vývojár (Middle)",
       location: "Baku, Azerbajdžan · Na pracovisku",
-      summary: "Frontendový vývoj národných vzdelávacích webových platforiem Azerbajdžanu.",
-      highlights: ["Video.edu.az - nová verzia postavená na Next.js."],
+      roles: [
+        {
+          title: "Frontend vývojár (Middle)",
+          summary: "Frontendový vývoj národných vzdelávacích webových platforiem Azerbajdžanu.",
+          highlights: ["Video.edu.az - nová verzia postavená na Next.js."],
+        },
+        {
+          title: "Frontend vývojár (Junior)",
+          summary: "Frontendový vývoj národných vzdelávacích webových platforiem Azerbajdžanu.",
+          highlights: ["Portal.edu.az a Pts.edu.az - nové služby a priebežná podpora."],
+        },
+        {
+          title: "Frontend vývojár (stážista)",
+          summary: "Trojmesačná stáž na národných vzdelávacích webových platformách.",
+          highlights: ["Digital.edu.az, Karabakh.edu.az, Ict.edu.az, Ite.az, MarsAcademy.az; podpora pre Edu.gov.az."],
+        },
+      ],
     },
     {
-      role: "Frontend vývojár (Junior)",
       location: "Baku, Azerbajdžan · Na pracovisku",
-      summary: "Frontendový vývoj národných vzdelávacích webových platforiem Azerbajdžanu.",
-      highlights: ["Portal.edu.az a Pts.edu.az - nové služby a priebežná podpora."],
+      roles: [
+        {
+          title: "Frontend vývojár (stážista)",
+          summary: "Sima Reporting System - klientske a administrátorské rozhrania.",
+          highlights: ["Stáž som ukončil s certifikátom s vyznamenaním."],
+          credential: { label: "Certifikát s vyznamenaním" },
+        },
+      ],
+    },
+  ],
+  volunteering: [
+    {
+      organization: "Azerbajdžanská štátna univerzita ropy a priemyslu - IT oddelenie",
+      role: "Full-Stack vývojár (dobrovoľnícky)",
+      location: "Baku, Azerbajdžan · Na pracovisku",
+      summary:
+        "Interný systém pre fakultu informatiky: správa študentov a vyučujúcich katedry a záznamov okolo nich.",
+      highlights: [
+        "K tímu som sa pridal v treťom ročníku štúdia a rok som podporoval IT oddelenie ako full-stack vývojár.",
+        "Jeden z piatich študentov vybraných z fakulty do tímu.",
+        "Moja prvá pracovná skúsenosť - tá, z ktorej vyšlo všetko ostatné.",
+      ],
     },
     {
-      role: "Frontend vývojár (stážista)",
-      location: "Baku, Azerbajdžan · Na pracovisku",
-      summary: "Trojmesačná stáž na národných vzdelávacích webových platformách.",
-      highlights: ["Digital.edu.az, Karabakh.edu.az, Ict.edu.az, Ite.az, MarsAcademy.az; podpora pre Edu.gov.az."],
-    },
-    {
-      role: "Frontend vývojár (stážista)",
-      location: "Baku, Azerbajdžan · Na pracovisku",
-      summary: "Sima Reporting System - klientske a administrátorské rozhrania.",
-      highlights: ["Stáž som ukončil s certifikátom s vyznamenaním."],
+      role: "Frontendové programovanie - jednosemestrálny kurz",
+      location: "Baku, Azerbajdžan",
+      summary: "Semestrálny program frontendového programovania, do ktorého sa vstupovalo cez prijímaciu skúšku.",
+      highlights: [
+        "Výber podľa prijímacej skúšky: program dostalo prvých 25 študentov fakulty a ja som sa do tejto skupiny dostal.",
+        "Vďaka účasti ma oslobodili od troch z piatich predmetov, ktoré by som v tom semestri na univerzite inak absolvoval.",
+        "Program som ukončil so ziskom 100/100.",
+      ],
+      credential: { label: "Certifikát" },
     },
   ],
   education: [

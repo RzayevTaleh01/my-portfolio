@@ -13,6 +13,7 @@ export function buildAssistantTopics(lang: Locale, content: SiteContent, dict: D
   const t = dict.assistant;
   const { profile, experience, skills, projects, researchStatement } = content;
   const [latestJob] = experience;
+  const [latestRole] = latestJob.roles;
   const posts = getAllPosts(lang);
   const [latestPost] = posts;
   const years = profile.highlights[0];
@@ -22,7 +23,7 @@ export function buildAssistantTopics(lang: Locale, content: SiteContent, dict: D
     {
       id: "experience",
       label: t.topics.experience,
-      answer: fmt(t.answers.experience, { years, role: latestJob.role, org: latestJob.organization }),
+      answer: fmt(t.answers.experience, { years, role: latestRole.title, org: latestJob.organization }),
       link: { label: t.links.home, href: `${localize(lang, "/")}#experience` },
     },
     {

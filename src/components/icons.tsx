@@ -1,4 +1,4 @@
-import { Code2, GraduationCap, IdCard, Mail, type LucideProps } from "lucide-react";
+import { Code2, GraduationCap, IdCard, Mail, Trophy, type LucideProps } from "lucide-react";
 import type { SocialPlatform } from "@/content";
 
 type IconProps = LucideProps;
@@ -63,6 +63,9 @@ export function SocialIcon({ platform, ...props }: IconProps & { platform: Socia
     case "hackerrank":
       // HackerRank has no Lucide brand icon; a code glyph keeps the row consistent.
       return <Code2 {...props} size={size} />;
+    case "eolymp":
+      // Competitive-programming judge - a trophy reads closer than a code glyph.
+      return <Trophy {...props} size={size} />;
     case "telegram":
       return <TelegramIcon {...props} size={size} />;
     case "youtube":

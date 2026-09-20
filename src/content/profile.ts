@@ -5,7 +5,7 @@ import type { Profile } from "./types";
 export const profile: Profile = {
   name: "Taleh Rzayev",
   authorName: "T. Rzayev",
-  headline: "Software Engineer · NLP research",
+  headline: "Software Engineer · AI Researcher",
   // location and now are set per visitor (Prešov for Slovakia, Riga elsewhere): see ./locations.ts
   location: "Riga, Latvia",
   email: "TalehRzayev2002@gmail.com",
@@ -30,6 +30,7 @@ export const profile: Profile = {
     { platform: "github", label: "GitHub", href: "https://github.com/RzayevTaleh01" },
     { platform: "linkedin", label: "LinkedIn", href: "https://www.linkedin.com/in/rzayevtaleh01/" },
     { platform: "hackerrank", label: "HackerRank", href: "https://www.hackerrank.com/profile/rzayevtaleh01" },
+    { platform: "eolymp", label: "E-Olymp", href: "https://eolymp.com/users/Taleh.Rzayev683.19" },
     { platform: "email", label: "Email", href: "mailto:TalehRzayev2002@gmail.com" },
   ],
 };

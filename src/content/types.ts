@@ -8,6 +8,7 @@ export type SocialPlatform =
   | "github"
   | "linkedin"
   | "hackerrank"
+  | "eolymp"
   | "telegram"
   | "youtube"
   | "scholar"
@@ -45,18 +46,47 @@ export interface Profile {
 
 // ─── Experience & education ────────────────────────────────
 
-export interface Experience {
-  organization: string;
-  role: string;
-  kind: "full-time" | "internship" | "freelance";
+export type ExperienceKind = "full-time" | "internship" | "freelance";
+
+/** A public credential earned in a role or a course. */
+export interface Credential {
+  label: string;
+  href: string;
+}
+
+/** One title held at an organisation. Several of them make a promotion track. */
+export interface ExperienceRole {
+  title: string;
+  kind: ExperienceKind;
   /** Free text, e.g. "03/2023 - 08/2026". */
   period: string;
-  location: string;
   summary: string;
   highlights?: string[];
   stack?: string[];
   /** Slug of a related case study in src/content/projects. */
   caseStudy?: string;
+  credential?: Credential;
+}
+
+/** One organisation, newest role first - the whole stay is grouped under it. */
+export interface Experience {
+  organization: string;
+  location: string;
+  /** The whole span across the roles below, e.g. "12/2022 - 08/2026". */
+  period: string;
+  roles: ExperienceRole[];
+}
+
+/** Unpaid work and training programmes - shown apart from paid experience. */
+export interface Volunteering {
+  organization: string;
+  role: string;
+  period: string;
+  location: string;
+  summary: string;
+  highlights?: string[];
+  stack?: string[];
+  credential?: Credential;
 }
 
 export interface Education {

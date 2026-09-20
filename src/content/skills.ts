@@ -1,25 +1,35 @@
 import type { ResearchDirection, SkillGroup } from "./types";
 
 export const researchStatement =
-  "I research adaptive, AI-driven learning: how a system can model what a learner knows, decide what to teach next, and explain it in natural language that stays grounded in the course.";
+  "A software engineer by profession, reading and building my way into research. The direction is natural language processing for low-resource languages - Azerbaijani and the wider Turkic family, Czech and Slovak - and this page is where that work is kept while I prepare for a PhD in it.";
 
 export const researchDirections: ResearchDirection[] = [
   {
-    title: "Learner modelling",
-    description: "Estimating what a student knows from noisy answers, so the system can adapt without asking the learner to self-report.",
-    methods: ["Bayesian Knowledge Tracing", "Spaced repetition", "Error taxonomies"],
-    projects: ["eduvision", "langvis"],
+    title: "NLP for Azerbaijani",
+    description:
+      "An agglutinative language with little annotated data. What I want to understand: how far tokenisation and morphology-aware modelling can carry a language before corpus size becomes the wall.",
+    methods: ["Morphological segmentation", "Corpus building", "Transfer from high-resource languages"],
+    projects: [],
   },
   {
-    title: "Reinforcement learning for pedagogy",
-    description: "Learning a policy that keeps each learner in the flow zone - hard enough to grow, easy enough not to quit.",
-    methods: ["PPO", "Reward shaping", "A/B evaluation"],
-    projects: ["eduvision"],
+    title: "Transfer across the Turkic family",
+    description:
+      "Turkish has data; Azerbaijani, Turkmen and the rest have far less. The family shares structure, so the question is how much of a high-resource sibling transfers, and where it quietly stops.",
+    methods: ["Multilingual pretraining", "Shared subword vocabularies", "Zero-shot evaluation"],
+    projects: [],
   },
   {
-    title: "Grounded conversational tutors",
-    description: "LLM tutors that follow a pedagogical strategy and stay factual by retrieving from course material.",
-    methods: ["Retrieval-augmented generation", "Neuro-symbolic control", "Real-time speech"],
+    title: "Czech and Slovak",
+    description:
+      "Two close, morphologically rich languages I live between. They make a natural testbed for cross-lingual work: near-identical structure, separate data, separate communities.",
+    methods: ["Cross-lingual alignment", "Rich morphology", "Low-resource fine-tuning"],
+    projects: [],
+  },
+  {
+    title: "Adaptive learning systems",
+    description:
+      "Where I started, and still one thread: modelling what a learner knows, deciding what to teach next, and explaining it in language grounded in the course material.",
+    methods: ["Bayesian Knowledge Tracing", "PPO", "Retrieval-augmented generation"],
     projects: ["eduvision", "langvis"],
   },
 ];

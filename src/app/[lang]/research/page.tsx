@@ -45,24 +45,27 @@ export default async function ResearchPage(props: PageProps<"/[lang]/research">)
                       </span>
                     ))}
                   </div>
-                  <p className="text-xs text-subtle-foreground">
-                    {t.research.in}{" "}
-                    {d.projects.map((slug, j) => {
-                      const p = getProject(slug);
-                      if (!p) return null;
-                      return (
-                        <span key={slug}>
-                          {j > 0 && ", "}
-                          <Link
-                            href={localize(lang, `/projects/${slug}`)}
-                            className="text-muted-foreground underline decoration-border-strong underline-offset-4 hover:text-foreground"
-                          >
-                            {p.title}
-                          </Link>
-                        </span>
-                      );
-                    })}
-                  </p>
+                  {/* A direction can be something I am only reading into, with nothing built yet. */}
+                  {d.projects.length > 0 && (
+                    <p className="text-xs text-subtle-foreground">
+                      {t.research.in}{" "}
+                      {d.projects.map((slug, j) => {
+                        const p = getProject(slug);
+                        if (!p) return null;
+                        return (
+                          <span key={slug}>
+                            {j > 0 && ", "}
+                            <Link
+                              href={localize(lang, `/projects/${slug}`)}
+                              className="text-muted-foreground underline decoration-border-strong underline-offset-4 hover:text-foreground"
+                            >
+                              {p.title}
+                            </Link>
+                          </span>
+                        );
+                      })}
+                    </p>
+                  )}
                 </div>
               </div>
             </li>

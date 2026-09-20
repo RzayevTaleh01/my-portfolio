@@ -30,7 +30,7 @@ export const sk: Dictionary = {
   },
   home: {
     greeting: "Ahoj, som {name}.",
-    role: "Softvérový inžinier a výskumník v oblasti AI.",
+    role: "Softvérový inžinier, učím sa výskumu NLP.",
     viewCv: "Zobraziť životopis",
     contact: "Kontakt",
     engineeringTitle: "Softvérové inžinierstvo",

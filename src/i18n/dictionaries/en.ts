@@ -29,7 +29,7 @@ export const en = {
   },
   home: {
     greeting: "Hi, I'm {name}.",
-    role: "Software engineer and AI researcher.",
+    role: "Software engineer, learning to research NLP.",
     viewCv: "View CV",
     contact: "Contact",
     engineeringTitle: "Software engineering",

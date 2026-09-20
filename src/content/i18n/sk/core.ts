@@ -2,16 +2,17 @@ import type { ContentOverrides } from "../types";
 
 export const core: ContentOverrides = {
   profile: {
-    headline: "Softvérový inžinier · Výskumník v oblasti AI",
+    headline: "Softvérový inžinier · Výskum NLP",
     intro:
-      "Mám 4 roky frontendových skúseností s vývojom produkčných webových aplikácií v Reacte a Next.js a praktické skúsenosti s backendom - REST API, databázy a nasadzovanie. Ako výskumník v oblasti AI vytváram adaptívne vzdelávacie systémy: sledovanie znalostí, posilňované učenie a LLM tútorov opretých o zdroje.",
+      "Mám 4 roky frontendových skúseností s vývojom produkčných webových aplikácií v Reacte a Next.js a praktické skúsenosti s backendom - REST API, databázy a nasadzovanie. Vo voľnom čase sa venujem spracovaniu prirodzeného jazyka pre jazyky s malým množstvom dát: azerbajdžančine a širšej turkickej rodine, češtine a slovenčine.",
     bio: [
-      "Začínal som v roku 2022 ako frontendový stážista v AzInTelecom, kde som vytváral klientske a administrátorské rozhrania systému Sima Reporting System. V rokoch 2023 – 2026 som v spoločnosti Edumedia-Azerbaijan pracoval na národných vzdelávacích platformách - vrátane novej verzie Video.edu.az postavenej na Next.js a nových služieb pre Portal.edu.az a Pts.edu.az.",
-      "Okrem frontendu navrhujem celé systémy. Pre Diaspor.org som od začiatku do konca postavil multi-tenant publikačnú platformu: Spring Boot REST API, administráciu v Reacte, verejný web v Next.js so serverovým renderovaním, PostgreSQL s verzovanými migráciami a S3 pre médiá.",
-      "Môj výskum sa venuje AI vo vzdelávaní: modelovaniu toho, čo študent vie, rozhodovaniu, čo ho naučiť ďalej, a vysvetľovaniu v prirodzenom jazyku opretom o učebný materiál. EduVision, môj adaptívny tútorský systém, kombinuje bayesovské sledovanie znalostí (BKT), agenta posilňovaného učenia PPO a LLM s vyhľadávaním v zdrojoch (RAG); LangVis je hlasový tútor na nácvik rozprávania v reálnom čase.",
+      "Začínal som v roku 2022 ako frontendový stážista v AzInTelecom, kde som vytváral klientske a administrátorské rozhrania systému Sima Reporting System. Od konca roku 2022 do roku 2026 som bol v spoločnosti Edumedia-Azerbaijan, kde som prešiel od stážistu po middle vývojára na národných vzdelávacích platformách Azerbajdžanu - vrátane novej verzie Video.edu.az postavenej na Next.js. Od roku 2026 pracujem ako full-stack vývojár v ITM - Information Technology Center.",
+      "Okrem frontendu navrhujem celé systémy. Pre Diaspor.org som od začiatku do konca postavil multi-tenant publikačnú platformu: Spring Boot REST API, administráciu v Reacte, verejný web v Next.js so serverovým renderovaním, PostgreSQL s verzovanými migráciami a S3 pre médiá. V ITM pracujem aj v PHP a Laraveli - na platforme akademického časopisu postavenej na OJS a na prepise portálu verejného zdravotníckeho inštitútu.",
+      "Profesionálne som softvérový inžinier. Výskum je to, čomu sa venujem vo vlastnom čase, ako nadšenec: čítam články, reprodukujem, čo sa dá, a učím sa písať vlastný výskum. Mojím smerom je spracovanie prirodzeného jazyka pre jazyky s malým množstvom dát - azerbajdžančina a širšia turkická rodina, čeština a slovenčina. Adaptívne učenie je miesto, kde som začal, a vzišli z neho EduVision a LangVis, ale ťažisko sa presunulo na samotný jazyk.",
+      "Pripravujem sa na ďalší krok: doktorandské štúdium v tejto oblasti a akademickú dráhu postavenú na publikovanej práci popri tej inžinierskej. Ešte tam nie som - toto portfólio je záznamom cesty tam.",
       "Pri každodennej práci používam AI na zrýchlenie vývoja a k prompt engineeringu pristupujem ako programátor. Teraz žijem na Slovensku a študujem Priemyselný manažment na Technickej univerzite v Košiciach.",
     ],
-    highlights: ["4 roky frontend skúseností", "Backend: Node.js · Spring Boot", "Výskum AI · adaptívne učenie", "Angličtina B2 · Slovenčina A2"],
+    highlights: ["4 roky frontend skúseností", "Backend: Node.js · Spring Boot", "NLP · jazyky s malým množstvom dát", "Angličtina B2 · Slovenčina A2"],
     socials: [{}, {}, {}, { label: "E-mail" }],
   },
   experience: [
@@ -100,24 +101,31 @@ export const core: ContentOverrides = {
     { title: "Umelá inteligencia" },
   ],
   researchStatement:
-    "Skúmam adaptívne vzdelávanie poháňané umelou inteligenciou: ako môže systém modelovať, čo študent vie, rozhodnúť, čo ho naučiť ďalej, a vysvetliť to v prirodzenom jazyku, ktorý sa opiera o učebný materiál.",
+    "Profesiou softvérový inžinier, ktorý sa čítaním a stavaním prepracúva k výskumu. Smerom je spracovanie prirodzeného jazyka pre jazyky s malým množstvom dát - azerbajdžančina a širšia turkická rodina, čeština a slovenčina - a táto stránka je miestom, kde sa tá práca zbiera, kým sa pripravujem na doktorandské štúdium.",
   researchDirections: [
     {
-      title: "Modelovanie študenta",
+      title: "NLP pre azerbajdžančinu",
       description:
-        "Odhad toho, čo študent vie, z nepresných odpovedí - aby sa systém mohol prispôsobiť bez toho, aby sa študent musel sám hodnotiť.",
-      methods: ["Bayesovské sledovanie znalostí (BKT)", "Rozložené opakovanie", "Taxonómia chýb"],
+        "Aglutinačný jazyk s malým množstvom anotovaných dát. Chcem pochopiť, ako ďaleko dokáže jazyk doniesť tokenizácia a modelovanie citlivé na morfológiu, než sa stenou stane veľkosť korpusu.",
+      methods: ["Morfologická segmentácia", "Budovanie korpusu", "Prenos z jazykov s množstvom dát"],
     },
     {
-      title: "Posilňované učenie pre pedagogiku",
+      title: "Prenos v rámci turkickej rodiny",
       description:
-        "Učenie stratégie, ktorá udrží každého študenta v stave flow - dosť náročné na rast, dosť ľahké, aby to nevzdal.",
-      methods: ["PPO", "Návrh odmeny", "A/B hodnotenie"],
+        "Turečtina dáta má; azerbajdžančina, turkménčina a ostatné oveľa menej. Rodina zdieľa štruktúru, takže otázkou je, koľko sa prenesie z bohatšieho súrodenca a kde to potichu prestane fungovať.",
+      methods: ["Viacjazyčné predtrénovanie", "Zdieľané subword slovníky", "Zero-shot hodnotenie"],
     },
     {
-      title: "Konverzační tútori opretí o zdroje",
-      description: "LLM tútori, ktorí dodržiavajú pedagogickú stratégiu a zostávajú fakticky presní vďaka vyhľadávaniu v učebnom materiáli.",
-      methods: ["Retrieval-augmented generation", "Neuro-symbolické riadenie", "Reč v reálnom čase"],
+      title: "Čeština a slovenčina",
+      description:
+        "Dva blízke, morfologicky bohaté jazyky, medzi ktorými žijem. Sú prirodzeným testovacím prostredím pre medzijazykovú prácu: takmer zhodná štruktúra, oddelené dáta, oddelené komunity.",
+      methods: ["Medzijazykové zarovnanie", "Bohatá morfológia", "Doladenie pri málo dátach"],
+    },
+    {
+      title: "Adaptívne vzdelávacie systémy",
+      description:
+        "Miesto, kde som začal, a stále jedna z línií: modelovať, čo študent vie, rozhodnúť, čo ho naučiť ďalej, a vysvetliť to jazykom opretým o učebný materiál.",
+      methods: ["Bayesovské sledovanie znalostí (BKT)", "PPO", "Retrieval-augmented generation"],
     },
   ],
   archive: [

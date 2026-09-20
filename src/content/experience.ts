@@ -85,20 +85,21 @@ export const volunteering: Volunteering[] = [
       "One of five students chosen from the faculty.",
       "My first working experience.",
     ],
-    stack: ["JavaScript", "HTML5", "CSS3", "PHP", "MySQL"],
+    stack: ["Java", "Spring Boot", "React", "Bootstrap"],
   },
   {
-    organization: "Algorithmics Global for Azerbaijan",
+    organization: "Algorithmics Global in Azerbaijan",
     role: "Frontend programming - one-semester course",
     period: "2022",
     location: "Baku, Azerbaijan",
     summary: "A semester-long frontend programme, entered by examination.",
     highlights: [
+      "A coding school running in Azerbaijan with the Ministry of Education and ADNSU.",
       "Entrance exam - the programme went to the faculty's first 25 students.",
       "Exempted me from three of the five subjects that semester.",
-      "Finished with 100/100.",
+      "Finished with 100/100; certificates presented by the Ministry of Education and Algorithmics.",
     ],
-    stack: ["HTML5", "CSS3", "JavaScript"],
+    stack: ["HTML5", "CSS3", "JavaScript", "React", "Node.js", "Git", "GitHub"],
     credential: {
       label: "Certificate",
       href: "https://drive.google.com/file/d/1wU_RX5qmX0dzXBMgP72aRV-E6RxTdbL2/view",
@@ -158,7 +159,7 @@ export const certificates: Certificate[] = [
   },
   {
     title: "Frontend Developer (#CodeForFuture)",
-    issuer: "Algorithmics Global",
+    issuer: "Algorithmics Global in Azerbaijan",
     link: "https://drive.google.com/file/d/1wU_RX5qmX0dzXBMgP72aRV-E6RxTdbL2/view",
   },
   {

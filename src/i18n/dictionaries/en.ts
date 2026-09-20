@@ -30,7 +30,7 @@ export const en = {
   home: {
     greeting: "Hi, I'm {name}.",
     role: "Software engineer and AI researcher.",
-    viewCv: "View CV",
+    viewCv: "View resume",
     contact: "Contact",
     engineeringTitle: "Software engineering",
     engineeringText:
@@ -109,8 +109,8 @@ export const en = {
   },
   about: { title: "About", description: "Background of {name}." },
   cv: {
-    title: "CV",
-    description: "Curriculum vitae of {name}.",
+    title: "Resume",
+    description: "Resume of {name}.",
     profile: "Profile",
     experience: "Experience",
     volunteering: "Volunteering & training",
@@ -141,7 +141,7 @@ export const en = {
       projects: "Best projects",
       research: "AI research",
       articles: "Articles",
-      cv: "CV",
+      cv: "Resume",
       contact: "How to reach him",
     },
     answers: {
@@ -150,10 +150,10 @@ export const en = {
       projects: "{count} written-up case studies - each one explains the architecture layer by layer. Start with {first}.",
       research: "{statement}",
       articles: "{count} articles on software architecture and AI, with code and formulas. Latest: {first}.",
-      cv: "The CV page has the full record and a PDF download.",
+      cv: "The resume page has the full record and a PDF download.",
       contact: "Email: {email}. He is also on GitHub and LinkedIn - links are in the sidebar.",
     },
-    links: { home: "See experience", skills: "See skills", projects: "All projects", research: "Research", articles: "Read articles", cv: "Open CV", contact: "Send email" },
+    links: { home: "See experience", skills: "See skills", projects: "All projects", research: "Research", articles: "Read articles", cv: "Open resume", contact: "Send email" },
   },
   notFound: {
     title: "Page not found",

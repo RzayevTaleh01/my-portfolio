@@ -81,9 +81,10 @@ export const core: ContentOverrides = {
       location: "Baku, Azerbajdžan",
       summary: "Semestrálny frontendový program, do ktorého sa vstupovalo cez skúšku.",
       highlights: [
+        "Kódovacia škola pôsobiaca v Azerbajdžane spolu s ministerstvom školstva a univerzitou ADNSU.",
         "Prijímacia skúška - program dostalo prvých 25 študentov fakulty.",
         "Oslobodil ma od troch z piatich predmetov v tom semestri.",
-        "Ukončil som ho so ziskom 100/100.",
+        "Ukončil som ho so ziskom 100/100; certifikáty odovzdalo ministerstvo školstva a Algorithmics.",
       ],
       credential: { label: "Certifikát" },
     },

@@ -5,6 +5,7 @@ import { ExperienceItem } from "@/components/experience-item";
 import { PostList } from "@/components/post-list";
 import { ProjectRow } from "@/components/project/project-card";
 import { Section } from "@/components/section";
+import { SkillList } from "@/components/skill-list";
 import { Timeline } from "@/components/timeline";
 import { Button } from "@/components/ui/button";
 import { getContent } from "@/content";
@@ -94,20 +95,7 @@ export default async function HomePage(props: PageProps<"/[lang]">) {
 
 
       <Section id="skills" title={t.home.skills}>
-        <dl className="space-y-4">
-          {skills.map((g) => (
-            <div key={g.title} className="grid gap-2 sm:grid-cols-[150px_1fr] sm:gap-6">
-              <dt className="pt-1 text-sm font-medium">{g.title}</dt>
-              <dd className="flex flex-wrap gap-1.5">
-                {g.skills.map((s) => (
-                  <span key={s} className="rounded-md bg-muted px-2 py-1 text-[13px] leading-none text-muted-foreground">
-                    {s}
-                  </span>
-                ))}
-              </dd>
-            </div>
-          ))}
-        </dl>
+        <SkillList groups={skills} />
       </Section>
 
       <Section id="projects" title={t.home.projects} href={localize(lang, "/projects")} linkLabel={t.home.allProjects}>

@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { Fragment } from "react";
 import { ExperienceItem, VolunteeringItem } from "@/components/experience-item";
 import { PrintButton } from "@/components/print-button";
+import { SkillList } from "@/components/skill-list";
 import { Timeline, TimelineDot } from "@/components/timeline";
 import { getContent } from "@/content";
 import { fmt, hasLocale } from "@/i18n/config";
@@ -110,11 +111,7 @@ export default async function CvPage(props: PageProps<"/[lang]/cv">) {
       </CvSection>
 
       <CvSection title={t.skills}>
-        {skills.map((g) => (
-          <Row key={g.title} when={g.title}>
-            {g.skills.join(", ")}
-          </Row>
-        ))}
+        <SkillList groups={skills} />
       </CvSection>
 
       {publications.length > 0 && (

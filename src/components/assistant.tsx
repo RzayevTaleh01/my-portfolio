@@ -32,9 +32,8 @@ interface Turn {
   topic: AssistantTopic;
 }
 
-const TEASER_DELAY = 1500;
+const TEASER_DELAY = 2000;
 const THINKING_TIME = 900;
-const TEASER_DISMISSED = "assistant-teaser-dismissed";
 
 /**
  * Floating "AI assistant". The answers are scripted from the site content -
@@ -45,23 +44,18 @@ export function Assistant({ topics, t }: { topics: AssistantTopic[]; t: Assistan
   const [turns, setTurns] = useState<Turn[]>([]);
   const [thinking, setThinking] = useState<Turn | null>(null);
   const [teaser, setTeaser] = useState(false);
+  const [dismissed, setDismissed] = useState(false);
   const feed = useRef<HTMLDivElement>(null);
 
   const asked = new Set(turns.map((turn) => turn.topic.id));
   const remaining = topics.filter((topic) => !asked.has(topic.id) && topic.id !== thinking?.topic.id);
 
-  // Nudge first-time visitors once the page has settled.
+  // The nudge comes back a couple of seconds after every close, not just on the first visit.
   useEffect(() => {
-    let dismissed = false;
-    try {
-      dismissed = sessionStorage.getItem(TEASER_DISMISSED) === "1";
-    } catch {
-      // Private mode or blocked storage: just show it.
-    }
-    if (dismissed) return;
+    if (open || dismissed) return;
     const timer = setTimeout(() => setTeaser(true), TEASER_DELAY);
     return () => clearTimeout(timer);
-  }, []);
+  }, [open, dismissed]);
 
   // Follow the conversation like a real chat (the container scrolls smoothly via CSS).
   useEffect(() => {
@@ -69,13 +63,10 @@ export function Assistant({ topics, t }: { topics: AssistantTopic[]; t: Assistan
     if (el) el.scrollTop = el.scrollHeight;
   }, [turns, thinking]);
 
+  // Dismissing silences the nudge until the panel is opened again.
   const hideTeaser = () => {
     setTeaser(false);
-    try {
-      sessionStorage.setItem(TEASER_DISMISSED, "1");
-    } catch {
-      // Nothing to remember if storage is unavailable.
-    }
+    setDismissed(true);
   };
 
   const ask = (topic: AssistantTopic) => {
@@ -92,7 +83,11 @@ export function Assistant({ topics, t }: { topics: AssistantTopic[]; t: Assistan
       open={open}
       onOpenChange={(next) => {
         setOpen(next);
-        if (next) hideTeaser();
+        // Opening clears the nudge and re-arms it for the next time the panel closes.
+        if (next) {
+          setTeaser(false);
+          setDismissed(false);
+        }
       }}
     >
       {/* Same backdrop as the search dialog, so the chat reads as a layer above the page. */}
@@ -100,30 +95,30 @@ export function Assistant({ topics, t }: { topics: AssistantTopic[]; t: Assistan
 
       <div className="no-print fixed bottom-10 right-5 z-50 flex flex-col items-end gap-3 lg:bottom-12 lg:right-6">
         {teaser && !open && (
-          <div className="msg-in flex max-w-[15rem] items-start gap-2 rounded-2xl rounded-br-sm border bg-surface px-3.5 py-3 text-[13px] leading-relaxed shadow-[0_16px_40px_-20px_rgb(0_0_0/0.4)]">
+          <div className="always-light msg-in flex max-w-[17.5rem] items-start gap-2.5 rounded-2xl rounded-br-sm border bg-surface px-4 py-3.5 text-sm leading-relaxed text-foreground shadow-[0_16px_40px_-20px_rgb(0_0_0/0.4)]">
             <button onClick={() => setOpen(true)} className="text-left">
               {t.teaser}
             </button>
             <button
               onClick={hideTeaser}
               aria-label={t.dismiss}
-              className="-mr-1 -mt-1 flex size-6 shrink-0 items-center justify-center rounded-lg text-subtle-foreground transition-colors hover:bg-muted hover:text-foreground"
+              className="-mr-1.5 -mt-1 flex size-7 shrink-0 items-center justify-center rounded-lg text-subtle-foreground transition-colors hover:bg-muted hover:text-foreground"
             >
-              <X className="size-3" />
+              <X className="size-3.5" />
             </button>
           </div>
         )}
 
         <Popover.Trigger
           aria-label={open ? t.close : t.open}
-          className="relative flex size-12 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-[0_10px_30px_-10px_rgb(0_0_0/0.45)] transition-transform hover:scale-105 data-[state=open]:scale-95"
+          className="relative flex size-14 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-[0_10px_30px_-10px_rgb(0_0_0/0.45)] transition-transform hover:scale-105 data-[state=open]:scale-95"
         >
-          {open ? <X className="size-5" /> : <Bot className="size-7" />}
+          {open ? <X className="size-6" /> : <Bot className="size-8" />}
           {/* "Online" dot, hidden while the panel is open */}
           {!open && (
-            <span className="absolute right-0.5 top-0.5 flex size-3">
+            <span className="absolute right-1 top-1 flex size-3.5">
               <span className="status-ping absolute inline-flex size-full rounded-full bg-accent" />
-              <span className="relative inline-flex size-3 rounded-full border-2 border-primary bg-accent" />
+              <span className="relative inline-flex size-3.5 rounded-full border-2 border-primary bg-accent" />
             </span>
           )}
         </Popover.Trigger>
@@ -135,7 +130,7 @@ export function Assistant({ topics, t }: { topics: AssistantTopic[]; t: Assistan
           side="top"
           sideOffset={12}
           collisionPadding={16}
-          className="popover-content z-50 flex max-h-[min(80vh,660px)] w-[min(26rem,calc(100vw-2rem))] flex-col overflow-hidden rounded-2xl border bg-surface shadow-[0_24px_60px_-20px_rgb(0_0_0/0.35)]"
+          className="always-light popover-content z-50 flex h-[min(78vh,620px)] max-h-[var(--radix-popover-content-available-height)] w-[min(26rem,calc(100vw-2rem))] flex-col overflow-hidden rounded-2xl border bg-surface text-foreground shadow-[0_24px_60px_-20px_rgb(0_0_0/0.35)]"
         >
           <header className="flex items-center gap-2.5 border-b px-4 py-3">
             <Bot className="size-5 shrink-0 text-muted-foreground" />

@@ -8,7 +8,6 @@ import { defaultLocale, hasLocale, type Locale } from "@/i18n/config";
 /**
  * Articles live in content/posts:
  *   my-post.mdx      English (required)
- *   my-post.az.mdx   Azerbaijani translation (optional)
  *   my-post.sk.mdx   Slovak translation (optional)
  * A missing translation falls back to English.
  */

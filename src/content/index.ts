@@ -1,7 +1,5 @@
 import type { Locale } from "@/i18n/config";
 import { certificates, education, educationIntl, experience, languages } from "./experience";
-import { core as azCore } from "./i18n/az/core";
-import { projects as azProjects } from "./i18n/az/projects";
 import { core as skCore } from "./i18n/sk/core";
 import { projects as skProjects } from "./i18n/sk/projects";
 import type { ContentOverrides } from "./i18n/types";
@@ -33,7 +31,6 @@ export type SiteContent = typeof english & { getProject: (slug: string) => (type
 
 const overrides: Record<Locale, ContentOverrides> = {
   en: {},
-  az: { ...azCore, projects: azProjects },
   sk: { ...skCore, projects: skProjects },
 };
 

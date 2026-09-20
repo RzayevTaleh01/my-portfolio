@@ -15,14 +15,14 @@ export function ProfileCard({
 }) {
   return (
     <div className="space-y-4">
-      {/* Wider than it is tall, so the photo reads as a portrait card rather than a strip. */}
+      {/* Square, like the source photo, so nothing is cropped out of the frame. */}
       <AvatarZoom
         src={profile.avatar}
         name={profile.name}
         t={t}
         priority
-        sizes="144px"
-        className="aspect-[6/5] w-36"
+        sizes="128px"
+        className="aspect-square w-32"
       />
       <div className="space-y-1">
         <Link href={homeHref} className="block w-fit text-xl font-semibold tracking-tight">

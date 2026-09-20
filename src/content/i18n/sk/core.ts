@@ -16,17 +16,6 @@ export const core: ContentOverrides = {
   },
   experience: [
     {
-      role: "Full-Stack vývojár",
-      location: "Na diaľku",
-      summary:
-        "Publikačná platforma pre organizácie diaspóry: každá organizácia má vlastný spravodajský web na subdoméne so svojou značkou a hlavný portál zhromažďuje schválené správy do národného kanála.",
-      highlights: [
-        "Navrhol som architektúru od začiatku do konca - Spring Boot REST API, administrácia v Reacte, verejný web v Next.js (SSR).",
-        "PostgreSQL s verzovanými migráciami, S3 pre médiá, backend v Dockeri.",
-        "Implementoval som prístup na základe rolí.",
-      ],
-    },
-    {
       role: "Frontend vývojár (Strong Junior)",
       location: "Baku, Azerbajdžan · Na pracovisku",
       summary: "Frontendový vývoj národných vzdelávacích webových platforiem Azerbajdžanu.",

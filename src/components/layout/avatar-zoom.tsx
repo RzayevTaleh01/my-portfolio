@@ -47,7 +47,7 @@ export function AvatarZoom({ src, name, t, className, sizes, priority }: AvatarZ
           className,
         )}
       >
-        {/* The source is a 3:4 headshot, so the crop is biased upwards to keep the face centred. */}
+        {/* The source is a square headshot, so the crop is biased upwards to keep the face centred. */}
         <Image
           src={src}
           alt={name}
@@ -75,8 +75,8 @@ export function AvatarZoom({ src, name, t, className, sizes, priority }: AvatarZ
             <Image
               src={src}
               alt={name}
-              width={1086}
-              height={1448}
+              width={1024}
+              height={1024}
               sizes="(max-width: 768px) 92vw, 720px"
               onClick={() => setZoomed((z) => !z)}
               onTransitionEnd={centre}

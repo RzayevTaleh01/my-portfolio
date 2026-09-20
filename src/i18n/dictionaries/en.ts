@@ -1,4 +1,4 @@
-/** Interface strings. `az.ts` and `sk.ts` must have exactly the same shape. */
+/** Interface strings. `sk.ts` must have exactly the same shape. */
 export const en = {
   nav: {
     home: "Home",

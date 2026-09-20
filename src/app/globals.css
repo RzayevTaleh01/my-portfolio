@@ -5,10 +5,13 @@
 
 /*
  * Design tokens - flat colours only, no gradients.
- * Soft slate off-white page, white cards, one quiet accent.
+ * Soft warm off-white page, white cards, one quiet accent.
+ * `.always-light` re-declares the same values, so anything carrying it keeps
+ * the light palette even inside `.dark`.
  */
-:root {
-  --background: oklch(0.983 0.003 248);
+:root,
+.always-light {
+  --background: #fcfcfa;
   --surface: oklch(1 0 0);
   --foreground: oklch(0.21 0.025 265);
   --muted: oklch(0.955 0.006 248);
@@ -21,6 +24,10 @@
   --primary: oklch(0.21 0.025 265);
   --primary-foreground: oklch(0.985 0.002 248);
   --ring: oklch(0.5 0.09 190);
+}
+
+.always-light {
+  color-scheme: light;
 }
 
 .dark {

@@ -22,7 +22,7 @@ import { getRegion } from "@/lib/region";
 const jakarta = Plus_Jakarta_Sans({ variable: "--font-jakarta", subsets: ["latin", "latin-ext"] });
 const jetbrains = JetBrains_Mono({ variable: "--font-jetbrains", subsets: ["latin"] });
 
-// Only /en, /az and /sk exist; anything else is a 404.
+// Only /en and /sk exist; anything else is a 404.
 export const dynamicParams = false;
 
 export function generateStaticParams() {

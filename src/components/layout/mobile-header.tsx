@@ -57,8 +57,8 @@ export function MobileHeader({ lang, profile, menu }: ChromeProps) {
                       src={profile.avatar}
                       name={profile.name}
                       t={menu.t}
-                      sizes="72px"
-                      className="aspect-[6/5] w-[72px] shrink-0 rounded-xl"
+                      sizes="64px"
+                      className="aspect-square w-16 shrink-0 rounded-xl"
                     />
                     <Link href={home} onClick={() => setOpen(false)} className="min-w-0">
                       <Dialog.Title className="truncate text-[15px] font-semibold leading-tight tracking-tight">

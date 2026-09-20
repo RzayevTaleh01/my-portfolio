@@ -2,6 +2,7 @@ import { ArrowUpRight } from "lucide-react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Fragment } from "react";
+import { ExperienceItem, VolunteeringItem } from "@/components/experience-item";
 import { PrintButton } from "@/components/print-button";
 import { Timeline, TimelineDot } from "@/components/timeline";
 import { getContent } from "@/content";
@@ -76,41 +77,17 @@ export default async function CvPage(props: PageProps<"/[lang]/cv">) {
       </CvSection>
 
       <CvSection title={t.experience}>
-        <Timeline gap="space-y-7">
+        <Timeline>
           {experience.map((e) => (
-            <div key={`${e.organization}-${e.period}`} className="relative break-inside-avoid text-sm leading-6">
-              <TimelineDot />
-              <p className="font-mono text-xs text-muted-foreground">{e.period}</p>
-              <p className="font-medium">{e.organization}</p>
-              <div className="mt-1 space-y-3">
-                {e.roles.map((r) => (
-                  <div key={r.title}>
-                    <p>
-                      {r.title}
-                      <span className="font-mono text-xs text-muted-foreground"> · {r.period}</span>
-                    </p>
-                    <p className="text-muted-foreground">{r.summary}</p>
-                    {r.stack && <p className="text-xs text-subtle-foreground">{r.stack.join(", ")}</p>}
-                  </div>
-                ))}
-              </div>
-            </div>
+            <ExperienceItem key={`${e.organization}-${e.period}`} item={e} lang={lang} />
           ))}
         </Timeline>
       </CvSection>
 
       <CvSection title={t.volunteering}>
-        <Timeline gap="space-y-7">
+        <Timeline>
           {volunteering.map((v) => (
-            <div key={`${v.organization}-${v.period}`} className="relative break-inside-avoid text-sm leading-6">
-              <TimelineDot />
-              <p className="font-mono text-xs text-muted-foreground">{v.period}</p>
-              <p className="font-medium">
-                {v.role} · {v.organization}
-              </p>
-              <p className="text-muted-foreground">{v.summary}</p>
-              {v.stack && <p className="text-xs text-subtle-foreground">{v.stack.join(", ")}</p>}
-            </div>
+            <VolunteeringItem key={`${v.organization}-${v.period}`} item={v} lang={lang} />
           ))}
         </Timeline>
       </CvSection>

@@ -33,17 +33,20 @@ function CredentialLink({ label, href, note }: { label: string; href: string; no
 }
 
 /** One title held at the organisation. Several of them stack up into a promotion track. */
-function Role({ role, lang, nested }: { role: ExperienceRole; lang: Locale; nested: boolean }) {
+function Role({ role, lang, showPeriod }: { role: ExperienceRole; lang: Locale; showPeriod: boolean }) {
   const t = getDictionary(lang).experience;
   return (
     <div className="space-y-2.5">
       <div>
-        <h4 className={nested ? "text-[15px] font-semibold tracking-tight" : "font-semibold tracking-tight"}>
-          {role.title}
-        </h4>
+        <h4 className="text-[15px] font-semibold tracking-tight">{role.title}</h4>
         <p className="flex flex-wrap items-center gap-x-2 text-xs text-muted-foreground">
-          <span className="font-mono">{role.period}</span>
-          <span aria-hidden>·</span>
+          {/* A single role repeats the organisation's own span, so it is left out. */}
+          {showPeriod && (
+            <>
+              <span className="font-mono">{role.period}</span>
+              <span aria-hidden>·</span>
+            </>
+          )}
           <span>{t.kinds[role.kind]}</span>
         </p>
       </div>
@@ -74,26 +77,23 @@ export function ExperienceItem({ item, lang }: { item: Experience; lang: Locale 
   const single = item.roles.length === 1;
 
   return (
-    <article className="relative space-y-3">
+    <article className="relative space-y-3 break-inside-avoid">
       <TimelineDot />
       <div>
-        <h3 className={single ? "text-sm text-muted-foreground" : "font-semibold tracking-tight"}>
-          {item.organization}
-        </h3>
+        <h3 className="font-semibold tracking-tight">{item.organization}</h3>
         <p className="text-xs text-muted-foreground">
-          {!single && <span className="font-mono">{item.period} · </span>}
-          {item.location}
+          <span className="font-mono">{item.period}</span> · {item.location}
         </p>
       </div>
 
       {single ? (
-        <Role role={item.roles[0]} lang={lang} nested={false} />
+        <Role role={item.roles[0]} lang={lang} showPeriod={false} />
       ) : (
         <ol className="space-y-6 border-l pl-5">
           {item.roles.map((role) => (
             <li key={role.title} className="relative">
               <span className="absolute -left-[23px] top-[7px] size-1.5 rounded-full bg-border-strong" />
-              <Role role={role} lang={lang} nested />
+              <Role role={role} lang={lang} showPeriod />
             </li>
           ))}
         </ol>
@@ -106,15 +106,15 @@ export function ExperienceItem({ item, lang }: { item: Experience; lang: Locale 
 export function VolunteeringItem({ item, lang }: { item: Volunteering; lang: Locale }) {
   const t = getDictionary(lang).experience;
   return (
-    <article className="relative space-y-2.5">
+    <article className="relative space-y-2.5 break-inside-avoid">
       <TimelineDot />
-      <p className="font-mono text-xs text-muted-foreground">{item.period}</p>
       <div>
-        <h3 className="font-semibold tracking-tight">{item.role}</h3>
-        <p className="text-sm text-muted-foreground">
-          {item.organization} · {item.location}
+        <h3 className="font-semibold tracking-tight">{item.organization}</h3>
+        <p className="text-xs text-muted-foreground">
+          <span className="font-mono">{item.period}</span> · {item.location}
         </p>
       </div>
+      <h4 className="text-[15px] font-semibold tracking-tight">{item.role}</h4>
       <p className="text-sm leading-relaxed">{item.summary}</p>
       {item.highlights && item.highlights.length > 0 && <Bullets items={item.highlights} />}
       {item.stack && <p className="text-xs leading-relaxed text-subtle-foreground">{item.stack.join(" · ")}</p>}

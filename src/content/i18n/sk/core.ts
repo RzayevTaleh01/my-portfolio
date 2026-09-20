@@ -23,12 +23,11 @@ export const core: ContentOverrides = {
         {
           title: "Full-Stack vývojár",
           period: "05/2026 - súčasnosť",
-          summary:
-            "Full-stack vývoj webových platforiem centra - multi-tenant publikačná platforma, systém pre akademický časopis a portál verejného zdravotníckeho inštitútu.",
+          summary: "Full-stack práca na webových platformách centra.",
           highlights: [
-            "Diaspor.org - multi-tenant publikačnú platformu som navrhol od začiatku do konca: Spring Boot REST API, administrácia v Reacte, verejný web v Next.js (SSR), PostgreSQL s verzovanými migráciami, S3 pre médiá a prístup na základe rolí.",
-            "UNEC Student Research Journal - platforma akademického časopisu na OJS s frontom v Laraveli: workflow podania, recenzného konania a produkcie pre zhruba dvadsať fakúlt, registrácia DOI a indexovanie v Google Scholar.",
-            "Institute of Lung Diseases (etacxi.az) - verejný portál prepisujem od nuly v Laraveli a natvrdo zapísané stránky presúvam do editovateľného dvojjazyčného obsahového modelu s administráciou.",
+            "Diaspor.org - multi-tenant publikačná platforma, postavená od začiatku do konca.",
+            "UNEC Student Research Journal - platforma na OJS s frontom v Laraveli, DOI a indexovanie v Scholar.",
+            "Institute of Lung Diseases - prepis verejného portálu v Laraveli.",
           ],
         },
       ],
@@ -38,17 +37,17 @@ export const core: ContentOverrides = {
       roles: [
         {
           title: "Frontend vývojár (Middle)",
-          summary: "Frontendový vývoj národných vzdelávacích webových platforiem Azerbajdžanu.",
+          summary: "Národné vzdelávacie webové platformy.",
           highlights: ["Video.edu.az - nová verzia postavená na Next.js."],
         },
         {
           title: "Frontend vývojár (Junior)",
-          summary: "Frontendový vývoj národných vzdelávacích webových platforiem Azerbajdžanu.",
-          highlights: ["Portal.edu.az a Pts.edu.az - nové služby a priebežná podpora."],
+          summary: "Národné vzdelávacie webové platformy.",
+          highlights: ["Portal.edu.az a Pts.edu.az - nové služby a podpora."],
         },
         {
           title: "Frontend vývojár (stážista)",
-          summary: "Trojmesačná stáž na národných vzdelávacích webových platformách.",
+          summary: "Trojmesačná stáž na tých istých platformách.",
           highlights: ["Digital.edu.az, Karabakh.edu.az, Ict.edu.az, Ite.az, MarsAcademy.az; podpora pre Edu.gov.az."],
         },
       ],
@@ -59,7 +58,7 @@ export const core: ContentOverrides = {
         {
           title: "Frontend vývojár (stážista)",
           summary: "Sima Reporting System - klientske a administrátorské rozhrania.",
-          highlights: ["Stáž som ukončil s certifikátom s vyznamenaním."],
+          highlights: ["Ukončil som ju s certifikátom s vyznamenaním."],
           credential: { label: "Certifikát s vyznamenaním" },
         },
       ],
@@ -70,22 +69,21 @@ export const core: ContentOverrides = {
       organization: "Azerbajdžanská štátna univerzita ropy a priemyslu - IT oddelenie",
       role: "Full-Stack vývojár (dobrovoľnícky)",
       location: "Baku, Azerbajdžan · Na pracovisku",
-      summary:
-        "Interný systém pre fakultu informatiky: správa študentov a vyučujúcich katedry a záznamov okolo nich.",
+      summary: "Interný systém pre fakultu informatiky - študenti, vyučujúci a ich záznamy.",
       highlights: [
-        "K tímu som sa pridal v treťom ročníku štúdia a rok som podporoval IT oddelenie ako full-stack vývojár.",
-        "Jeden z piatich študentov vybraných z fakulty do tímu.",
-        "Moja prvá pracovná skúsenosť - tá, z ktorej vyšlo všetko ostatné.",
+        "Pridal som sa v treťom ročníku; rok v IT oddelení ako full-stack vývojár.",
+        "Jeden z piatich študentov vybraných z fakulty.",
+        "Moja prvá pracovná skúsenosť.",
       ],
     },
     {
       role: "Frontendové programovanie - jednosemestrálny kurz",
       location: "Baku, Azerbajdžan",
-      summary: "Semestrálny program frontendového programovania, do ktorého sa vstupovalo cez prijímaciu skúšku.",
+      summary: "Semestrálny frontendový program, do ktorého sa vstupovalo cez skúšku.",
       highlights: [
-        "Výber podľa prijímacej skúšky: program dostalo prvých 25 študentov fakulty a ja som sa do tejto skupiny dostal.",
-        "Vďaka účasti ma oslobodili od troch z piatich predmetov, ktoré by som v tom semestri na univerzite inak absolvoval.",
-        "Program som ukončil so ziskom 100/100.",
+        "Prijímacia skúška - program dostalo prvých 25 študentov fakulty.",
+        "Oslobodil ma od troch z piatich predmetov v tom semestri.",
+        "Ukončil som ho so ziskom 100/100.",
       ],
       credential: { label: "Certifikát" },
     },

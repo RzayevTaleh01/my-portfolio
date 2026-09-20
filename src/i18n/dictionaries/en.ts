@@ -22,6 +22,10 @@ export const en = {
     openMenu: "Open menu",
     closeMenu: "Close menu",
     language: "Language",
+    viewPhoto: "View photo",
+    closePhoto: "Close photo",
+    zoomIn: "Zoom in",
+    zoomOut: "Zoom out",
   },
   home: {
     greeting: "Hi, I'm {name}.",

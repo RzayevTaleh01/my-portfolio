@@ -1,25 +1,33 @@
 import { MapPin } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
+import { AvatarZoom, type AvatarZoomLabels } from "@/components/layout/avatar-zoom";
 import type { Profile } from "@/content";
 
 /** Photo, name and role - the identity block at the top of the sidebar. */
-export function ProfileCard({ profile, homeHref }: { profile: Profile; homeHref: string }) {
+export function ProfileCard({
+  profile,
+  homeHref,
+  t,
+}: {
+  profile: Profile;
+  homeHref: string;
+  t: AvatarZoomLabels;
+}) {
   return (
     <div className="space-y-4">
-      <Link href={homeHref} className="block w-fit" aria-label={profile.name}>
-        {/* 3:4 frame, the same ratio as the photo, so nothing is cropped. */}
-        <Image
-          src={profile.avatar}
-          alt={profile.name}
-          width={240}
-          height={320}
-          priority
-          className="aspect-[3/4] w-24 rounded-2xl border object-cover object-center"
-        />
-      </Link>
+      {/* Wider than it is tall, so the photo reads as a portrait card rather than a strip. */}
+      <AvatarZoom
+        src={profile.avatar}
+        name={profile.name}
+        t={t}
+        priority
+        sizes="144px"
+        className="aspect-[6/5] w-36"
+      />
       <div className="space-y-1">
-        <p className="text-xl font-semibold tracking-tight">{profile.name}</p>
+        <Link href={homeHref} className="block w-fit text-xl font-semibold tracking-tight">
+          {profile.name}
+        </Link>
         <p className="text-sm text-muted-foreground">{profile.headline}</p>
       </div>
       <p className="flex items-center gap-1.5 text-[13px] text-subtle-foreground">

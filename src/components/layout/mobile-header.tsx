@@ -6,6 +6,7 @@ import Link from "next/link";
 import { Dialog } from "radix-ui";
 import { useState } from "react";
 import { CommandMenu } from "@/components/command-menu";
+import { AvatarZoom } from "@/components/layout/avatar-zoom";
 import { LanguageSwitcher } from "@/components/layout/language-switcher";
 import { SidebarNav } from "@/components/layout/nav";
 import type { ChromeProps } from "@/components/layout/sidebar";
@@ -26,7 +27,7 @@ export function MobileHeader({ lang, profile, menu }: ChromeProps) {
             alt=""
             width={28}
             height={28}
-            className="size-7 shrink-0 rounded-lg border object-cover object-center"
+            className="size-7 shrink-0 rounded-lg border object-cover object-[50%_14%]"
           />
           <span className="truncate text-[15px] font-semibold tracking-tight">{profile.name}</span>
         </Link>
@@ -51,21 +52,21 @@ export function MobileHeader({ lang, profile, menu }: ChromeProps) {
                 className="sheet-content fixed inset-y-0 left-0 z-50 flex w-[82%] max-w-xs flex-col border-r bg-background px-5 py-5 shadow-[16px_0_40px_-20px_rgb(0_0_0/0.3)]"
               >
                 <div className="flex items-center justify-between gap-3">
-                  <Link href={home} onClick={() => setOpen(false)} className="flex min-w-0 items-center gap-3">
-                    <Image
+                  <div className="flex min-w-0 items-center gap-3">
+                    <AvatarZoom
                       src={profile.avatar}
-                      alt=""
-                      width={120}
-                      height={160}
-                      className="aspect-[3/4] w-10 shrink-0 rounded-xl border object-cover object-center"
+                      name={profile.name}
+                      t={menu.t}
+                      sizes="72px"
+                      className="aspect-[6/5] w-[72px] shrink-0 rounded-xl"
                     />
-                    <div className="min-w-0">
+                    <Link href={home} onClick={() => setOpen(false)} className="min-w-0">
                       <Dialog.Title className="truncate text-[15px] font-semibold leading-tight tracking-tight">
                         {profile.name}
                       </Dialog.Title>
                       <p className="truncate text-xs text-muted-foreground">{profile.headline}</p>
-                    </div>
-                  </Link>
+                    </Link>
+                  </div>
                   <Dialog.Close
                     aria-label={menu.t.closeMenu}
                     className="flex size-8 shrink-0 items-center justify-center rounded-lg border bg-surface text-muted-foreground transition-colors hover:border-border-strong hover:text-foreground"

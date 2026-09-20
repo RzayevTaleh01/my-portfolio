@@ -23,6 +23,10 @@ export const az: Dictionary = {
     openMenu: "Menyunu aç",
     closeMenu: "Menyunu bağla",
     language: "Dil",
+    viewPhoto: "Şəkilə bax",
+    closePhoto: "Şəkili bağla",
+    zoomIn: "Yaxınlaşdır",
+    zoomOut: "Uzaqlaşdır",
   },
   home: {
     greeting: "Salam, mən {name}.",

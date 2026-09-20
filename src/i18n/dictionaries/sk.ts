@@ -23,6 +23,10 @@ export const sk: Dictionary = {
     openMenu: "Otvoriť menu",
     closeMenu: "Zavrieť menu",
     language: "Jazyk",
+    viewPhoto: "Zobraziť fotku",
+    closePhoto: "Zavrieť fotku",
+    zoomIn: "Priblížiť",
+    zoomOut: "Oddialiť",
   },
   home: {
     greeting: "Ahoj, som {name}.",

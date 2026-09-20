@@ -3,6 +3,7 @@ import { JetBrains_Mono, Plus_Jakarta_Sans } from "next/font/google";
 import { notFound } from "next/navigation";
 import "katex/dist/katex.min.css";
 import "../globals.css";
+import { Assistant } from "@/components/assistant";
 import type { CommandMenuProps } from "@/components/command-menu";
 import { MobileHeader } from "@/components/layout/mobile-header";
 import { DesktopControls, Sidebar } from "@/components/layout/sidebar";
@@ -14,6 +15,7 @@ import { getContent, navigation } from "@/content";
 import { hasLocale, localeTags, localize, locales } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
 import { withRegion } from "@/content/locations";
+import { buildAssistantTopics } from "@/lib/assistant-topics";
 import { getAllPosts } from "@/lib/posts";
 import { getRegion } from "@/lib/region";
 
@@ -96,6 +98,7 @@ export default async function RootLayout(props: LayoutProps<"/[lang]">) {
                 <SiteFooter profile={profile} />
               </div>
             </div>
+            <Assistant topics={buildAssistantTopics(lang, { ...content, profile }, t)} t={t.assistant} />
           </MotionProvider>
         </ThemeProvider>
       </body>

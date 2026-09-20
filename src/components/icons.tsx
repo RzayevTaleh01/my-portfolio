@@ -1,4 +1,4 @@
-import { GraduationCap, IdCard, Mail, type LucideProps } from "lucide-react";
+import { Code2, GraduationCap, IdCard, Mail, type LucideProps } from "lucide-react";
 import type { SocialPlatform } from "@/content";
 
 type IconProps = LucideProps;
@@ -60,6 +60,9 @@ export function YouTubeIcon(props: IconProps) {
 export function SocialIcon({ platform, ...props }: IconProps & { platform: SocialPlatform }) {
   const size = props.size ?? 16;
   switch (platform) {
+    case "hackerrank":
+      // HackerRank has no Lucide brand icon; a code glyph keeps the row consistent.
+      return <Code2 {...props} size={size} />;
     case "telegram":
       return <TelegramIcon {...props} size={size} />;
     case "youtube":

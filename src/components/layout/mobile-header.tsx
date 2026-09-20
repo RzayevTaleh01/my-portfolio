@@ -26,7 +26,7 @@ export function MobileHeader({ lang, profile, menu }: ChromeProps) {
             alt=""
             width={28}
             height={28}
-            className="size-7 shrink-0 rounded-lg border object-cover object-[50%_30%]"
+            className="size-7 shrink-0 rounded-lg border object-cover object-center"
           />
           <span className="truncate text-[15px] font-semibold tracking-tight">{profile.name}</span>
         </Link>
@@ -55,9 +55,9 @@ export function MobileHeader({ lang, profile, menu }: ChromeProps) {
                     <Image
                       src={profile.avatar}
                       alt=""
-                      width={40}
-                      height={40}
-                      className="size-10 shrink-0 rounded-xl border object-cover object-[50%_30%]"
+                      width={120}
+                      height={160}
+                      className="aspect-[3/4] w-10 shrink-0 rounded-xl border object-cover object-center"
                     />
                     <div className="min-w-0">
                       <Dialog.Title className="truncate text-[15px] font-semibold leading-tight tracking-tight">

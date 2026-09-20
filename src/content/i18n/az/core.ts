@@ -12,7 +12,7 @@ export const core: ContentOverrides = {
       "Gündəlik mühəndislik işində inkişafı sürətləndirmək üçün süni intellektdən istifadə edirəm və prompt engineering-ə proqramçı yanaşması ilə baxıram. Hazırda Slovakiyada yaşayıram və Košice Texniki Universitetində Sənaye menecmenti ixtisası üzrə təhsil alıram.",
     ],
     highlights: ["4 il frontend təcrübəsi", "Backend: Node.js · Spring Boot", "AI tədqiqatı · adaptiv təhsil", "İngilis B2 · Slovak A2"],
-    socials: [{}, {}, { label: "E-poçt" }],
+    socials: [{}, {}, {}, { label: "E-poçt" }],
   },
   experience: [
     {

@@ -12,7 +12,7 @@ export const core: ContentOverrides = {
       "Pri každodennej práci používam AI na zrýchlenie vývoja a k prompt engineeringu pristupujem ako programátor. Teraz žijem na Slovensku a študujem Priemyselný manažment na Technickej univerzite v Košiciach.",
     ],
     highlights: ["4 roky frontend skúseností", "Backend: Node.js · Spring Boot", "Výskum AI · adaptívne učenie", "Angličtina B2 · Slovenčina A2"],
-    socials: [{}, {}, { label: "E-mail" }],
+    socials: [{}, {}, {}, { label: "E-mail" }],
   },
   experience: [
     {

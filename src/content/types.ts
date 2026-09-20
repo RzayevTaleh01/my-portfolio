@@ -4,7 +4,16 @@
  * never in page or component code.
  */
 
-export type SocialPlatform = "github" | "linkedin" | "telegram" | "youtube" | "scholar" | "orcid" | "x" | "email";
+export type SocialPlatform =
+  | "github"
+  | "linkedin"
+  | "hackerrank"
+  | "telegram"
+  | "youtube"
+  | "scholar"
+  | "orcid"
+  | "x"
+  | "email";
 
 export interface SocialLink {
   platform: SocialPlatform;

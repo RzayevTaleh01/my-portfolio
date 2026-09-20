@@ -19,7 +19,7 @@ export const profile: Profile = {
   ],
   now: "Based in Riga, Latvia",
   highlights: ["4 years frontend experience", "Backend: Node.js · Spring Boot", "AI research · adaptive learning", "English B2 · Slovak A2"],
-  avatar: "/avatar.jpg",
+  avatar: "/avatar.webp",
   // Replaced per visitor region in ./locations.ts
   cvPdf: "/taleh-rzayev-cv.pdf",
   githubUsername: "RzayevTaleh01",
@@ -28,6 +28,7 @@ export const profile: Profile = {
   socials: [
     { platform: "github", label: "GitHub", href: "https://github.com/RzayevTaleh01" },
     { platform: "linkedin", label: "LinkedIn", href: "https://www.linkedin.com/in/rzayevtaleh01/" },
+    { platform: "hackerrank", label: "HackerRank", href: "https://www.hackerrank.com/profile/rzayevtaleh01" },
     { platform: "email", label: "Email", href: "mailto:TalehRzayev2002@gmail.com" },
   ],
 };

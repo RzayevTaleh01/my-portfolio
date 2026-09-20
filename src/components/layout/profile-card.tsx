@@ -8,13 +8,14 @@ export function ProfileCard({ profile, homeHref }: { profile: Profile; homeHref:
   return (
     <div className="space-y-4">
       <Link href={homeHref} className="block w-fit" aria-label={profile.name}>
+        {/* 3:4 frame, the same ratio as the photo, so nothing is cropped. */}
         <Image
           src={profile.avatar}
           alt={profile.name}
-          width={80}
-          height={80}
+          width={240}
+          height={320}
           priority
-          className="size-20 rounded-2xl border object-cover object-[50%_30%]"
+          className="aspect-[3/4] w-24 rounded-2xl border object-cover object-center"
         />
       </Link>
       <div className="space-y-1">

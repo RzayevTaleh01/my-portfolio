@@ -70,6 +70,8 @@ export interface Education {
 export interface Certificate {
   title: string;
   issuer: string;
+  /** Public credential page, if the issuer publishes one. */
+  link?: string;
 }
 
 export interface Language {

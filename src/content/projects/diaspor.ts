@@ -12,9 +12,8 @@ export const diaspor: Project = {
   featured: true,
   links: {},
   facts: [
-    { label: "Role", value: "Full-stack · ITM" },
+    { label: "Role", value: "Full-stack" },
     { label: "Period", value: "05/2026 - Present" },
-    { label: "Tenancy", value: "Subdomain per organisation" },
     { label: "Core", value: "Spring Boot · Next.js" },
   ],
   overview: [

@@ -6,9 +6,8 @@ export const projects: Projects = {
   diaspor: {
     tagline: "Multi-tenant publikačná platforma: vlastný spravodajský web pre každú organizáciu diaspóry a jeden národný kanál.",
     facts: [
-      { label: "Rola", value: "Full-stack · ITM" },
+      { label: "Rola", value: "Full-stack" },
       { label: "Obdobie", value: "05/2026 - súčasnosť" },
-      { label: "Tenanti", value: "Subdoména pre každú organizáciu" },
       { label: "Jadro", value: "Spring Boot · Next.js" },
     ],
     overview: [
@@ -628,7 +627,7 @@ export const projects: Projects = {
   "unec-ttj": {
     tagline:
       "Platforma akademického časopisu na OJS: dvadsať fakúlt posiela články, každý prejde recenzným redakčným procesom a zverejnené číslo je indexované a citovateľné.",
-    facts: [{ label: "Rola", value: "Full-stack · ITM" }, { label: "Stav", value: "Prebieha" }, { label: "Platforma" }, { label: "Indexovanie" }],
+    facts: [{ label: "Rola", value: "Full-stack" }, { label: "Stav", value: "Prebieha" }, { label: "Platforma" }, { label: "Indexovanie" }],
     overview: [
       "Študentská vedecká spoločnosť UNEC vydáva študentský vedecký časopis univerzity dvakrát ročne. Prispieva doň zhruba dvadsať fakúlt, v azerbajdžančine, turečtine, angličtine alebo ruštine, a každý článok musí prejsť rovnakým redakčným procesom, než sa dostane do čísla.",
       "Platforma beží na Open Journal Systems, open-source softvéri pre časopisy od Public Knowledge Project. OJS nesie redakčný workflow a metadátové štandardy; mojou prácou je Laravel okolo neho - verejný web časopisu, téma a integrácia, ktorá oboje drží v súlade.",
@@ -767,7 +766,7 @@ export const projects: Projects = {
   etacxi: {
     tagline:
       "Prepis webu verejného zdravotníckeho inštitútu od nuly: natvrdo zapísané stránky a mŕtvy layout z roku 2019 nahradil Laravel portál, ktorý zamestnanci naozaj vedia spravovať.",
-    facts: [{ label: "Rola", value: "Full-stack · ITM" }, { label: "Stav", value: "Prebieha" }, { label: "Klient", value: "Verejná právnická osoba" }, { label: "Prístup", value: "Prepis, nie nový vzhľad" }],
+    facts: [{ label: "Rola", value: "Full-stack" }, { label: "Stav", value: "Prebieha" }, { label: "Jazyky" }],
     overview: [
       "Vedecko-výskumný inštitút pľúcnych chorôb je verejná právnická osoba v Baku s koreňmi siahajúcimi k protituberkulóznemu inštitútu z roku 1944. Jeho web etacxi.az je miesto, kde občania hľadajú štruktúru inštitútu, jeho vedenie, správy a praktické informácie pred návštevou.",
       "Web, ktorý dnes stojí, vznikol v roku 2019 a odvtedy sa nepohol. Prepisujem ho od nuly: tá istá inštitúcia, tá istá verejná úloha, ale platforma, ktorú zamestnanci udržia aktuálnu bez vývojára.",

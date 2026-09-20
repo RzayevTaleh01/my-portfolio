@@ -1,3 +1,4 @@
+import { ArrowUpRight } from "lucide-react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Fragment } from "react";
@@ -137,6 +138,17 @@ export default async function CvPage(props: PageProps<"/[lang]/cv">) {
         {certificates.map((c) => (
           <Row key={c.title} when={c.issuer}>
             {c.title}
+            {c.link && (
+              <a
+                href={c.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="no-print ml-2 inline-flex items-center gap-1 text-[13px] text-muted-foreground underline decoration-border-strong underline-offset-4 transition-colors hover:text-foreground hover:decoration-foreground"
+              >
+                {t.showCredential}
+                <ArrowUpRight className="size-3" />
+              </a>
+            )}
           </Row>
         ))}
       </CvSection>

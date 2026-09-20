@@ -28,14 +28,22 @@ export const core: ContentOverrides = {
       ],
     },
     {
-      role: "Frontend vývojár (Strong Junior)",
+      role: "Frontend vývojár (Middle)",
       location: "Baku, Azerbajdžan · Na pracovisku",
       summary: "Frontendový vývoj národných vzdelávacích webových platforiem Azerbajdžanu.",
-      highlights: [
-        "Video.edu.az - nová verzia postavená na Next.js.",
-        "Portal.edu.az a Pts.edu.az - nové služby a priebežná podpora.",
-        "Digital.edu.az, Karabakh.edu.az, Ict.edu.az, Ite.az, MarsAcademy.az; podpora pre Edu.gov.az.",
-      ],
+      highlights: ["Video.edu.az - nová verzia postavená na Next.js."],
+    },
+    {
+      role: "Frontend vývojár (Junior)",
+      location: "Baku, Azerbajdžan · Na pracovisku",
+      summary: "Frontendový vývoj národných vzdelávacích webových platforiem Azerbajdžanu.",
+      highlights: ["Portal.edu.az a Pts.edu.az - nové služby a priebežná podpora."],
+    },
+    {
+      role: "Frontend vývojár (stážista)",
+      location: "Baku, Azerbajdžan · Na pracovisku",
+      summary: "Trojmesačná stáž na národných vzdelávacích webových platformách.",
+      highlights: ["Digital.edu.az, Karabakh.edu.az, Ict.edu.az, Ite.az, MarsAcademy.az; podpora pre Edu.gov.az."],
     },
     {
       role: "Frontend vývojár (stážista)",
@@ -74,6 +82,7 @@ export const core: ContentOverrides = {
     },
   ],
   certificates: [
+    {},
     { title: "Frontend vývojár - certifikát s vyznamenaním (stáž)" },
     {},
     { title: "Problem Solving (Basic), React (Basic), JavaScript (Basic a Intermediate)" },

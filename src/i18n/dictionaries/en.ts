@@ -115,6 +115,7 @@ export const en = {
     skills: "Skills",
     publications: "Publications",
     certificates: "Certificates",
+    showCredential: "Show credential",
     languages: "Languages",
     pdf: "PDF",
     print: "Print",

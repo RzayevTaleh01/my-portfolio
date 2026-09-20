@@ -13,10 +13,9 @@ export const etacxi: Project = {
   featured: true,
   links: { demo: "http://etacxi.az/" },
   facts: [
-    { label: "Role", value: "Full-stack · ITM" },
+    { label: "Role", value: "Full-stack" },
     { label: "Status", value: "In progress" },
-    { label: "Client", value: "Public legal entity" },
-    { label: "Approach", value: "Rewrite, not a reskin" },
+    { label: "Locales", value: "AZ · EN" },
   ],
   overview: [
     "The Scientific Research Institute of Lung Diseases is a public legal entity in Baku with roots going back to the 1944 tuberculosis institute. Its site, etacxi.az, is where citizens look for the institute's structure, its leadership, its news and the practical information they need before a visit.",

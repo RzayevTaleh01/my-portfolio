@@ -21,17 +21,33 @@ export const experience: Experience[] = [
   },
   {
     organization: "Edumedia-Azerbaijan LLC",
-    role: "Frontend Developer (Strong Junior)",
+    role: "Frontend Developer (Middle)",
     kind: "full-time",
-    period: "03/2023 - 08/2026",
+    period: "03/2025 - 08/2026",
     location: "Baku, Azerbaijan · On-site",
     summary: "Frontend development for Azerbaijan's national education web platforms.",
-    highlights: [
-      "Video.edu.az - new version built with Next.js.",
-      "Portal.edu.az and Pts.edu.az - new services and ongoing support.",
-      "Digital.edu.az, Karabakh.edu.az, Ict.edu.az, Ite.az, MarsAcademy.az; support for Edu.gov.az.",
-    ],
-    stack: ["HTML5", "CSS3", "JavaScript", "jQuery", "React", "Context API", "Redux Toolkit", "Next.js", "Figma", "GitLab"],
+    highlights: ["Video.edu.az - new version built with Next.js."],
+    stack: ["React", "Next.js", "TypeScript", "Redux Toolkit", "Figma", "GitLab"],
+  },
+  {
+    organization: "Edumedia-Azerbaijan LLC",
+    role: "Frontend Developer (Junior)",
+    kind: "full-time",
+    period: "03/2023 - 03/2025",
+    location: "Baku, Azerbaijan · On-site",
+    summary: "Frontend development for Azerbaijan's national education web platforms.",
+    highlights: ["Portal.edu.az and Pts.edu.az - new services and ongoing support."],
+    stack: ["React", "Context API", "Redux Toolkit", "JavaScript", "CSS3", "GitLab"],
+  },
+  {
+    organization: "Edumedia-Azerbaijan LLC",
+    role: "Frontend Developer (Intern)",
+    kind: "internship",
+    period: "12/2022 - 03/2023",
+    location: "Baku, Azerbaijan · On-site",
+    summary: "Three-month internship on the national education web platforms.",
+    highlights: ["Digital.edu.az, Karabakh.edu.az, Ict.edu.az, Ite.az, MarsAcademy.az; support for Edu.gov.az."],
+    stack: ["HTML5", "CSS3", "JavaScript", "jQuery", "GitLab"],
   },
   {
     organization: "Azerbaijan International Telecom - AzInTelecom",
@@ -85,9 +101,26 @@ export const educationIntl: Education[] = [
 ];
 
 export const certificates: Certificate[] = [
-  { title: "Frontend Developer - Certificate of Distinction (Internship)", issuer: "AzInTelecom" },
-  { title: "Frontend Developer (#CodeForFuture)", issuer: "Algorithmics Global" },
-  { title: "Problem Solving (Basic), React (Basic), JavaScript (Basic & Intermediate)", issuer: "HackerRank" },
+  {
+    title: "Agentic Automation Developer",
+    issuer: "UiPath Academy",
+    link: "https://credentials.uipath.com/05f6e12c-fa14-43ac-9d85-32345daaccc2",
+  },
+  {
+    title: "Frontend Developer - Certificate of Distinction (Internship)",
+    issuer: "AzInTelecom",
+    link: "https://lnkd.in/p/dAPxzcjp",
+  },
+  {
+    title: "Frontend Developer (#CodeForFuture)",
+    issuer: "Algorithmics Global",
+    link: "https://drive.google.com/file/d/1wU_RX5qmX0dzXBMgP72aRV-E6RxTdbL2/view",
+  },
+  {
+    title: "Problem Solving (Basic), React (Basic), JavaScript (Basic & Intermediate)",
+    issuer: "HackerRank",
+    link: "https://www.hackerrank.com/profile/rzayevtaleh01",
+  },
 ];
 
 export const languages: Language[] = [

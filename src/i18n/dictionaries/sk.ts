@@ -115,6 +115,7 @@ export const sk: Dictionary = {
     skills: "Zručnosti",
     publications: "Publikácie",
     certificates: "Certifikáty",
+    showCredential: "Zobraziť certifikát",
     languages: "Jazyky",
     pdf: "PDF",
     print: "Tlačiť",

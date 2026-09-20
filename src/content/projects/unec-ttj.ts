@@ -14,7 +14,7 @@ export const unecTtj: Project = {
   featured: true,
   links: { demo: "https://journals.unec.edu.az/ttj/index" },
   facts: [
-    { label: "Role", value: "Full-stack · ITM" },
+    { label: "Role", value: "Full-stack" },
     { label: "Status", value: "In progress" },
     { label: "Platform", value: "OJS 3.4 (PKP)" },
     { label: "Indexing", value: "DOI · Google Scholar" },

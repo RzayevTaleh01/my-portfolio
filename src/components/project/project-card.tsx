@@ -14,7 +14,7 @@ export function ProjectMeta({ project, lang, className }: { project: Project; la
       {project.organization && (
         <>
           <span aria-hidden>·</span>
-          <span>{project.organization}</span>
+          <span className="font-medium text-accent">{project.organization}</span>
         </>
       )}
       <span aria-hidden>·</span>

@@ -1,18 +1,18 @@
 import type { Project } from "../types";
 
-// Freelance client project (see resume). No public repository.
+// Built at ITM - Information Technology Center (see resume). No public repository.
 
 export const diaspor: Project = {
   slug: "diaspor",
   title: "Diaspor.org",
   tagline: "A multi-tenant publishing platform: a branded news site for every diaspora organisation, and one national feed.",
-  kind: "freelance",
+  kind: "work",
   year: 2026,
   featured: true,
   links: {},
   facts: [
-    { label: "Role", value: "Full-stack · freelance" },
-    { label: "Period", value: "05 - 09/2026" },
+    { label: "Role", value: "Full-stack · ITM" },
+    { label: "Period", value: "05/2026 - Present" },
     { label: "Tenancy", value: "Subdomain per organisation" },
     { label: "Core", value: "Spring Boot · Next.js" },
   ],

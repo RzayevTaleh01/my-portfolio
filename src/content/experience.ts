@@ -4,6 +4,22 @@ import type { Certificate, Education, Experience, Language } from "./types";
 
 export const experience: Experience[] = [
   {
+    organization: "ITM - Information Technology Center",
+    role: "Full-Stack Developer",
+    kind: "full-time",
+    period: "05/2026 - Present",
+    location: "Baku, Azerbaijan · Remote",
+    summary:
+      "Full-stack work on the centre's web platforms. Diaspor.org is a multi-site publishing platform: every organisation gets its own branded subdomain news site, and a main portal aggregates approved news into a national feed.",
+    highlights: [
+      "Diaspor.org - designed the architecture end to end: Spring Boot REST API, React admin panel, Next.js SSR public site.",
+      "PostgreSQL with versioned migrations, S3 for media, Dockerized backend.",
+      "Implemented role-based access.",
+    ],
+    stack: ["Java", "Spring Boot", "PostgreSQL", "React", "TypeScript", "Next.js", "AWS S3", "Docker"],
+    caseStudy: "diaspor",
+  },
+  {
     organization: "Edumedia-Azerbaijan LLC",
     role: "Frontend Developer (Strong Junior)",
     kind: "full-time",

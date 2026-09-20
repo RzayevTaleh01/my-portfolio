@@ -16,6 +16,18 @@ export const core: ContentOverrides = {
   },
   experience: [
     {
+      role: "Full-Stack vývojár",
+      period: "05/2026 - súčasnosť",
+      location: "Baku, Azerbajdžan · Na diaľku",
+      summary:
+        "Full-stack vývoj webových platforiem centra. Diaspor.org je publikačná platforma: každá organizácia má vlastný spravodajský web na subdoméne so svojou značkou a hlavný portál zhromažďuje schválené správy do národného kanála.",
+      highlights: [
+        "Diaspor.org - navrhol som architektúru od začiatku do konca: Spring Boot REST API, administrácia v Reacte, verejný web v Next.js (SSR).",
+        "PostgreSQL s verzovanými migráciami, S3 pre médiá, backend v Dockeri.",
+        "Implementoval som prístup na základe rolí.",
+      ],
+    },
+    {
       role: "Frontend vývojár (Strong Junior)",
       location: "Baku, Azerbajdžan · Na pracovisku",
       summary: "Frontendový vývoj národných vzdelávacích webových platforiem Azerbajdžanu.",

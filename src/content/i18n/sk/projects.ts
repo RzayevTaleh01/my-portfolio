@@ -6,8 +6,8 @@ export const projects: Projects = {
   diaspor: {
     tagline: "Multi-tenant publikačná platforma: vlastný spravodajský web pre každú organizáciu diaspóry a jeden národný kanál.",
     facts: [
-      { label: "Rola", value: "Full-stack · freelance" },
-      { label: "Obdobie", value: "05 - 09/2026" },
+      { label: "Rola", value: "Full-stack · ITM" },
+      { label: "Obdobie", value: "05/2026 - súčasnosť" },
       { label: "Tenanti", value: "Subdoména pre každú organizáciu" },
       { label: "Jadro", value: "Spring Boot · Next.js" },
     ],

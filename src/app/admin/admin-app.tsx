@@ -1,7 +1,8 @@
 "use client";
 
 import { Download, ExternalLink, FileJson, LoaderCircle, LogOut, RefreshCw, Save } from "lucide-react";
-import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
+import { useRouter } from "next/navigation";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import type { Locale } from "@/i18n/config";
 import type { Region } from "@/i18n/region";
@@ -18,52 +19,21 @@ import {
   type CvSource,
 } from "@/lib/cv/model";
 import { cn } from "@/lib/utils";
-import { ADMIN_CODE_SHA256, sha256 } from "./access";
 
-const SESSION_KEY = "cv-admin";
+type Storage = "blob" | "file" | "none";
 
 interface Props {
   source: CvSource;
   initialConfig: CvConfig;
-  canSave: boolean;
-}
-
-// Signed in for this browser tab only (sessionStorage).
-const AUTH_EVENT = "cv-admin-auth";
-
-function readAuth() {
-  try {
-    return sessionStorage.getItem(SESSION_KEY) === ADMIN_CODE_SHA256;
-  } catch {
-    return false;
-  }
-}
-
-function writeAuth(on: boolean) {
-  try {
-    if (on) sessionStorage.setItem(SESSION_KEY, ADMIN_CODE_SHA256);
-    else sessionStorage.removeItem(SESSION_KEY);
-  } catch {}
-  window.dispatchEvent(new Event(AUTH_EVENT));
-}
-
-function subscribeAuth(callback: () => void) {
-  window.addEventListener(AUTH_EVENT, callback);
-  return () => window.removeEventListener(AUTH_EVENT, callback);
-}
-
-export function AdminApp(props: Props) {
-  // null on the server: nothing renders until the browser knows.
-  const authed = useSyncExternalStore(subscribeAuth, readAuth, () => null);
-
-  if (authed === null) return null;
-  if (!authed) return <Login onSuccess={() => writeAuth(true)} />;
-  return <CvBuilder {...props} onLogout={() => writeAuth(false)} />;
+  /** Where Save writes: Vercel Blob (live), the local JSON file (npm run dev), or nowhere. */
+  storage: Storage;
 }
 
 // ─── Login ────────────────────────────────────────────────
 
-function Login({ onSuccess }: { onSuccess: () => void }) {
+/** The code is checked on the server (ADMIN_CODE); a correct one sets a session cookie. */
+export function Login({ configured }: { configured: boolean }) {
+  const router = useRouter();
   const [code, setCode] = useState("");
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
@@ -73,13 +43,18 @@ function Login({ onSuccess }: { onSuccess: () => void }) {
     setBusy(true);
     setError("");
     try {
-      if ((await sha256(code.trim())) === ADMIN_CODE_SHA256) {
-        onSuccess();
+      const res = await fetch("/api/admin/session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code }),
+      });
+      if (res.ok) {
+        router.refresh();
         return;
       }
-      setError("Wrong code.");
-    } catch {
-      setError("This browser can't check the code here - open the panel over https or on localhost.");
+      setError(((await res.json().catch(() => ({}))) as { error?: string }).error ?? `HTTP ${res.status}`);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : String(e));
     }
     setBusy(false);
   }
@@ -91,6 +66,11 @@ function Login({ onSuccess }: { onSuccess: () => void }) {
           <h1 className="text-lg font-semibold tracking-tight">Admin</h1>
           <p className="text-sm text-muted-foreground">Enter the access code.</p>
         </div>
+        {!configured && (
+          <p className="rounded-lg bg-amber-50 px-3 py-2 text-[13px] text-amber-900">
+            ADMIN_CODE is not set on the server - add it to the environment variables first.
+          </p>
+        )}
         <input
           type="password"
           autoFocus
@@ -150,7 +130,8 @@ function useCvPreview(source: CvSource, config: CvRegionConfig, region: Region) 
   return { url, busy, error, regenerate: generate };
 }
 
-function CvBuilder({ source, initialConfig, canSave, onLogout }: Props & { onLogout: () => void }) {
+export function AdminApp({ source, initialConfig, storage }: Props) {
+  const router = useRouter();
   const [saved, setSaved] = useState(initialConfig);
   const [config, setConfig] = useState(initialConfig);
   const [region, setRegion] = useState<Region>("sk");
@@ -194,9 +175,15 @@ function CvBuilder({ source, initialConfig, canSave, onLogout }: Props & { onLog
       });
       const body = await res.json();
       if (!res.ok) throw new Error(body.error ?? `HTTP ${res.status}`);
-      setSaved(body);
-      setConfig(body);
-      setMessage({ tone: "ok", text: "Saved to src/content/cv/cv-config.json. Deploy to publish the new PDFs." });
+      setSaved(body.config);
+      setConfig(body.config);
+      setMessage({
+        tone: "ok",
+        text:
+          body.storage === "blob"
+            ? "Published - the download buttons on the site now give the new PDFs."
+            : "Saved to src/content/cv/cv-config.json. No Blob store here, so the live site updates on the next deploy.",
+      });
     } catch (e) {
       setMessage({ tone: "error", text: e instanceof Error ? e.message : String(e) });
     }
@@ -212,6 +199,11 @@ function CvBuilder({ source, initialConfig, canSave, onLogout }: Props & { onLog
     a.download = "cv-config.json";
     a.click();
     URL.revokeObjectURL(a.href);
+  }
+
+  async function logout() {
+    await fetch("/api/admin/session", { method: "DELETE" });
+    router.refresh();
   }
 
   const profile = source[current.language].profile;
@@ -245,16 +237,17 @@ function CvBuilder({ source, initialConfig, canSave, onLogout }: Props & { onLog
             ))}
           </div>
 
-          {canSave ? (
+          {storage !== "none" ? (
             <Button size="sm" onClick={save} disabled={!dirty || saving}>
-              {saving ? <LoaderCircle className="size-3.5 animate-spin" /> : <Save className="size-3.5" />} Save both CVs
+              {saving ? <LoaderCircle className="size-3.5 animate-spin" /> : <Save className="size-3.5" />}{" "}
+              {storage === "blob" ? "Save & publish" : "Save"}
             </Button>
           ) : (
             <Button size="sm" variant="outline" onClick={exportJson} title="Replace src/content/cv/cv-config.json with this file">
               <FileJson className="size-3.5" /> Export config
             </Button>
           )}
-          <Button size="sm" variant="ghost" onClick={onLogout} aria-label="Log out">
+          <Button size="sm" variant="ghost" onClick={logout} aria-label="Log out">
             <LogOut className="size-3.5" />
           </Button>
         </div>
@@ -268,10 +261,9 @@ function CvBuilder({ source, initialConfig, canSave, onLogout }: Props & { onLog
             {message.text}
           </p>
         )}
-        {!canSave && (
-          <p className="mx-auto max-w-[1500px] px-4 pb-2 text-[13px] text-muted-foreground">
-            Read-only here. Run <code className="font-mono">npm run dev</code> and open localhost:3000/admin to save - or
-            export the config and put it in <code className="font-mono">src/content/cv/cv-config.json</code>.
+        {storage === "none" && (
+          <p className="mx-auto max-w-[1500px] px-4 pb-2 text-[13px] text-amber-700">
+            No Vercel Blob store is connected, so nothing can be saved here. Connect one in Vercel → Storage and redeploy.
           </p>
         )}
       </header>

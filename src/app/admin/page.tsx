@@ -1,14 +1,12 @@
-import rawConfig from "@/content/cv/cv-config.json";
-import { normalizeConfig } from "@/lib/cv/model";
+import { isAdmin, isAdminConfigured } from "@/lib/admin-auth";
 import { getCvSource } from "@/lib/cv/source";
-import { AdminApp } from "./admin-app";
+import { getPublishedConfig, hasBlobStore } from "@/lib/cv/store";
+import { AdminApp, Login } from "./admin-app";
 
-export default function AdminPage() {
-  return (
-    <AdminApp
-      source={getCvSource()}
-      initialConfig={normalizeConfig(rawConfig)}
-      canSave={process.env.NODE_ENV === "development"}
-    />
-  );
+export default async function AdminPage() {
+  // Nothing about the CV reaches the browser before the code is checked on the server.
+  if (!(await isAdmin())) return <Login configured={isAdminConfigured()} />;
+
+  const storage = hasBlobStore() ? "blob" : process.env.NODE_ENV === "development" ? "file" : "none";
+  return <AdminApp source={getCvSource()} initialConfig={await getPublishedConfig()} storage={storage} />;
 }

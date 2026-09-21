@@ -5,7 +5,7 @@ import { projects as skProjects } from "./i18n/sk/projects";
 import type { ContentOverrides } from "./i18n/types";
 import { mergeOverride } from "./localize";
 import { profile } from "./profile";
-import { archive, projects } from "./projects";
+import { projects } from "./projects";
 import { publications } from "./publications";
 import { researchDirections, researchStatement, skills } from "./skills";
 
@@ -24,7 +24,6 @@ const english = {
   researchStatement,
   researchDirections,
   projects,
-  archive,
   publications,
 };
 
@@ -52,7 +51,6 @@ function build(locale: Locale): SiteContent {
     researchStatement: o.researchStatement ?? english.researchStatement,
     researchDirections: mergeOverride(english.researchDirections, o.researchDirections, `${locale}.researchDirections`),
     projects: localizedProjects,
-    archive: mergeOverride(english.archive, o.archive, `${locale}.archive`),
     publications: english.publications,
   };
   return { ...content, getProject: (slug) => localizedProjects.find((p) => p.slug === slug) ?? null };

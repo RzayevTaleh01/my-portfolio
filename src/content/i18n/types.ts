@@ -1,6 +1,5 @@
 import type { DeepPartial } from "../localize";
 import type {
-  ArchiveProject,
   Certificate,
   Education,
   Experience,
@@ -24,7 +23,6 @@ export interface ContentOverrides {
   skills?: DeepPartial<SkillGroup>[];
   researchStatement?: string;
   researchDirections?: DeepPartial<ResearchDirection>[];
-  archive?: DeepPartial<ArchiveProject>[];
   /** Keyed by project slug. */
   projects?: Record<string, DeepPartial<Project>>;
 }

@@ -49,22 +49,22 @@ export const core: ContentOverrides = {
               ],
             },
             { detail: "Presunutý zo starého systému a postavený nanovo v Next.js." },
-            { detail: "Oficiálny web ministerstva zahraničných vecí - podpora." },
-            { detail: "Interný systém ministerstva na apostilu a legalizáciu, postavený od nuly." },
-          ],
-        },
-        {
-          title: "Frontend vývojár (Junior)",
-          summary: "Národné vzdelávacie platformy pre ministerstvo vedy a školstva.",
-          projects: [
             {
               detail: "Interný systém pre odborné školy.",
               points: ["Vyše 10 služieb postavených alebo prepracovaných - online diplomy, individuálne študijné plány, prestupy študentov."],
             },
             { detail: "Žiadosti o štúdium v zahraničí v rámci programov HTP a DP." },
+            { detail: "Oficiálny web Karabašskej univerzity." },
+            { detail: "Oficiálny web ministerstva zahraničných vecí - podpora." },
+          ],
+        },
+        {
+          title: "Frontend vývojár (Junior)",
+          summary: "Národné platformy pre ministerstvo vedy a školstva a ministerstvo zahraničných vecí.",
+          projects: [
+            { detail: "Interný systém ministerstva zahraničných vecí na apostilu a legalizáciu, postavený od nuly." },
             { detail: "Frontend napísaný od nuly." },
             { detail: "Vzdelávacie centrum pre učiteľov - postavil som frontend." },
-            { detail: "Oficiálny web Karabašskej univerzity." },
             { detail: "Detská STEM akadémia - postavil som web." },
             { detail: "Oficiálny web ministerstva - podpora." },
             { detail: "Platforma ministerstva na prieskumy - podpora." },
@@ -184,15 +184,5 @@ export const core: ContentOverrides = {
         "Miesto, kde som začal, a stále jedna z línií: modelovať, čo študent vie, rozhodnúť, čo ho naučiť ďalej, a vysvetliť to jazykom opretým o učebný materiál.",
       methods: ["Bayesovské sledovanie znalostí (BKT)", "PPO", "Retrieval-augmented generation"],
     },
-  ],
-  archive: [
-    { description: "Kvízová aplikácia s dynamickou architektúrou otázok a ukladaním do localStorage." },
-    { description: "Preklad stránky na strane klienta s čistým kódom bez závislostí." },
-    { description: "Full-stack platforma na zdieľanie fotografií s backendom v Node.js a Express." },
-    { description: "Správca úloh s Context API, tmavým režimom a localStorage." },
-    { description: "Rozhranie pracovnej burzy s filtrovaním a localStorage." },
-    { description: "Autentifikácia pomocou JSON Web Tokenov v Next.js." },
-    { description: "Služba v Spring Boot s validáciou, spracovaním výnimiek a vlastnými aliasmi." },
-    { description: "Systém riadenia ľudských zdrojov s overením e-mailu - backend v Spring Boot a frontend v Reacte." },
   ],
 };

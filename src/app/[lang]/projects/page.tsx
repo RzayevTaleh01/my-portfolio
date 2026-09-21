@@ -2,11 +2,10 @@ import { GitFork, Star } from "lucide-react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { GitHubIcon } from "@/components/icons";
-import { ProjectCard } from "@/components/project/project-card";
 import { ArrowLink, PageHeader, Section } from "@/components/section";
 import { Timeline, TimelineDot } from "@/components/timeline";
 import { getContent } from "@/content";
-import { hasLocale } from "@/i18n/config";
+import { hasLocale, localize } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
 import { getRepos } from "@/lib/github";
 import { formatDate } from "@/lib/utils";
@@ -25,7 +24,7 @@ export default async function ProjectsPage(props: PageProps<"/[lang]/projects">)
   if (!hasLocale(lang)) notFound();
 
   const t = getDictionary(lang).projects;
-  const { profile, projects, archive } = getContent(lang);
+  const { profile, projects } = getContent(lang);
   const repos = await getRepos(profile.githubUsername);
   const githubUrl = `https://github.com/${profile.githubUsername}`;
 
@@ -41,35 +40,46 @@ export default async function ProjectsPage(props: PageProps<"/[lang]/projects">)
         if (items.length === 0) return null;
         return (
           <Section key={kind} id={kind} title={title}>
-            <p className="-mt-2 mb-5 text-sm text-muted-foreground">{intro}</p>
-            <div className="grid gap-3 sm:grid-cols-2">
+            <p className="-mt-2 mb-6 text-sm text-muted-foreground">{intro}</p>
+            {/* A compact list rather than cards: year, name, one line, and the two links. */}
+            <Timeline gap="space-y-8">
               {items.map((p) => (
-                <ProjectCard key={p.slug} project={p} lang={lang} />
+                <div key={p.slug} className="relative grid gap-1 sm:grid-cols-[1fr_auto] sm:gap-6">
+                  <TimelineDot />
+                  <div className="min-w-0">
+                    <p className="text-xs text-muted-foreground">
+                      <span className="font-mono">{p.year}</span>
+                      {p.organization && (
+                        <>
+                          {" · "}
+                          <span className="font-medium text-accent">{p.organization}</span>
+                        </>
+                      )}
+                    </p>
+                    <p className="mt-1 text-sm font-medium">{p.title}</p>
+                    <p className="text-sm text-muted-foreground">{p.tagline}</p>
+                    <p className="mt-0.5 text-xs text-subtle-foreground">
+                      {p.stack
+                        .flatMap((g) => g.items)
+                        .slice(0, 5)
+                        .join(" · ")}
+                    </p>
+                  </div>
+                  <div className="flex gap-4 sm:pt-5">
+                    {p.links.demo && <ArrowLink href={p.links.demo}>{t.live}</ArrowLink>}
+                    <ArrowLink
+                      href={localize(lang, `/projects/${p.slug}`)}
+                      className="font-medium text-accent hover:text-accent hover:underline"
+                    >
+                      {t.details}
+                    </ArrowLink>
+                  </div>
+                </div>
               ))}
-            </div>
+            </Timeline>
           </Section>
         );
       })}
-
-      <Section id="archive" title={t.archive}>
-        <Timeline gap="space-y-8">
-          {archive.map((p) => (
-            <div key={p.repo} className="relative grid gap-1 sm:grid-cols-[1fr_auto] sm:gap-6">
-              <TimelineDot />
-              <div className="min-w-0">
-                <p className="font-mono text-xs text-muted-foreground">{p.year}</p>
-                <p className="mt-1 text-sm font-medium">{p.title}</p>
-                <p className="text-sm text-muted-foreground">{p.description}</p>
-                <p className="mt-0.5 text-xs text-subtle-foreground">{p.stack.join(" · ")}</p>
-              </div>
-              <div className="flex gap-4 sm:pt-5">
-                {p.demo && <ArrowLink href={p.demo}>{t.live}</ArrowLink>}
-                <ArrowLink href={p.repo}>{t.code}</ArrowLink>
-              </div>
-            </div>
-          ))}
-        </Timeline>
-      </Section>
 
       <Section id="github" title={t.github} href={githubUrl} linkLabel={`@${profile.githubUsername}`}>
         {repos && repos.length > 0 ? (

@@ -84,7 +84,7 @@ export const edumediaProjects: Project[] = [
     slug: "pts-edu",
     title: "Pts.edu.az",
     tagline: "A large internal system for vocational schools - more than ten services built or reworked.",
-    year: 2024,
+    year: 2025,
     links: { demo: "https://pts.edu.az" },
     facts: [
       { label: "Role", value: "Frontend" },
@@ -108,7 +108,7 @@ export const edumediaProjects: Project[] = [
     slug: "portal-edu",
     title: "Portal.edu.az",
     tagline: "The ministry's services portal - improving the study-abroad application flows.",
-    year: 2024,
+    year: 2025,
     links: { demo: "https://portal.edu.az" },
     facts: [
       { label: "Role", value: "Frontend" },
@@ -118,6 +118,17 @@ export const edumediaProjects: Project[] = [
       "Portal.edu.az is where the ministry's services are applied for. My main work there was improving the applications for study abroad under two programmes: the Intergovernmental Education Programme (HTP) and the State Programme for the education of Azerbaijani youth abroad (DP).",
     ],
     stack: [{ group: "Frontend", items: ["React", "JavaScript"] }],
+  },
+  {
+    ...base,
+    slug: "karabakh-edu",
+    title: "Karabakh.edu.az",
+    tagline: "The official website of Karabakh University.",
+    year: 2025,
+    links: { demo: "https://karabakh.edu.az" },
+    facts: [{ label: "Role", value: "Frontend" }],
+    overview: ["The official website of Karabakh University. I worked on it in the project team - one of the projects I count as a clear success."],
+    stack: [{ group: "Frontend", items: ["HTML5", "CSS3", "JavaScript"] }],
   },
   {
     ...base,
@@ -146,17 +157,6 @@ export const edumediaProjects: Project[] = [
     overview: [
       "Ite.az is the Innovative Technologies in Education continuing-education centre: digital-literacy and ICT courses for teachers, international certification, a course basket and certificate verification. I built the project's frontend as part of its team.",
     ],
-    stack: [{ group: "Frontend", items: ["HTML5", "CSS3", "JavaScript"] }],
-  },
-  {
-    ...base,
-    slug: "karabakh-edu",
-    title: "Karabakh.edu.az",
-    tagline: "The official website of Karabakh University.",
-    year: 2024,
-    links: { demo: "https://karabakh.edu.az" },
-    facts: [{ label: "Role", value: "Frontend" }],
-    overview: ["The official website of Karabakh University. I worked on it in the project team - one of the projects I count as a clear success."],
     stack: [{ group: "Frontend", items: ["HTML5", "CSS3", "JavaScript"] }],
   },
   {

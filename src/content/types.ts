@@ -211,16 +211,6 @@ export interface Project {
   next?: string[];
 }
 
-/** Smaller, earlier projects shown as a compact list. */
-export interface ArchiveProject {
-  title: string;
-  description: string;
-  year: number;
-  stack: string[];
-  repo: string;
-  demo?: string;
-}
-
 export interface NewsItem {
   date: string;
   text: string;

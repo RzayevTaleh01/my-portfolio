@@ -1,53 +1,78 @@
 # Taleh Rzayev - Portfolio
 
-Portfolio of a software engineer and AI researcher: experience, skills, research, architecture case studies and articles.
+Personal site of a software engineer and AI researcher: experience, projects, research, articles and a printable resume.
 
-Next.js 16 · Tailwind CSS 4 · Radix UI · Motion · cmdk · next-themes · MDX · Shiki · KaTeX · Plus Jakarta Sans
+**Live:** [therzayev.site](https://therzayev.site)
+
+Next.js 16 · Tailwind CSS 4 · Radix UI · Motion · cmdk · next-themes · MDX · Shiki · KaTeX
+
+## Getting started
 
 ```bash
 npm install
 npm run dev      # http://localhost:3000
 npm run build
+npm run lint
 ```
 
-## Languages (EN · AZ · SK)
+## Project structure
 
-Every page exists at `/en`, `/az` and `/sk`. Visiting `/` (or any path without a locale) redirects via `src/proxy.ts` to English, or to the language the visitor picked earlier in the top-right language menu.
+```
+content/posts/          Articles (MDX)
+public/                 Photo and resume PDFs
+src/
+  app/[lang]/           Pages - home, projects, research, writing, about, cv
+  components/           UI components
+  content/              All site content (typed)
+    i18n/sk/            Slovak translations of the content
+    projects/           Project pages
+  i18n/                 Locales and interface dictionaries
+  lib/                  Helpers (posts, GitHub, assistant topics)
+  proxy.ts              Locale redirect
+```
 
-| What | Where |
-| --- | --- |
-| Interface text (buttons, headings, labels) | `src/i18n/dictionaries/{en,az,sk}.ts` |
-| Content translations | `src/content/i18n/{az,sk}/core.ts` and `projects.ts` |
-| Article translations | `content/posts/<slug>.az.mdx`, `<slug>.sk.mdx` (falls back to English) |
-
-English content is the source of truth. Translations are *overrides* with the same shape that contain only text - stack, code, formulas and links are never repeated. Arrays are matched by position; if a translation has a different number of items than the English content, the build fails with the exact path, so translations can never silently drift. Use `{}` to keep an item in English.
+Pages only render data - everything shown on the site lives in `src/content/` and `content/posts/`. Types in `src/content/types.ts` make the build fail on a missing or misspelled field.
 
 ## Editing content
 
-Pages only render data - all content lives in `src/content/` and `content/posts/`.
-
 | What | File |
 | --- | --- |
-| Name, intro, bio, photo, CV PDF, links | `src/content/profile.ts` |
-| Experience, education, certificates, languages | `src/content/experience.ts` |
+| Name, headline, intro, bio, photo, social links | `src/content/profile.ts` |
+| Experience, volunteering, education, certificates, languages | `src/content/experience.ts` |
 | Skills, research statement and directions | `src/content/skills.ts` |
-| Publications (shown on /research and /cv once the list is not empty) | `src/content/publications.ts` |
-| Project case studies - one file per project | `src/content/projects/*.ts` |
-| Earlier/smaller projects | `src/content/projects/index.ts` (`archive`) |
+| Publications (shown once the list is not empty) | `src/content/publications.ts` |
+| Projects | `src/content/projects/*.ts` |
+| Earlier, smaller projects | `src/content/projects/index.ts` (`archive`) |
 | Articles | `content/posts/*.mdx` |
-| CV downloads (per region) | `public/taleh-rzayev-cv.pdf`, `public/taleh-rzayev-cv-sk.pdf` |
+| Resume PDFs | `public/` |
 
-Types in `src/content/types.ts` make the build fail on missing or misspelled fields.
+### Experience
 
-### Adding a case study
+Each entry is one organisation with one or more `roles`, newest first. Several roles are shown as a promotion track under the company. A role can link a project page (`caseStudy`) and a credential (`credential`). The home page and the resume render the same components, so they always match.
 
-Copy an existing file in `src/content/projects/`, fill it in, and add it to the `projects` array in `index.ts`. A case study has:
+### Projects
 
-- `architecture.layers` - rendered as a layered diagram, top (users) to bottom (data)
-- `components`, `flow` (numbered steps), `decisions`, `stack`
-- `deepDives` - optional prose with a LaTeX `formula` and/or highlighted `code`
+Add a file in `src/content/projects/` (or an entry in `edumedia.ts` for smaller work) and list it in the `projects` array in `index.ts` - the array order is the display order. `featured: true` puts a project on the home page.
 
-### Writing an article
+- Required: `slug`, `title`, `tagline`, `kind`, `year`, `links` (`repo`, `demo`, `docs` - all optional, `{}` for none), `overview`, `stack`
+- `kind` is `work`, `freelance`, `research` or `hobby`; `work` projects also take an `organization`
+- Optional: `facts`, `problem`, `components`, `next`, and for a full case study `architecture` (a layered diagram), `flow`, `deepDives` (LaTeX `formula`, highlighted `code`) and `decisions`
+
+Only the sections a project fills are rendered, and they are numbered in order.
+
+## Languages
+
+Every page exists in English (`/en`) and Slovak (`/sk`). Visiting a path without a locale redirects to one.
+
+| What | Where |
+| --- | --- |
+| Interface text (buttons, headings, labels) | `src/i18n/dictionaries/{en,sk}.ts` |
+| Content translations | `src/content/i18n/sk/core.ts` and `projects.ts` |
+| Article translations | `content/posts/<slug>.sk.mdx` (falls back to English) |
+
+English is the source of truth. A translation is an *override* with the same shape that contains only text - stack, code, formulas and links are never repeated. Arrays are matched by position: if a translation has a different number of items than the English content, the build fails with the exact path. Use `{}` to keep an item in English. Project translations are keyed by `slug`.
+
+## Writing an article
 
 ```mdx
 ---
@@ -64,4 +89,9 @@ Posts support GitHub-flavoured Markdown, `$LaTeX$`, titled code blocks (```` ```
 
 ## Deploying
 
-Set `NEXT_PUBLIC_SITE_URL` to your domain (used for SEO metadata and the sitemap). Optionally set `GITHUB_TOKEN` to raise the GitHub API rate limit for the live repository and language stats.
+Deployed on Vercel from `master`.
+
+| Variable | Purpose |
+| --- | --- |
+| `NEXT_PUBLIC_SITE_URL` | Your domain - used for SEO metadata and the sitemap |
+| `GITHUB_TOKEN` | Optional - raises the GitHub API rate limit for repository and language stats |

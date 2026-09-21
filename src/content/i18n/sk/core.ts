@@ -24,10 +24,10 @@ export const core: ContentOverrides = {
           title: "Full-Stack vývojár",
           period: "05/2026 - súčasnosť",
           summary: "Full-stack práca na webových platformách centra.",
-          highlights: [
-            "Diaspor.org - multi-tenant publikačná platforma, postavená od začiatku do konca.",
-            "UNEC Student Research Journal - platforma na OJS s frontom v Laraveli, DOI a indexovanie v Scholar.",
-            "Institute of Lung Diseases - prepis verejného portálu v Laraveli.",
+          projects: [
+            { detail: "Multi-tenant publikačná platforma, postavená od začiatku do konca." },
+            { detail: "Platforma na OJS s frontom v Laraveli, DOI a indexovanie v Google Scholar." },
+            { detail: "Prepis verejného portálu v Laraveli." },
           ],
         },
       ],
@@ -37,26 +37,38 @@ export const core: ContentOverrides = {
       roles: [
         {
           title: "Frontend vývojár (Middle)",
-          summary:
-            "Digitálna škola (Digital.edu.az) - národná školská platforma ministerstva vedy a školstva: jeden portál pre učiteľov, riaditeľov, žiakov a rodičov. Náš najväčší a najnáročnejší systém.",
-          highlights: [
-            "Viac ako 10 jej služieb som postavil od nuly.",
-            "AI asistent učenia - hoci som frontendový vývojár, prizvali ma do tímu, ktorý postavil chatbota pre žiakov na lokálnom generatívnom modeli trénovanom na materiáloch ministerstva, aby sa s ním žiaci mohli učiť z oficiálnych učebníc. Spustený v júni 2026.",
-            "Video.edu.az - pomohol som presunúť starý systém na novú technológiu; postavený nanovo v Next.js.",
-            "Mfa.gov.az (podpora) a aida.mfa.gov.az - interný systém ministerstva zahraničných vecí na apostilu a legalizáciu, postavený od nuly.",
+          summary: "Národné platformy pre ministerstvo vedy a školstva a ministerstvo zahraničných vecí.",
+          projects: [
+            {
+              name: "Digitálna škola (Digital.edu.az)",
+              detail:
+                "Národná školská platforma ministerstva: jeden portál pre učiteľov, riaditeľov, žiakov a rodičov. Náš najväčší a najnáročnejší systém.",
+              points: [
+                "Viac ako 10 jej služieb som postavil od nuly.",
+                "AI asistent učenia - hoci som frontendový vývojár, prizvali ma do tímu, ktorý postavil chatbota pre žiakov na lokálnom generatívnom modeli trénovanom na materiáloch ministerstva. Spustený v júni 2026.",
+              ],
+            },
+            { detail: "Presunutý zo starého systému a postavený nanovo v Next.js." },
+            { detail: "Oficiálny web ministerstva zahraničných vecí - podpora." },
+            { detail: "Interný systém ministerstva na apostilu a legalizáciu, postavený od nuly." },
           ],
         },
         {
           title: "Frontend vývojár (Junior)",
           summary: "Národné vzdelávacie platformy pre ministerstvo vedy a školstva.",
-          highlights: [
-            "Portal.edu.az - žiadosti o štúdium v zahraničí: medzivládny vzdelávací program (HTP) a štátny program (DP).",
-            "Pts.edu.az - interný systém pre odborné školy; vyše 10 služieb postavených alebo prepracovaných, vrátane online diplomov, individuálnych študijných plánov a prestupov študentov.",
-            "Ict.edu.az - odbor informatizácie vzdelávacieho systému ministerstva; frontend napísaný od nuly.",
-            "Ite.az - vzdelávacie centrum Inovatívne technológie vo vzdelávaní; postavil som frontend.",
-            "Karabakh.edu.az - oficiálny web Karabašskej univerzity.",
-            "MarsAcademy.az - web detskej STEM akadémie, ktorý som postavil.",
-            "Edu.gov.az, Anket.edu.az (platforma ministerstva na prieskumy) a Azsmart.az - podpora.",
+          projects: [
+            {
+              detail: "Interný systém pre odborné školy.",
+              points: ["Vyše 10 služieb postavených alebo prepracovaných - online diplomy, individuálne študijné plány, prestupy študentov."],
+            },
+            { detail: "Žiadosti o štúdium v zahraničí v rámci programov HTP a DP." },
+            { detail: "Frontend napísaný od nuly." },
+            { detail: "Vzdelávacie centrum pre učiteľov - postavil som frontend." },
+            { detail: "Oficiálny web Karabašskej univerzity." },
+            { detail: "Detská STEM akadémia - postavil som web." },
+            { detail: "Oficiálny web ministerstva - podpora." },
+            { detail: "Platforma ministerstva na prieskumy - podpora." },
+            { detail: "Produktový web online pokladníc - podpora." },
           ],
         },
       ],

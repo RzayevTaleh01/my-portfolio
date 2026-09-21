@@ -54,6 +54,16 @@ export interface Credential {
   href: string;
 }
 
+/** A project done in a role, listed under it. Linked to its page when it has one. */
+export interface RoleProject {
+  name: string;
+  detail: string;
+  /** Points that belong to this project only. */
+  points?: string[];
+  /** Slug of the project page in src/content/projects. */
+  slug?: string;
+}
+
 /** One title held at an organisation. Several of them make a promotion track. */
 export interface ExperienceRole {
   title: string;
@@ -62,6 +72,7 @@ export interface ExperienceRole {
   period: string;
   summary: string;
   highlights?: string[];
+  projects?: RoleProject[];
   stack?: string[];
   /** Slug of a related case study in src/content/projects. */
   caseStudy?: string;

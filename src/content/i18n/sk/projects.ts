@@ -945,19 +945,6 @@ export const projects: Projects = {
       "Video.edu.az nesie video lekcie ministerstva. Starý systém sa nahradil, nie záplatoval: nová verzia bola postavená od nuly na Next.js a ja som pomohol platformu na ňu preniesť.",
     ],
   },
-  "aida-mfa": {
-    tagline: "Interný systém ministerstva zahraničných vecí na apostilu a legalizáciu dokumentov, postavený od nuly.",
-    facts: [{ label: "Rola" }, { label: "Prístup", value: "Interný" }, { label: "Oblasť", value: "Apostila · Legalizácia" }],
-    overview: [
-      "Okrem vzdelávania robila Edumedia aj prácu pre ministerstvo zahraničných vecí. aida.mfa.gov.az je interný systém ministerstva na apostilovanie a legalizáciu dokumentov a bol postavený od nuly.",
-      "Nie je verejne dostupný, preto tu nie je odkaz.",
-    ],
-  },
-  "mfa-gov": {
-    tagline: "Oficiálny web ministerstva zahraničných vecí - podpora.",
-    facts: [{ label: "Rola", value: "Podpora" }],
-    overview: ["Oficiálny web ministerstva zahraničných vecí. Podporu som na ňom robil popri internom apostilovom systéme."],
-  },
   "pts-edu": {
     tagline: "Veľký interný systém pre odborné školy - viac ako desať služieb postavených alebo prepracovaných.",
     facts: [{ label: "Rola" }, { label: "Služby" }, { label: "Používatelia", value: "Odborné školy" }],

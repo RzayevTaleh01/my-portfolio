@@ -52,6 +52,7 @@ export const sk: Dictionary = {
     kinds: { "full-time": "Plný úväzok", internship: "Stáž", freelance: "Freelance" },
     caseStudy: "Prečítať prípadovú štúdiu",
     credential: "Zobraziť certifikát",
+    viewProject: "Zobraziť projekt",
   },
   projects: {
     title: "Projekty",

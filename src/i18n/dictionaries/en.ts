@@ -51,6 +51,7 @@ export const en = {
     kinds: { "full-time": "Full-time", internship: "Internship", freelance: "Freelance" },
     caseStudy: "Read the case study",
     credential: "View certificate",
+    viewProject: "View project",
   },
   projects: {
     title: "Projects",

@@ -13,13 +13,16 @@ export const experience: Experience[] = [
         kind: "full-time",
         period: "05/2026 - Present",
         summary: "Full-stack work on the centre's web platforms.",
-        highlights: [
-          "Diaspor.org - multi-tenant publishing platform, built end to end.",
-          "UNEC Student Research Journal - OJS platform with a Laravel front, DOI and Scholar indexing.",
-          "Institute of Lung Diseases - rebuilding the public portal in Laravel.",
+        projects: [
+          { name: "Diaspor.org", detail: "Multi-tenant publishing platform, built end to end.", slug: "diaspor" },
+          {
+            name: "UNEC Student Research Journal",
+            detail: "OJS platform with a Laravel front, DOI and Google Scholar indexing.",
+            slug: "unec-ttj",
+          },
+          { name: "Institute of Lung Diseases", detail: "Rebuilding the public portal in Laravel.", slug: "etacxi" },
         ],
         stack: ["Java", "Spring Boot", "PHP", "Laravel", "PostgreSQL", "MySQL", "React", "Next.js", "OJS", "AWS S3", "Docker"],
-        caseStudy: "diaspor",
       },
     ],
   },
@@ -32,15 +35,22 @@ export const experience: Experience[] = [
         title: "Frontend Developer (Middle)",
         kind: "full-time",
         period: "03/2025 - 08/2026",
-        summary:
-          "Digital School (Digital.edu.az) - the Ministry of Science and Education's national school platform: one portal for teachers, directors, students and parents. Our biggest and heaviest system.",
-        highlights: [
-          "Built 10+ of its services from scratch.",
-          "AI learning assistant - a frontend developer by role, I was brought into the team that built the students' chatbot on a local generative model trained on the ministry's materials, so students can work through the official textbooks with it. Launched in June 2026.",
-          "Video.edu.az - helped move the old system to a new stack; rebuilt from scratch in Next.js.",
-          "Mfa.gov.az (support) and aida.mfa.gov.az - the Ministry of Foreign Affairs' internal apostille and legalisation system, built from scratch.",
+        summary: "National platforms for the Ministry of Science and Education and the Ministry of Foreign Affairs.",
+        projects: [
+          {
+            name: "Digital School (Digital.edu.az)",
+            detail:
+              "The ministry's national school platform: one portal for teachers, directors, students and parents. Our biggest and heaviest system.",
+            points: [
+              "Built 10+ of its services from scratch.",
+              "AI learning assistant - a frontend developer by role, I was brought into the team that built the students' chatbot on a local generative model trained on the ministry's materials. Launched in June 2026.",
+            ],
+            slug: "digital-school",
+          },
+          { name: "Video.edu.az", detail: "Moved off the old system and rebuilt from scratch in Next.js.", slug: "video-edu" },
+          { name: "Mfa.gov.az", detail: "The Ministry of Foreign Affairs' official website - support." },
+          { name: "aida.mfa.gov.az", detail: "The ministry's internal apostille and legalisation system, built from scratch." },
         ],
-        caseStudy: "digital-school",
         stack: ["React", "Next.js", "TypeScript", "Redux Toolkit", "Figma", "GitLab"],
       },
       {
@@ -48,14 +58,25 @@ export const experience: Experience[] = [
         kind: "full-time",
         period: "03/2023 - 03/2025",
         summary: "National education platforms for the Ministry of Science and Education.",
-        highlights: [
-          "Portal.edu.az - study-abroad applications: the Intergovernmental Education Programme (HTP) and the State Programme (DP).",
-          "Pts.edu.az - internal system for vocational schools; 10+ services built or reworked, including online diplomas, individual study plans and student transfers.",
-          "Ict.edu.az - the ministry's Education System Informatisation Department; frontend written from scratch.",
-          "Ite.az - Innovative Technologies in Education training centre; built the frontend.",
-          "Karabakh.edu.az - Karabakh University's official site.",
-          "MarsAcademy.az - a children's STEM academy site, built by me.",
-          "Edu.gov.az, Anket.edu.az (the ministry's survey platform) and Azsmart.az - support.",
+        projects: [
+          {
+            name: "Pts.edu.az",
+            detail: "Internal system for vocational schools.",
+            points: ["10+ services built or reworked - online diplomas, individual study plans, student transfers."],
+            slug: "pts-edu",
+          },
+          {
+            name: "Portal.edu.az",
+            detail: "Study-abroad applications under the HTP and DP programmes.",
+            slug: "portal-edu",
+          },
+          { name: "Ict.edu.az", detail: "Frontend written from scratch.", slug: "ict-edu" },
+          { name: "Ite.az", detail: "Teacher training centre - built the frontend.", slug: "ite" },
+          { name: "Karabakh.edu.az", detail: "Karabakh University's official site.", slug: "karabakh-edu" },
+          { name: "MarsAcademy.az", detail: "Children's STEM academy - built the site.", slug: "mars-academy" },
+          { name: "Edu.gov.az", detail: "The ministry's official website - support.", slug: "edu-gov" },
+          { name: "Anket.edu.az", detail: "The ministry's survey platform - support.", slug: "anket-edu" },
+          { name: "Azsmart.az", detail: "Online cash register product site - support.", slug: "azsmart" },
         ],
         stack: ["HTML5", "CSS3", "JavaScript", "jQuery", "React", "Context API", "Redux Toolkit", "GitLab"],
       },

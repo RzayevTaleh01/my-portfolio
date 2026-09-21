@@ -1,7 +1,7 @@
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 import { TimelineDot } from "@/components/timeline";
-import type { Experience, ExperienceRole, Volunteering } from "@/content";
+import type { Experience, ExperienceRole, RoleProject, Volunteering } from "@/content";
 import { localize, type Locale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
 
@@ -32,6 +32,47 @@ function CredentialLink({ label, href, note }: { label: string; href: string; no
   );
 }
 
+/**
+ * Projects done in a role, all on the same level: name and a green link to the
+ * project page, a one-line description, and points that belong to that project only.
+ */
+function Projects({ items, lang }: { items: RoleProject[]; lang: Locale }) {
+  const t = getDictionary(lang).experience;
+  return (
+    <ul className="space-y-3 text-sm leading-relaxed">
+      {items.map((p) => (
+        <li key={p.name} className="flex gap-2.5">
+          <span className="mt-[9px] size-1 shrink-0 rounded-full bg-border-strong" />
+          <div className="min-w-0">
+            <p className="flex flex-wrap items-baseline gap-x-2.5">
+              <span className="font-medium">{p.name}</span>
+              {p.slug && (
+                <Link
+                  href={localize(lang, `/projects/${p.slug}`)}
+                  className="inline-flex items-center gap-0.5 text-[13px] font-medium text-accent hover:underline"
+                >
+                  {t.viewProject} <ArrowRight className="size-3" />
+                </Link>
+              )}
+            </p>
+            <p className="text-muted-foreground">{p.detail}</p>
+            {p.points && p.points.length > 0 && (
+              <ul className="mt-1.5 space-y-1 text-muted-foreground">
+                {p.points.map((pt) => (
+                  <li key={pt} className="flex gap-2">
+                    <span className="mt-[11px] h-px w-2 shrink-0 bg-border-strong" />
+                    {pt}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
 /** One title held at the organisation. Several of them stack up into a promotion track. */
 function Role({ role, lang, showPeriod }: { role: ExperienceRole; lang: Locale; showPeriod: boolean }) {
   const t = getDictionary(lang).experience;
@@ -52,6 +93,7 @@ function Role({ role, lang, showPeriod }: { role: ExperienceRole; lang: Locale; 
       </div>
       <p className="text-sm leading-relaxed">{role.summary}</p>
       {role.highlights && role.highlights.length > 0 && <Bullets items={role.highlights} />}
+      {role.projects && role.projects.length > 0 && <Projects items={role.projects} lang={lang} />}
       {role.stack && <p className="text-xs leading-relaxed text-subtle-foreground">{role.stack.join(" · ")}</p>}
       <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
         {role.caseStudy && (

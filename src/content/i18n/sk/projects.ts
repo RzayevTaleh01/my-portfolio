@@ -891,6 +891,138 @@ export const projects: Projects = {
     ],
   },
 
+  "digital-school": {
+    title: "Digitálna škola",
+    tagline: "Národná školská platforma ministerstva vedy a školstva - jeden portál pre učiteľov, riaditeľov, žiakov a rodičov.",
+    facts: [
+      { label: "Rola" },
+      { label: "Používatelia", value: "Učiteľ · Riaditeľ · Žiak · Rodič" },
+      { label: "Služby", value: "10+ postavených" },
+      { label: "AI asistent", value: "Spustený 06/2026" },
+    ],
+    overview: [
+      "Digitálna škola (Rəqəmsal məktəb) je platforma ministerstva na učenie, výučbu, komunikáciu a spoluprácu v digitálnom prostredí. Je to najväčší a najnáročnejší systém, aký sme v Edumedii postavili, a jedna z najhlbších zmien, ktoré prišli do azerbajdžanských škôl: celý vyučovací proces beží z jedného portálu.",
+      "Rodičia, učitelia a riaditelia sa prihlasujú cez národný Digital Login vrátane digitálneho podpisu SİMA; žiaci sa prihlasujú kódom UTİS a heslom, ktoré im nastaví rodič.",
+      "Viac ako desať jej služieb som postavil od nuly. Najviac si pamätám AI asistenta učenia.",
+    ],
+    components: [
+      {
+        name: "Kabinet žiaka",
+        role: "Učenie mimo vyučovacej hodiny",
+        points: ["Video lekcie, e-učebnice, úlohy a testy ku každej téme.", "Otázky učiteľom a sebahodnotenie."],
+      },
+      {
+        name: "Kabinet rodiča",
+        role: "Sledovanie pokroku dieťaťa",
+        points: ["Denné známky a týždenný rozvrh.", "Priamy chat s riaditeľom školy."],
+      },
+      {
+        name: "Kabinet učiteľa",
+        role: "Každodenný záznam výučby",
+        points: ["Triedy, týždenný úväzok a rozvrh.", "Elektronické triedne knihy pre formatívne a sumatívne hodnotenie."],
+      },
+      {
+        name: "Kabinet riaditeľa",
+        role: "Celá škola z jedného miesta",
+        points: ["Štatistiky školy a okamžité reporty.", "Rozvrhy všetkých tried a učiteľov a odpovede rodičom."],
+      },
+      {
+        name: "AI asistent učenia",
+        role: "Časť, ktorú si pamätám najviac",
+        points: [
+          "Hoci som frontendový vývojár, prizvali ma do tímu, ktorý ho postavil.",
+          "Chatbot na lokálnom generatívnom modeli trénovanom na materiáloch ministerstva a hostovanom v krajine, aby sa s ním žiaci mohli učiť z oficiálnych učebníc.",
+          "Žiakom sprístupnený v júni 2026 v kabinete žiaka v časti Aplikácie → Digitálny asistent.",
+        ],
+      },
+    ],
+    stack: [{}, { items: ["Lokálny generatívny model", "Chatové rozhranie"] }],
+  },
+  "video-edu": {
+    tagline: "Platforma video lekcií ministerstva, presunutá zo starého systému a postavená nanovo v Next.js.",
+    facts: [{ label: "Rola" }, {}, { label: "Rozsah", value: "Úplná prestavba" }],
+    overview: [
+      "Video.edu.az nesie video lekcie ministerstva. Starý systém sa nahradil, nie záplatoval: nová verzia bola postavená od nuly na Next.js a ja som pomohol platformu na ňu preniesť.",
+    ],
+  },
+  "aida-mfa": {
+    tagline: "Interný systém ministerstva zahraničných vecí na apostilu a legalizáciu dokumentov, postavený od nuly.",
+    facts: [{ label: "Rola" }, { label: "Prístup", value: "Interný" }, { label: "Oblasť", value: "Apostila · Legalizácia" }],
+    overview: [
+      "Okrem vzdelávania robila Edumedia aj prácu pre ministerstvo zahraničných vecí. aida.mfa.gov.az je interný systém ministerstva na apostilovanie a legalizáciu dokumentov a bol postavený od nuly.",
+      "Nie je verejne dostupný, preto tu nie je odkaz.",
+    ],
+  },
+  "mfa-gov": {
+    tagline: "Oficiálny web ministerstva zahraničných vecí - podpora.",
+    facts: [{ label: "Rola", value: "Podpora" }],
+    overview: ["Oficiálny web ministerstva zahraničných vecí. Podporu som na ňom robil popri internom apostilovom systéme."],
+  },
+  "pts-edu": {
+    tagline: "Veľký interný systém pre odborné školy - viac ako desať služieb postavených alebo prepracovaných.",
+    facts: [{ label: "Rola" }, { label: "Služby" }, { label: "Používatelia", value: "Odborné školy" }],
+    overview: [
+      "Pts.edu.az je interný systém, na ktorom bežia odborné školy. Je veľký a viac ako desať jeho služieb som postavil od nuly alebo pomohol prepracovať.",
+    ],
+    components: [
+      {
+        name: "Moduly",
+        role: "Niektoré zo služieb, na ktorých som pracoval",
+        points: ["Online vydávanie diplomov.", "Individuálne študijné plány.", "Prestupy študentov."],
+      },
+    ],
+  },
+  "portal-edu": {
+    tagline: "Portál služieb ministerstva - vylepšenie žiadostí o štúdium v zahraničí.",
+    facts: [{ label: "Rola" }, { label: "Programy" }],
+    overview: [
+      "Portal.edu.az je miesto, kde sa žiada o služby ministerstva. Mojou hlavnou prácou tam bolo vylepšenie žiadostí o štúdium v zahraničí v rámci dvoch programov: medzivládneho vzdelávacieho programu (HTP) a štátneho programu vzdelávania azerbajdžanskej mládeže v zahraničí (DP).",
+    ],
+  },
+  "ict-edu": {
+    tagline: "Web odboru informatizácie vzdelávacieho systému ministerstva - frontend napísaný od nuly.",
+    facts: [{ label: "Rola" }, { label: "Rozsah", value: "Od nuly" }],
+    overview: [
+      "Web odboru informatizácie vzdelávacieho systému, inštitúcie pod ministerstvom vedy a školstva: e-služby, Azerbajdžanská vzdelávacia sieť, e-zdroje a správy. Jeho frontend som napísal od nuly.",
+    ],
+  },
+  ite: {
+    tagline: "Inovatívne technológie vo vzdelávaní - vzdelávacie centrum pre učiteľov s kurzami, košíkom a overovaním certifikátov.",
+    facts: [{ label: "Rola" }],
+    overview: [
+      "Ite.az je centrum ďalšieho vzdelávania Inovatívne technológie vo vzdelávaní: kurzy digitálnej gramotnosti a IKT pre učiteľov, medzinárodná certifikácia, košík kurzov a overovanie certifikátov. Ako člen tímu som postavil frontend projektu.",
+    ],
+  },
+  "karabakh-edu": {
+    tagline: "Oficiálny web Karabašskej univerzity.",
+    facts: [{ label: "Rola" }],
+    overview: ["Oficiálny web Karabašskej univerzity. Pracoval som na ňom v projektovom tíme - jeden z projektov, ktoré považujem za jasný úspech."],
+  },
+  "mars-academy": {
+    tagline: "Detská STEM akadémia - robotika, inžinierstvo, programovanie a digitálne umenie podľa vekových skupín.",
+    facts: [{ label: "Rola" }, { label: "Vekové skupiny" }],
+    overview: [
+      "Mars Academy učí deti robotiku, inžinierstvo, programovanie a digitálne umenie v troch programoch podľa veku - Prima (5-7), Alta (8-11) a Ultima (12-15). Web nesie programy, lektorov, blog a online platby. Postavil som ho.",
+    ],
+  },
+  "edu-gov": {
+    tagline: "Oficiálny web ministerstva vedy a školstva - podpora.",
+    facts: [{ label: "Rola", value: "Podpora" }],
+    overview: ["Oficiálny web ministerstva. Robil som na ňom podporu."],
+  },
+  "anket-edu": {
+    tagline: "Platforma ministerstva na prieskumy - nástroj v štýle Google Forms na oficiálne prieskumy.",
+    facts: [{ label: "Rola", value: "Podpora" }],
+    overview: [
+      "Anket.edu.az je platforma ministerstva vedy a školstva na správu prieskumov - nástroj v štýle Google Forms. Prieskumy sa občanom otvárajú cez priame odkazy počas stanoveného obdobia. V jej tíme som sa podieľal na podpore.",
+    ],
+  },
+  azsmart: {
+    tagline: "Produktový web online pokladníc - podpora.",
+    facts: [{ label: "Rola", value: "Podpora" }],
+    overview: ["Produktový web online pokladníc Az Smart, ktoré prijímajú hotovosť aj karty. Robil som na ňom podporu."],
+  },
+
   aments: {
     tagline: "E-shop v Next.js so serverovým renderovaním a prísnou dátovou architektúrou Route → Query → Mapper → UI.",
     facts: [{ label: "Renderovanie" }, { label: "Dátové vrstvy" }, { value: "Jazyk na serveri" }],

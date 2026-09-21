@@ -40,6 +40,7 @@ export const experience: Experience[] = [
           "Video.edu.az - helped move the old system to a new stack; rebuilt from scratch in Next.js.",
           "Mfa.gov.az (support) and aida.mfa.gov.az - the Ministry of Foreign Affairs' internal apostille and legalisation system, built from scratch.",
         ],
+        caseStudy: "digital-school",
         stack: ["React", "Next.js", "TypeScript", "Redux Toolkit", "Figma", "GitLab"],
       },
       {

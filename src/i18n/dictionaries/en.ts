@@ -49,7 +49,7 @@ export const en = {
   },
   experience: {
     kinds: { "full-time": "Full-time", internship: "Internship", freelance: "Freelance" },
-    caseStudy: "Read the architecture case study",
+    caseStudy: "Read the case study",
     credential: "View certificate",
   },
   projects: {

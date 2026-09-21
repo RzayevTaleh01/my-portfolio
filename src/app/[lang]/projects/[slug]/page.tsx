@@ -45,11 +45,11 @@ export default async function ProjectPage(props: PageProps<"/[lang]/projects/[sl
   const sections = [
     "overview",
     project.problem?.length ? "problem" : null,
-    "architecture",
-    "components",
-    "flow",
+    project.architecture ? "architecture" : null,
+    project.components?.length ? "components" : null,
+    project.flow?.length ? "flow" : null,
     project.deepDives?.length ? "deep-dives" : null,
-    "decisions",
+    project.decisions?.length ? "decisions" : null,
     "stack",
     project.next?.length ? "next" : null,
   ].filter(Boolean) as string[];
@@ -134,46 +134,52 @@ export default async function ProjectPage(props: PageProps<"/[lang]/projects/[sl
         </Section>
       ) : null}
 
-      <Section id="architecture" title={t.architecture} index={n("architecture")}>
-        <p className="mb-5 text-[15px] leading-relaxed text-muted-foreground">{project.architecture.summary}</p>
-        <ArchitectureDiagram layers={project.architecture.layers} label={t.architectureLabel} />
-      </Section>
+      {project.architecture && (
+        <Section id="architecture" title={t.architecture} index={n("architecture")}>
+          <p className="mb-5 text-[15px] leading-relaxed text-muted-foreground">{project.architecture.summary}</p>
+          <ArchitectureDiagram layers={project.architecture.layers} label={t.architectureLabel} />
+        </Section>
+      )}
 
-      <Section id="components" title={t.components} index={n("components")}>
-        <div className="grid gap-3 sm:grid-cols-2">
-          {project.components.map((c) => (
-            <div key={c.name} className="flex flex-col rounded-xl border bg-surface p-5">
-              <p className="font-semibold tracking-tight">{c.name}</p>
-              <p className="mb-3 text-[13px] text-accent">{c.role}</p>
-              <ul className="space-y-2 text-sm leading-relaxed text-muted-foreground">
-                {c.points.map((pt) => (
-                  <li key={pt} className="flex gap-2.5">
-                    <Bullet />
-                    {pt}
-                  </li>
-                ))}
-              </ul>
-              {c.tech && <p className="mt-auto pt-4 font-mono text-[11px] text-subtle-foreground">{c.tech}</p>}
-            </div>
-          ))}
-        </div>
-      </Section>
-
-      <Section id="flow" title={t.flow} index={n("flow")}>
-        <ol className="relative space-y-5 before:absolute before:bottom-3 before:left-[13px] before:top-3 before:w-px before:bg-border">
-          {project.flow.map((s, i) => (
-            <li key={`${s.title}-${i}`} className="relative flex gap-4">
-              <span className="relative z-10 flex size-7 shrink-0 items-center justify-center rounded-full border bg-surface font-mono text-[11px] text-muted-foreground">
-                {i + 1}
-              </span>
-              <div className="pt-0.5">
-                <p className="font-medium">{s.title}</p>
-                <p className="text-sm leading-relaxed text-muted-foreground">{s.detail}</p>
+      {project.components?.length ? (
+        <Section id="components" title={t.components} index={n("components")}>
+          <div className="grid gap-3 sm:grid-cols-2">
+            {project.components.map((c) => (
+              <div key={c.name} className="flex flex-col rounded-xl border bg-surface p-5">
+                <p className="font-semibold tracking-tight">{c.name}</p>
+                <p className="mb-3 text-[13px] text-accent">{c.role}</p>
+                <ul className="space-y-2 text-sm leading-relaxed text-muted-foreground">
+                  {c.points.map((pt) => (
+                    <li key={pt} className="flex gap-2.5">
+                      <Bullet />
+                      {pt}
+                    </li>
+                  ))}
+                </ul>
+                {c.tech && <p className="mt-auto pt-4 font-mono text-[11px] text-subtle-foreground">{c.tech}</p>}
               </div>
-            </li>
-          ))}
-        </ol>
-      </Section>
+            ))}
+          </div>
+        </Section>
+      ) : null}
+
+      {project.flow?.length ? (
+        <Section id="flow" title={t.flow} index={n("flow")}>
+          <ol className="relative space-y-5 before:absolute before:bottom-3 before:left-[13px] before:top-3 before:w-px before:bg-border">
+            {project.flow.map((s, i) => (
+              <li key={`${s.title}-${i}`} className="relative flex gap-4">
+                <span className="relative z-10 flex size-7 shrink-0 items-center justify-center rounded-full border bg-surface font-mono text-[11px] text-muted-foreground">
+                  {i + 1}
+                </span>
+                <div className="pt-0.5">
+                  <p className="font-medium">{s.title}</p>
+                  <p className="text-sm leading-relaxed text-muted-foreground">{s.detail}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </Section>
+      ) : null}
 
       {project.deepDives?.length ? (
         <Section id="deep-dives" title={t.deepDives} index={n("deep-dives")}>
@@ -194,16 +200,18 @@ export default async function ProjectPage(props: PageProps<"/[lang]/projects/[sl
         </Section>
       ) : null}
 
-      <Section id="decisions" title={t.decisions} index={n("decisions")}>
-        <div className="-mt-2 divide-y">
-          {project.decisions.map((d) => (
-            <div key={d.title} className="grid gap-1 py-4 sm:grid-cols-[200px_1fr] sm:gap-8">
-              <p className="font-medium leading-snug">{d.title}</p>
-              <p className="text-sm leading-relaxed text-muted-foreground">{d.detail}</p>
-            </div>
-          ))}
-        </div>
-      </Section>
+      {project.decisions?.length ? (
+        <Section id="decisions" title={t.decisions} index={n("decisions")}>
+          <div className="-mt-2 divide-y">
+            {project.decisions.map((d) => (
+              <div key={d.title} className="grid gap-1 py-4 sm:grid-cols-[200px_1fr] sm:gap-8">
+                <p className="font-medium leading-snug">{d.title}</p>
+                <p className="text-sm leading-relaxed text-muted-foreground">{d.detail}</p>
+              </div>
+            ))}
+          </div>
+        </Section>
+      ) : null}
 
       <Section id="stack" title={t.stack} index={n("stack")}>
         <dl className="space-y-3">

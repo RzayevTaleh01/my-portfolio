@@ -189,11 +189,13 @@ export interface Project {
   facts?: { label: string; value: string }[];
   overview: string[];
   problem?: string[];
-  architecture: { summary: string; layers: ArchLayer[] };
-  components: ProjectComponent[];
-  flow: { title: string; detail: string }[];
+  // The sections below are optional so a smaller project can be a short page:
+  // overview, what I did, stack. A full case study fills all of them.
+  architecture?: { summary: string; layers: ArchLayer[] };
+  components?: ProjectComponent[];
+  flow?: { title: string; detail: string }[];
   deepDives?: DeepDive[];
-  decisions: { title: string; detail: string }[];
+  decisions?: { title: string; detail: string }[];
   stack: { group: string; items: string[] }[];
   next?: string[];
 }

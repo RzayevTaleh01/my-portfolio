@@ -1010,11 +1010,12 @@ export const projects: Projects = {
     overview: ["Produktový web online pokladníc Az Smart, ktoré prijímajú hotovosť aj karty. Robil som na ňom podporu."],
   },
 
-  aments: {
-    tagline: "E-shop v Next.js so serverovým renderovaním a prísnou dátovou architektúrou Route → Query → Mapper → UI.",
+  "3s-auto-parts": {
+    tagline: "E-shop s autodielmi v Next.js so serverovým renderovaním a prísnou dátovou architektúrou Route → Query → Mapper → UI.",
     facts: [{ label: "Renderovanie" }, { label: "Dátové vrstvy" }, { value: "Jazyk na serveri" }],
     overview: [
-      "E-commerce frontend pre backend, ktorého tvar JSON frontend nemá pod kontrolou. Cieľ: UI komponenty vždy čítajú stabilné kľúče, aj keď sa API zmení.",
+      "3S Auto Parts je internetový obchod s autodielmi: kategórie, akcie a produkty podľa značky a podľa modelu auta, na ktorý pasujú.",
+      "Jeho frontend komunikuje s backendom, ktorého tvar JSON frontend nemá pod kontrolou. Cieľ: UI komponenty vždy čítajú stabilné kľúče, aj keď sa API zmení.",
     ],
     problem: [
       "Keď komponenty čítajú surové polia API priamo, každé premenovanie na backende rozbije UI na mnohých miestach a komponenty sa plnia záložnou logikou typu raw?.name ?? raw?.title ?? \"\".",

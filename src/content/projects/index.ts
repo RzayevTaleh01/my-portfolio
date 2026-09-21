@@ -1,5 +1,5 @@
 import type { Project } from "../types";
-import { aments } from "./aments";
+import { autoParts } from "./3s-auto-parts";
 import { cryptoTrader } from "./crypto-trader";
 import { devcodeLms } from "./devcode-lms";
 import { diaspor } from "./diaspor";
@@ -21,7 +21,7 @@ export const projects: Project[] = [
   devcodeLms,
   cryptoTrader,
   vacancyBot,
-  aments,
+  autoParts,
 ];
 
 export function getProject(slug: string) {

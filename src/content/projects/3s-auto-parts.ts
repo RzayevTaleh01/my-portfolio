@@ -1,19 +1,20 @@
 import type { Project } from "../types";
 
-export const aments: Project = {
-  slug: "aments",
-  title: "Aments Storefront",
-  tagline: "A server-rendered Next.js storefront with a strict Route → Query → Mapper → UI data architecture.",
+export const autoParts: Project = {
+  slug: "3s-auto-parts",
+  title: "3S Auto Parts",
+  tagline: "A server-rendered Next.js storefront for car parts, with a strict Route → Query → Mapper → UI data architecture.",
   kind: "freelance",
   year: 2026,
-  links: { repo: "https://github.com/RzayevTaleh01/aments-nextjs" },
+  links: { demo: "https://3sautoparts.com" },
   facts: [
     { label: "Rendering", value: "SSR" },
     { label: "Data layers", value: "4" },
     { label: "i18n", value: "Server-side lang" },
   ],
   overview: [
-    "An e-commerce frontend for a backend whose JSON shape is not under the frontend's control. The goal: UI components always read stable keys, even when the API changes.",
+    "3S Auto Parts is an online store for car parts: categories, promotions, and products listed by brand and by the car make and model they fit.",
+    "Its frontend talks to a backend whose JSON shape is not under the frontend's control. The goal: UI components always read stable keys, even when the API changes.",
   ],
   problem: [
     "When components read raw API fields directly, every backend rename breaks the UI in many places, and components fill up with fallback logic like raw?.name ?? raw?.title ?? \"\".",

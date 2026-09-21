@@ -4,11 +4,11 @@ export const core: ContentOverrides = {
   profile: {
     headline: "Softvérový inžinier · Výskumník v oblasti AI",
     intro:
-      "Mám 4 roky frontendových skúseností s vývojom produkčných webových aplikácií v Reacte a Next.js a praktické skúsenosti s backendom - REST API, databázy a nasadzovanie. Vo voľnom čase sa venujem spracovaniu prirodzeného jazyka pre jazyky s malým množstvom dát: azerbajdžančine a širšej turkickej rodine, češtine a slovenčine.",
+      "Mám 4 roky frontendových skúseností s vývojom produkčných webových aplikácií v Reacte a Next.js a praktické skúsenosti s backendom - REST API, databázy a nasadzovanie. Popri softvérovom inžinierstve sa venujem výskumu AI. Mojou hlavnou oblasťou záujmu je NLP pre jazyky s malým množstvom dát: turkická jazyková rodina, napríklad azerbajdžančina, a západoslovanská skupina, napríklad slovenčina a čeština.",
     bio: [
-      "Začínal som v roku 2022 ako frontendový stážista v AzInTelecom, kde som vytváral klientske a administrátorské rozhrania systému Sima Reporting System. Od konca roku 2022 do roku 2026 som bol v spoločnosti Edumedia-Azerbaijan, kde som prešiel od stážistu po middle vývojára na národných vzdelávacích platformách Azerbajdžanu - vrátane novej verzie Video.edu.az postavenej na Next.js. Od roku 2026 pracujem ako full-stack vývojár v ITM - Information Technology Center.",
+      "Začínal som v roku 2022 ako frontendový stážista v AzInTelecom, kde som vytváral klientske a administrátorské rozhrania systému Sima Reporting System. V rokoch 2023 – 2026 som bol v spoločnosti Edumedia-Azerbaijan, kde som prešiel od juniora po middle vývojára na národných vzdelávacích platformách Azerbajdžanu - vrátane platformy Digitálna škola ministerstva a novej verzie Video.edu.az postavenej na Next.js. Od roku 2026 pracujem ako full-stack vývojár v ITM - Information Technology Center.",
       "Okrem frontendu navrhujem celé systémy. Pre Diaspor.org som od začiatku do konca postavil multi-tenant publikačnú platformu: Spring Boot REST API, administráciu v Reacte, verejný web v Next.js so serverovým renderovaním, PostgreSQL s verzovanými migráciami a S3 pre médiá. V ITM pracujem aj v PHP a Laraveli - na platforme akademického časopisu postavenej na OJS a na prepise portálu verejného zdravotníckeho inštitútu.",
-      "Profesionálne som softvérový inžinier. Výskum je to, čomu sa venujem vo vlastnom čase, ako nadšenec: čítam články, reprodukujem, čo sa dá, a učím sa písať vlastný výskum. Mojím smerom je spracovanie prirodzeného jazyka pre jazyky s malým množstvom dát - azerbajdžančina a širšia turkická rodina, čeština a slovenčina. Adaptívne učenie je miesto, kde som začal, a vzišli z neho EduVision a LangVis, ale ťažisko sa presunulo na samotný jazyk.",
+      "Profesionálne som softvérový inžinier. Výskum je to, čomu sa venujem vo vlastnom čase, ako nadšenec: čítam články, reprodukujem, čo sa dá, a učím sa písať vlastný výskum. Mojím smerom je NLP pre jazyky s malým množstvom dát - turkická jazyková rodina, napríklad azerbajdžančina, a západoslovanská skupina, napríklad slovenčina a čeština. Adaptívne učenie je miesto, kde som začal, a vzišli z neho EduVision a LangVis, ale ťažisko sa presunulo na samotný jazyk.",
       "Pripravujem sa na ďalší krok: doktorandské štúdium v tejto oblasti a akademickú dráhu postavenú na publikovanej práci popri tej inžinierskej.",
       "Pri každodennej práci používam AI na zrýchlenie vývoja a k prompt engineeringu pristupujem ako programátor. Teraz žijem na Slovensku a študujem Priemyselný manažment na Technickej univerzite v Košiciach.",
     ],
@@ -37,18 +37,27 @@ export const core: ContentOverrides = {
       roles: [
         {
           title: "Frontend vývojár (Middle)",
-          summary: "Národné vzdelávacie webové platformy.",
-          highlights: ["Video.edu.az - nová verzia postavená na Next.js."],
+          summary:
+            "Digitálna škola (Digital.edu.az) - národná školská platforma ministerstva vedy a školstva: jeden portál pre učiteľov, riaditeľov, žiakov a rodičov. Náš najväčší a najnáročnejší systém.",
+          highlights: [
+            "Viac ako 10 jej služieb som postavil od nuly.",
+            "AI asistent učenia - hoci som frontendový vývojár, prizvali ma do tímu, ktorý postavil chatbota pre žiakov na lokálnom generatívnom modeli trénovanom na materiáloch ministerstva, aby sa s ním žiaci mohli učiť z oficiálnych učebníc. Spustený v júni 2026.",
+            "Video.edu.az - pomohol som presunúť starý systém na novú technológiu; postavený nanovo v Next.js.",
+            "Mfa.gov.az (podpora) a aida.mfa.gov.az - interný systém ministerstva zahraničných vecí na apostilu a legalizáciu, postavený od nuly.",
+          ],
         },
         {
           title: "Frontend vývojár (Junior)",
-          summary: "Národné vzdelávacie webové platformy.",
-          highlights: ["Portal.edu.az a Pts.edu.az - nové služby a podpora."],
-        },
-        {
-          title: "Frontend vývojár (stážista)",
-          summary: "Trojmesačná stáž na tých istých platformách.",
-          highlights: ["Digital.edu.az, Karabakh.edu.az, Ict.edu.az, Ite.az, MarsAcademy.az; podpora pre Edu.gov.az."],
+          summary: "Národné vzdelávacie platformy pre ministerstvo vedy a školstva.",
+          highlights: [
+            "Portal.edu.az - žiadosti o štúdium v zahraničí: medzivládny vzdelávací program (HTP) a štátny program (DP).",
+            "Pts.edu.az - interný systém pre odborné školy; vyše 10 služieb postavených alebo prepracovaných, vrátane online diplomov, individuálnych študijných plánov a prestupov študentov.",
+            "Ict.edu.az - odbor informatizácie vzdelávacieho systému ministerstva; frontend napísaný od nuly.",
+            "Ite.az - vzdelávacie centrum Inovatívne technológie vo vzdelávaní; postavil som frontend.",
+            "Karabakh.edu.az - oficiálny web Karabašskej univerzity.",
+            "MarsAcademy.az - web detskej STEM akadémie, ktorý som postavil.",
+            "Edu.gov.az, Anket.edu.az (platforma ministerstva na prieskumy) a Azsmart.az - podpora.",
+          ],
         },
       ],
     },
@@ -137,7 +146,7 @@ export const core: ContentOverrides = {
     { title: "Umelá inteligencia" },
   ],
   researchStatement:
-    "Profesiou softvérový inžinier, ktorý sa čítaním a stavaním prepracúva k výskumu. Smerom je spracovanie prirodzeného jazyka pre jazyky s malým množstvom dát - azerbajdžančina a širšia turkická rodina, čeština a slovenčina - a táto stránka je miestom, kde sa tá práca zbiera, kým sa pripravujem na doktorandské štúdium.",
+    "Profesiou softvérový inžinier, ktorý sa čítaním a stavaním prepracúva k výskumu. Smerom je NLP pre jazyky s malým množstvom dát - turkická jazyková rodina, napríklad azerbajdžančina, a západoslovanská skupina, napríklad slovenčina a čeština - a táto stránka je miestom, kde sa tá práca zbiera, kým sa pripravujem na doktorandské štúdium.",
   researchDirections: [
     {
       title: "NLP pre azerbajdžančinu",

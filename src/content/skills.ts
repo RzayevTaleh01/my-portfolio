@@ -1,7 +1,7 @@
 import type { ResearchDirection, SkillGroup } from "./types";
 
 export const researchStatement =
-  "A software engineer by profession, reading and building my way into research. The direction is natural language processing for low-resource languages - Azerbaijani and the wider Turkic family, Czech and Slovak - and this page is where that work is kept while I prepare for a PhD in it.";
+  "A software engineer by profession, reading and building my way into research. The direction is NLP for low-resource languages - the Turkic family, such as Azerbaijani, and the West Slavic group, such as Slovak and Czech - and this page is where that work is kept while I prepare for a PhD in it.";
 
 export const researchDirections: ResearchDirection[] = [
   {

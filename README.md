@@ -19,9 +19,11 @@ npm run lint
 
 ```
 content/posts/          Articles (MDX)
-public/                 Photo and resume PDFs
+public/                 Photo and the fonts of the generated CV
 src/
   app/[lang]/           Pages - home, projects, research, writing, about, cv
+  app/admin/            Admin panel - CV builder
+  app/cv/[file]/        The generated CV PDFs
   components/           UI components
   content/              All site content (typed)
     i18n/sk/            Slovak translations of the content
@@ -44,7 +46,17 @@ Pages only render data - everything shown on the site lives in `src/content/` an
 | Projects | `src/content/projects/*.ts` |
 | Earlier, smaller projects | `src/content/projects/index.ts` (`archive`) |
 | Articles | `content/posts/*.mdx` |
-| Resume PDFs | `public/` |
+| Resume PDFs (which entries go in) | `/admin` → `src/content/cv/cv-config.json` |
+
+### Resume PDFs
+
+The downloadable CVs are generated at build time from the content above, in a Europass layout - no PDF is kept by hand. There is one per visitor region: `/cv/taleh-rzayev-cv-sk.pdf` for Slovakia and `/cv/taleh-rzayev-cv.pdf` for everyone else, and the resume page links the right one.
+
+1. `npm run dev` and open http://localhost:3000/admin, sign in with the access code
+2. Pick a region, tick the entries that go in, fill the personal fields - the preview updates live
+3. **Save both CVs** writes `src/content/cv/cv-config.json`; deploy and the new PDFs are live
+
+Saving works only under `npm run dev`; on the deployed site the panel is read-only (it can export the config). The code is stored as a SHA-256 hash in `src/app/admin/access.ts` - the comment there shows how to change it. Anything added to the content later shows up in the panel unticked until you approve it.
 
 ### Experience
 

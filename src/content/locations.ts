@@ -1,5 +1,6 @@
 import type { Locale } from "@/i18n/config";
 import type { Region } from "@/i18n/region";
+import { cvFiles } from "@/lib/cv/model";
 import type { Profile } from "./types";
 
 /**
@@ -35,10 +36,13 @@ const bioClosing: Record<Region, Record<Locale, string>> = {
   },
 };
 
-/** Both save as the same file name; see PrintButton. */
+/**
+ * Generated from the site content - pick what goes in at /admin (see src/lib/cv).
+ * Both save as the same file name; see PrintButton.
+ */
 const cvPdf: Record<Region, string> = {
-  sk: "/taleh-rzayev-cv-sk.pdf",
-  intl: "/taleh-rzayev-cv.pdf",
+  sk: `/cv/${cvFiles.sk}`,
+  intl: `/cv/${cvFiles.intl}`,
 };
 
 export function withRegion(profile: Profile, locale: Locale, region: Region): Profile {

@@ -22,7 +22,7 @@ export const profile: Profile = {
   highlights: ["4 years frontend experience", "Backend: Node.js · Spring Boot", "NLP · low-resource languages", "English B2 · Slovak A2"],
   avatar: "/avatar.webp",
   // Replaced per visitor region in ./locations.ts
-  cvPdf: "/taleh-rzayev-cv.pdf",
+  cvPdf: "/cv/taleh-rzayev-cv.pdf",
   githubUsername: "RzayevTaleh01",
   // Set NEXT_PUBLIC_SITE_URL to your domain when you deploy (used for SEO and the sitemap).
   siteUrl: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",

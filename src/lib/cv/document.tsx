@@ -71,10 +71,10 @@ const s = StyleSheet.create({
   row: { flexDirection: "row", marginBottom: 3 },
   rowLabel: { width: 120, fontWeight: 600 },
   rowValue: { flex: 1 },
-  groupHead: { flexDirection: "row", justifyContent: "space-between", alignItems: "baseline" },
+  groupHead: { marginBottom: 4 },
   groupOrg: { fontSize: 10, fontWeight: 700, color: ACCENT },
-  roles: { marginTop: 4, marginLeft: 3, paddingLeft: 9, borderLeftWidth: 1.2, borderLeftColor: RULE },
-  role: { marginBottom: 6 },
+  role: { marginLeft: 3, paddingLeft: 9, paddingBottom: 6, borderLeftWidth: 1.2, borderLeftColor: RULE },
+  lastRole: { marginBottom: 9 },
   roleHead: { flexDirection: "row", justifyContent: "space-between", alignItems: "baseline", gap: 8 },
   rolePeriod: { fontSize: 7.8, color: MUTED, letterSpacing: 0.3 },
   pageHeader: {
@@ -97,7 +97,7 @@ const s = StyleSheet.create({
 
 function Section({ title, keepWithFirst = true, children }: { title: string; keepWithFirst?: boolean; children: React.ReactNode }) {
   const head = (
-    <View style={s.sectionHead} minPresenceAhead={40}>
+    <View style={s.sectionHead}>
       <Text style={s.sectionTitle}>{title}</Text>
       <View style={s.sectionRule} />
     </View>
@@ -185,25 +185,23 @@ function RoleGroup({ roles, technologies }: { roles: CvEntry[]; technologies: st
   const sharedLocation = same(roles.map((r) => r.location));
   const sharedSummary = same(roles.map((r) => r.summary));
   return (
-    <View style={s.entry}>
-      <View minPresenceAhead={60}>
+    <>
+      <View style={s.groupHead} wrap={false}>
         <Text style={s.meta}>{[period, sharedLocation ? latest.location : ""].filter(Boolean).join("  ·  ")}</Text>
         <Text style={s.groupOrg}>{latest.organization}</Text>
         {sharedSummary && latest.summary ? <Text style={s.para}>{latest.summary}</Text> : null}
       </View>
-      <View style={s.roles}>
-        {roles.map((r, i) => (
-          <View key={i} style={s.role} wrap={r.bullets.length > 4}>
-            <View style={s.roleHead}>
-              <Text style={s.title}>{r.title}</Text>
-              <Text style={s.rolePeriod}>{[r.period, sharedLocation ? "" : r.location].filter(Boolean).join("  ·  ")}</Text>
-            </View>
-            {!sharedSummary && r.summary ? <Text style={s.para}>{r.summary}</Text> : null}
-            <Bullets entry={r} technologies={technologies} />
+      {roles.map((r, i) => (
+        <View key={i} style={[s.role, i === roles.length - 1 ? s.lastRole : {}]} wrap={r.bullets.length > 4}>
+          <View style={s.roleHead}>
+            <Text style={s.title}>{r.title}</Text>
+            <Text style={s.rolePeriod}>{[r.period, sharedLocation ? "" : r.location].filter(Boolean).join("  ·  ")}</Text>
           </View>
-        ))}
-      </View>
-    </View>
+          {!sharedSummary && r.summary ? <Text style={s.para}>{r.summary}</Text> : null}
+          <Bullets entry={r} technologies={technologies} />
+        </View>
+      ))}
+    </>
   );
 }
 
@@ -256,13 +254,9 @@ export function CvDocument({ data }: { data: CvDocumentData }) {
 
         {data.experience.length > 0 && (
           <Section title={L.workExperience} keepWithFirst={false}>
-            {byOrganization(data.experience).map((roles, i) =>
-              roles.length > 1 ? (
-                <RoleGroup key={i} roles={roles} technologies={L.technologies} />
-              ) : (
-                <Entry key={i} entry={roles[0]} technologies={L.technologies} />
-              ),
-            )}
+            {byOrganization(data.experience).map((roles, i) => (
+              <RoleGroup key={i} roles={roles} technologies={L.technologies} />
+            ))}
           </Section>
         )}
 

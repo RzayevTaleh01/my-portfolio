@@ -12,13 +12,12 @@ import { MotionProvider } from "@/components/motion";
 import { SiteFooter } from "@/components/site-footer";
 import { ThemeProvider } from "@/components/theme";
 import { TopLoader } from "@/components/top-loader";
-import { getContent, navigation } from "@/content";
-import { hasLocale, localeTags, localize, locales } from "@/i18n/config";
-import { getDictionary } from "@/i18n/dictionaries";
-import { withRegion } from "@/content/locations";
+import { getContent, navigation, withRegion } from "@/content";
+import { fmt, hasLocale, localeTags, localize, locales } from "@/i18n/config";
 import { buildAssistantTopics } from "@/lib/assistant-topics";
 import { getAllPosts } from "@/lib/posts";
 import { getRegion } from "@/lib/region";
+import { getSiteTexts } from "@/lib/site/site-texts";
 
 const jakarta = Plus_Jakarta_Sans({ variable: "--font-jakarta", subsets: ["latin", "latin-ext"] });
 const jetbrains = JetBrains_Mono({ variable: "--font-jetbrains", subsets: ["latin"] });
@@ -32,7 +31,7 @@ export function generateStaticParams() {
 export async function generateMetadata(props: LayoutProps<"/[lang]">): Promise<Metadata> {
   const { lang } = await props.params;
   if (!hasLocale(lang)) return {};
-  const { profile } = getContent(lang);
+  const { profile } = await getContent(lang);
   return {
     metadataBase: new URL(profile.siteUrl),
     title: { default: `${profile.name} - ${profile.headline}`, template: `%s - ${profile.name}` },
@@ -57,17 +56,25 @@ export default async function RootLayout(props: LayoutProps<"/[lang]">) {
   const { lang } = await props.params;
   if (!hasLocale(lang)) notFound();
 
-  const t = getDictionary(lang);
-  const content = getContent(lang);
+  const t = await getSiteTexts(lang);
+  const content = await getContent(lang);
   const { projects } = content;
   const region = await getRegion();
-  const profile = withRegion(content.profile, lang, region);
+  const profile = withRegion(content, region);
+  const posts = await getAllPosts(lang);
+  const who = { name: profile.name, firstName: profile.name.split(" ")[0] };
+  const assistant = {
+    ...t.assistant,
+    subtitle: fmt(t.assistant.subtitle, who),
+    greeting: fmt(t.assistant.greeting, who),
+    teaser: fmt(t.assistant.teaser, who),
+  };
 
   const menu: CommandMenuProps = {
     nav: navigation.map((n) => ({ href: localize(lang, n.href), label: t.nav[n.key] })),
     entries: [
       ...projects.map((p) => ({ group: "projects" as const, title: p.title, href: localize(lang, `/projects/${p.slug}`) })),
-      ...getAllPosts(lang).map((p) => ({ group: "articles" as const, title: p.title, href: localize(lang, `/writing/${p.slug}`) })),
+      ...posts.map((p) => ({ group: "articles" as const, title: p.title, href: localize(lang, `/writing/${p.slug}`) })),
     ],
     socials: profile.socials,
     t: t.common,
@@ -98,7 +105,7 @@ export default async function RootLayout(props: LayoutProps<"/[lang]">) {
               </div>
             </div>
             <ClapButton t={t.clap} />
-            <Assistant topics={buildAssistantTopics(lang, region, { ...content, profile }, t)} t={t.assistant} />
+            <Assistant topics={buildAssistantTopics(lang, region, { ...content, profile }, t, posts)} t={assistant} />
           </MotionProvider>
         </ThemeProvider>
       </body>

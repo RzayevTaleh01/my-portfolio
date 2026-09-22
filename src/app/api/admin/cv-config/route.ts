@@ -1,7 +1,8 @@
-import { writeFile } from "node:fs/promises";
-import { revalidatePath, revalidateTag } from "next/cache";
+import { mkdir, writeFile } from "node:fs/promises";
+import path from "node:path";
+import { revalidateTag } from "next/cache";
 import { isAdmin } from "@/lib/admin-auth";
-import { CV_PATH, normalizeConfig, regions } from "@/lib/cv/model";
+import { normalizeConfig, regions } from "@/lib/cv/model";
 import { renderCvPdf } from "@/lib/cv/render";
 import { CV_CACHE_TAG, hasBlobStore, LOCAL_CONFIG_FILE, saveToBlob } from "@/lib/cv/store";
 
@@ -23,10 +24,10 @@ export async function POST(request: Request) {
   }
 
   if (hasBlobStore()) await saveToBlob(config);
-  if (dev) await writeFile(LOCAL_CONFIG_FILE, `${JSON.stringify(config, null, 2)}\n`, "utf8");
+  if (dev && !hasBlobStore()) await mkdir(path.dirname(LOCAL_CONFIG_FILE), { recursive: true });
+  if (dev && !hasBlobStore()) await writeFile(LOCAL_CONFIG_FILE, `${JSON.stringify(config, null, 2)}\n`, "utf8");
 
   revalidateTag(CV_CACHE_TAG, { expire: 0 });
-  revalidatePath(CV_PATH);
 
   return Response.json({ config, storage: hasBlobStore() ? "blob" : "file" });
 }

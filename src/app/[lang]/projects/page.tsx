@@ -6,7 +6,7 @@ import { ArrowLink, PageHeader, Section } from "@/components/section";
 import { Timeline, TimelineDot } from "@/components/timeline";
 import { getContent } from "@/content";
 import { hasLocale, localize } from "@/i18n/config";
-import { getDictionary } from "@/i18n/dictionaries";
+import { getSiteTexts } from "@/lib/site/site-texts";
 import { getRepos } from "@/lib/github";
 import { formatDate } from "@/lib/utils";
 
@@ -15,7 +15,7 @@ export const revalidate = 3600;
 export async function generateMetadata(props: PageProps<"/[lang]/projects">): Promise<Metadata> {
   const { lang } = await props.params;
   if (!hasLocale(lang)) return {};
-  const t = getDictionary(lang).projects;
+  const t = (await getSiteTexts(lang)).projects;
   return { title: t.title, description: t.description };
 }
 
@@ -23,8 +23,8 @@ export default async function ProjectsPage(props: PageProps<"/[lang]/projects">)
   const { lang } = await props.params;
   if (!hasLocale(lang)) notFound();
 
-  const t = getDictionary(lang).projects;
-  const { profile, projects } = getContent(lang);
+  const t = (await getSiteTexts(lang)).projects;
+  const { profile, projects } = await getContent(lang);
   const repos = await getRepos(profile.githubUsername);
   const githubUrl = `https://github.com/${profile.githubUsername}`;
 

@@ -1,9 +1,9 @@
 import type { MetadataRoute } from "next";
 import { getContent } from "@/content";
 
-export default function robots(): MetadataRoute.Robots {
+export default async function robots(): Promise<MetadataRoute.Robots> {
   return {
     rules: { userAgent: "*", allow: "/", disallow: "/admin" },
-    sitemap: `${getContent("en").profile.siteUrl.replace(/\/$/, "")}/sitemap.xml`,
+    sitemap: `${(await getContent("en")).profile.siteUrl.replace(/\/$/, "")}/sitemap.xml`,
   };
 }

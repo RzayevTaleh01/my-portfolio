@@ -4,7 +4,7 @@ import type { SiteContent } from "@/content";
 import { fmt, localize, type Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/dictionaries";
 import type { Region } from "@/i18n/region";
-import { getAllPosts } from "@/lib/posts";
+import type { PostMeta } from "@/lib/posts";
 
 const SKILLS_PER_GROUP = 5;
 const FEATURED_PROJECTS = 4;
@@ -18,17 +18,17 @@ function startYear(period: string) {
   return Number(period.match(/\d{4}/)?.[0] ?? new Date().getFullYear());
 }
 
-export function buildAssistantTopics(lang: Locale, region: Region, content: SiteContent, dict: Dictionary): AssistantTopic[] {
+export function buildAssistantTopics(lang: Locale, region: Region, content: SiteContent, dict: Dictionary, posts: PostMeta[]): AssistantTopic[] {
   const t = dict.assistant;
   const { profile, experience, skills, projects, researchDirections, languages } = content;
   const education = region === "sk" ? content.education : content.educationIntl;
-  const [latestJob] = experience;
-  const [latestRole] = latestJob.roles;
-  const posts = getAllPosts(lang);
+  const latestJob = experience[0];
+  const latestRole = latestJob?.roles[0];
   const [latestPost] = posts;
+  const who = { name: profile.name, firstName: profile.name.split(" ")[0], headline: profile.headline };
 
   const roles = experience.flatMap((job) => job.roles.map((role) => ({ job, role })));
-  const firstYear = Math.min(...roles.map(({ role }) => startYear(role.period)));
+  const firstYear = roles.length ? Math.min(...roles.map(({ role }) => startYear(role.period))) : new Date().getFullYear();
   const years = yearsText(t.years, Math.max(1, new Date().getFullYear() - firstYear));
   const roleText = ({ job, role }: (typeof roles)[number]) =>
     fmt(t.answers.role, { role: role.title, org: job.organization, period: role.period });
@@ -40,16 +40,17 @@ export function buildAssistantTopics(lang: Locale, region: Region, content: Site
   const topics: AssistantTopic[] = [
     {
       id: "who",
-      label: t.topics.who,
-      answer: fmt(t.answers.who, { location: profile.location, years, role: latestRole.title, org: latestJob.organization }),
-      link: { label: t.links.who, href: localize(lang, "/about") },
+      label: fmt(t.topics.who, who),
+      answer: fmt(t.answers.who, { ...who, location: profile.location, years, role: latestRole?.title ?? "", org: latestJob?.organization ?? "" }),
+      link: { label: fmt(t.links.who, who), href: localize(lang, "/about") },
     },
     {
       id: "experience",
       label: t.topics.experience,
       answer: fmt(t.answers.experience, {
+        ...who,
         years,
-        current: roleText(roles[0]),
+        current: roles[0] ? roleText(roles[0]) : "",
         previous: roles.slice(1).map(roleText).join("; "),
       }),
       link: { label: t.links.home, href: `${localize(lang, "/")}#experience` },
@@ -85,6 +86,7 @@ export function buildAssistantTopics(lang: Locale, region: Region, content: Site
           .map((e) => `• ${fmt(t.answers.educationItem, { degree: e.degree, field: e.field, institution: e.institution, period: e.period })}`)
           .join("\n"),
         languages: list(languages.map((l) => `${l.name} - ${l.level}`)),
+        motherTongue: profile.motherTongue ?? "",
       }),
       link: { label: t.links.education, href: localize(lang, "/cv") },
     },

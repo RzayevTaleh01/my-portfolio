@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { PageHeader } from "@/components/section";
-import { getContent } from "@/content";
-import { withRegion } from "@/content/locations";
+import { getContent, withRegion } from "@/content";
 import { fmt, hasLocale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
 import { getRegion } from "@/lib/region";
@@ -11,13 +10,13 @@ export async function generateMetadata(props: PageProps<"/[lang]/about">): Promi
   const { lang } = await props.params;
   if (!hasLocale(lang)) return {};
   const t = getDictionary(lang).about;
-  return { title: t.title, description: fmt(t.description, { name: getContent(lang).profile.name }) };
+  return { title: t.title, description: fmt(t.description, { name: (await getContent(lang)).profile.name }) };
 }
 
 export default async function AboutPage(props: PageProps<"/[lang]/about">) {
   const { lang } = await props.params;
   if (!hasLocale(lang)) notFound();
-  const profile = withRegion(getContent(lang).profile, lang, await getRegion());
+  const profile = withRegion(await getContent(lang), await getRegion());
 
   return (
     <div>

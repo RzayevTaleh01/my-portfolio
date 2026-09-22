@@ -9,16 +9,15 @@ import { getDictionary } from "@/i18n/dictionaries";
 import { getAllPosts, getPost } from "@/lib/posts";
 import { formatDate } from "@/lib/utils";
 
-export const dynamicParams = false;
-
-export function generateStaticParams() {
-  return locales.flatMap((lang) => getAllPosts(lang).map((post) => ({ lang, slug: post.slug })));
+export async function generateStaticParams() {
+  const all = await Promise.all(locales.map(async (lang) => (await getAllPosts(lang)).map((post) => ({ lang, slug: post.slug }))));
+  return all.flat();
 }
 
 export async function generateMetadata(props: PageProps<"/[lang]/writing/[slug]">): Promise<Metadata> {
   const { lang, slug } = await props.params;
   if (!hasLocale(lang)) return {};
-  const post = getPost(slug, lang);
+  const post = await getPost(slug, lang);
   if (!post) return {};
   return {
     title: post.title,
@@ -30,7 +29,7 @@ export async function generateMetadata(props: PageProps<"/[lang]/writing/[slug]"
 export default async function PostPage(props: PageProps<"/[lang]/writing/[slug]">) {
   const { lang, slug } = await props.params;
   if (!hasLocale(lang)) notFound();
-  const post = getPost(slug, lang);
+  const post = await getPost(slug, lang);
   if (!post) notFound();
   const t = getDictionary(lang).writing;
 

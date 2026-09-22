@@ -6,18 +6,18 @@ import { ExperienceItem, VolunteeringItem } from "@/components/experience-item";
 import { DownloadButton } from "@/components/download-button";
 import { SkillList } from "@/components/skill-list";
 import { Timeline, TimelineDot } from "@/components/timeline";
-import { getContent } from "@/content";
+import { getContent, withRegion } from "@/content";
 import { fmt, hasLocale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
-import { withRegion } from "@/content/locations";
 import { getRegion } from "@/lib/region";
+import { cvDownloadName } from "@/lib/site/content";
 import { sortPublications } from "@/lib/utils";
 
 export async function generateMetadata(props: PageProps<"/[lang]/cv">): Promise<Metadata> {
   const { lang } = await props.params;
   if (!hasLocale(lang)) return {};
   const t = getDictionary(lang).cv;
-  return { title: t.title, description: fmt(t.description, { name: getContent(lang).profile.name }) };
+  return { title: t.title, description: fmt(t.description, { name: (await getContent(lang)).profile.name }) };
 }
 
 function CvSection({ title, children }: { title: string; children: React.ReactNode }) {
@@ -42,10 +42,10 @@ export default async function CvPage(props: PageProps<"/[lang]/cv">) {
   const { lang } = await props.params;
   if (!hasLocale(lang)) notFound();
   const t = getDictionary(lang).cv;
-  const content = getContent(lang);
+  const content = await getContent(lang);
   const { experience, volunteering, skills, publications, certificates, languages } = content;
   const region = await getRegion();
-  const profile = withRegion(content.profile, lang, region);
+  const profile = withRegion(content, region);
   const education = region === "sk" ? content.education : content.educationIntl;
   const links = profile.socials.filter((s) => s.platform !== "email");
 
@@ -69,7 +69,7 @@ export default async function CvPage(props: PageProps<"/[lang]/cv">) {
             ))}
           </p>
         </div>
-        {profile.cvPdf && <DownloadButton href={profile.cvPdf} label={t.pdf} />}
+        {profile.cvPdf && <DownloadButton href={profile.cvPdf} label={t.pdf} fileName={cvDownloadName(profile.name)} />}
       </header>
 
       <CvSection title={t.profile}>

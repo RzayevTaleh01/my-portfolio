@@ -1,11 +1,10 @@
 import "server-only";
-import { getContent } from "@/content";
-import { withRegion } from "@/content/locations";
+import { getContent, withRegion } from "@/content";
 import { locales, type Locale } from "@/i18n/config";
 import { ids, type CvLocaleSource, type CvSource } from "./model";
 
-export function getCvSource(): CvSource {
-  const en = getContent("en");
+export async function getCvSource(): Promise<CvSource> {
+  const en = await getContent("en");
   const seen = new Set<string>();
   const picks: { list: "education" | "educationIntl"; index: number }[] = [];
   (["education", "educationIntl"] as const).forEach((list) =>
@@ -16,13 +15,13 @@ export function getCvSource(): CvSource {
     }),
   );
 
-  const build = (locale: Locale): CvLocaleSource => {
-    const c = getContent(locale);
+  const build = async (locale: Locale): Promise<CvLocaleSource> => {
+    const c = await getContent(locale);
     return {
       profile: c.profile,
       regionLocation: {
-        sk: withRegion(c.profile, locale, "sk").location,
-        intl: withRegion(c.profile, locale, "intl").location,
+        sk: withRegion(c, "sk").location,
+        intl: withRegion(c, "intl").location,
       },
       experience: c.experience,
       volunteering: c.volunteering,
@@ -44,5 +43,5 @@ export function getCvSource(): CvSource {
     };
   };
 
-  return Object.fromEntries(locales.map((l) => [l, build(l)])) as CvSource;
+  return Object.fromEntries(await Promise.all(locales.map(async (l) => [l, await build(l)]))) as CvSource;
 }

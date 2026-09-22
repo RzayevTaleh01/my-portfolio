@@ -63,12 +63,6 @@ export const regionLabels: Record<Region, string> = {
 
 export const regions: Region[] = ["sk", "intl"];
 
-export const CV_FILE = "taleh-rzayev-cv.pdf";
-
-export const CV_PATH = `/cv/${CV_FILE}`;
-
-export const CV_DOWNLOAD_NAME = "Taleh_Rzayev_Resume.pdf";
-
 export function slug(value: string) {
   return value
     .normalize("NFD")
@@ -357,16 +351,18 @@ export function siteHeader(source: CvSource, language: Locale, region: Region): 
     headline: t.profile.headline,
     summary: t.profile.intro,
     email: t.profile.email ?? "",
-    website: PORTFOLIO_URL,
+    website: portfolioOf(t.profile).url,
     location: t.regionLocation[region],
   };
 }
 
-export const PORTFOLIO_URL = "https://therzayev.site";
-export const PORTFOLIO_LABEL = "TheRzayev.Site";
+export function portfolioOf(profile: Profile) {
+  const url = (profile.website || (/localhost|127\.0\.0\.1/.test(profile.siteUrl) ? "" : profile.siteUrl)).replace(/\/$/, "");
+  return { url, label: profile.websiteLabel || pretty(url) };
+}
 
-function publicSite(url: string) {
-  return /\.vercel\.app/i.test(url) ? PORTFOLIO_URL : url;
+function publicSite(url: string, portfolio: string) {
+  return portfolio && /\.vercel\.app/i.test(url) ? portfolio : url;
 }
 
 export function withOwnCopy(source: CvSource, region: Region, config: CvRegionConfig): CvRegionConfig {
@@ -565,10 +561,11 @@ export function buildCvData(source: CvSource, config: CvRegionConfig, region: Re
   if (email && on.has("social:email")) contact.push({ icon: "email", value: email, href: `mailto:${email}` });
   const phone = header(config.phone, "");
   if (phone) contact.push({ icon: "phone", value: phone, href: `tel:${phone.replace(/[^\d+]/g, "")}` });
-  const website = publicSite(header(config.website, PORTFOLIO_URL));
+  const site = portfolioOf(t.profile);
+  const website = publicSite(header(config.website, site.url), site.url);
   if (website) {
     const href = /^https?:/.test(website) ? website : `https://${website}`;
-    contact.push({ icon: "website", value: href.replace(/\/$/, "") === PORTFOLIO_URL ? PORTFOLIO_LABEL : pretty(website), href });
+    contact.push({ icon: "website", value: href.replace(/\/$/, "") === site.url ? site.label : pretty(website), href });
   }
   const location = header(config.location, t.regionLocation[region]);
   if (location) contact.push({ icon: "location", value: location });
@@ -606,7 +603,7 @@ export function buildCvData(source: CvSource, config: CvRegionConfig, region: Re
       return { title: v.title, issuer: v.issuer, link: v.link || undefined };
     }),
     publications: approved("publications").map((i) => val(i).text).filter(Boolean),
-    portfolio: { href: `${PORTFOLIO_URL}/${config.language}`, label: PORTFOLIO_LABEL },
-    download: { href: `${PORTFOLIO_URL}${CV_PATH}`, label: `${PORTFOLIO_LABEL}${CV_PATH}` },
+    portfolio: { href: `${site.url}/${config.language}`, label: site.label },
+    download: { href: `${site.url}${t.profile.cvPdf ?? ""}`, label: `${site.label}${t.profile.cvPdf ?? ""}` },
   };
 }

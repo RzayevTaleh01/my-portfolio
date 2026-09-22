@@ -3,11 +3,10 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { get, put } from "@vercel/blob";
 import { unstable_cache } from "next/cache";
-import bundledConfig from "@/content/cv/cv-config.json";
 import { normalizeConfig, type CvConfig } from "./model";
 
 const BLOB_PATH = "cv/cv-config.json";
-export const LOCAL_CONFIG_FILE = path.join(process.cwd(), "src", "content", "cv", "cv-config.json");
+export const LOCAL_CONFIG_FILE = path.join(process.cwd(), ".content", "cv-config.json");
 
 export const CV_CACHE_TAG = "cv";
 
@@ -31,9 +30,9 @@ const cachedBlobConfig = unstable_cache(readFromBlob, ["cv-config"], { tags: [CV
 
 export async function getPublishedConfig(): Promise<CvConfig> {
   if (!hasBlobStore() && process.env.NODE_ENV === "development") {
-    return normalizeConfig(JSON.parse(await readFile(LOCAL_CONFIG_FILE, "utf8")));
+    return normalizeConfig(JSON.parse(await readFile(LOCAL_CONFIG_FILE, "utf8").catch(() => "{}")));
   }
-  return normalizeConfig((await cachedBlobConfig()) ?? bundledConfig);
+  return normalizeConfig(await cachedBlobConfig());
 }
 
 export async function saveToBlob(config: CvConfig) {

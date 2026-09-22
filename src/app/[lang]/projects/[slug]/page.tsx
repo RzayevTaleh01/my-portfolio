@@ -13,16 +13,15 @@ import { getContent } from "@/content";
 import { hasLocale, localize, locales } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
 
-export const dynamicParams = false;
-
-export function generateStaticParams() {
-  return locales.flatMap((lang) => getContent(lang).projects.map((p) => ({ lang, slug: p.slug })));
+export async function generateStaticParams() {
+  const all = await Promise.all(locales.map(async (lang) => (await getContent(lang)).projects.map((p) => ({ lang, slug: p.slug }))));
+  return all.flat();
 }
 
 export async function generateMetadata(props: PageProps<"/[lang]/projects/[slug]">): Promise<Metadata> {
   const { lang, slug } = await props.params;
   if (!hasLocale(lang)) return {};
-  const project = getContent(lang).getProject(slug);
+  const project = await (await getContent(lang)).getProject(slug);
   if (!project) return {};
   return { title: project.title, description: project.tagline };
 }
@@ -35,7 +34,7 @@ export default async function ProjectPage(props: PageProps<"/[lang]/projects/[sl
   const { lang, slug } = await props.params;
   if (!hasLocale(lang)) notFound();
   const t = getDictionary(lang).caseStudy;
-  const { projects, getProject } = getContent(lang);
+  const { projects, getProject } = await getContent(lang);
   const project = getProject(slug);
   if (!project) notFound();
 

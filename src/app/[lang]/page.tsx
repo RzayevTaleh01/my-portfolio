@@ -10,17 +10,17 @@ import { Timeline } from "@/components/timeline";
 import { Button } from "@/components/ui/button";
 import { getContent } from "@/content";
 import { fmt, hasLocale, localize } from "@/i18n/config";
-import { getDictionary } from "@/i18n/dictionaries";
 import { getAllPosts } from "@/lib/posts";
+import { getSiteTexts } from "@/lib/site/site-texts";
 
 export default async function HomePage(props: PageProps<"/[lang]">) {
   const { lang } = await props.params;
   if (!hasLocale(lang)) notFound();
 
-  const t = getDictionary(lang);
-  const { profile, experience, skills, projects, researchStatement, researchDirections } = getContent(lang);
+  const t = await getSiteTexts(lang);
+  const { profile, experience, skills, projects, researchStatement, researchDirections } = await getContent(lang);
   const featured = projects.filter((p) => p.featured).slice(0, 4);
-  const posts = getAllPosts(lang).slice(0, 3);
+  const posts = (await getAllPosts(lang)).slice(0, 3);
   const aiCount = projects.filter((p) => p.kind === "research").length;
   const engCount = projects.length - aiCount;
 

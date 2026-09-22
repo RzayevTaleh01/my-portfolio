@@ -3,12 +3,12 @@ import { getContent, navigation } from "@/content";
 import { localeTags, localize, locales } from "@/i18n/config";
 import { getAllPosts } from "@/lib/posts";
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  const base = getContent("en").profile.siteUrl.replace(/\/$/, "");
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const base = (await getContent("en")).profile.siteUrl.replace(/\/$/, "");
   const paths = [
     ...navigation.map((n) => n.href),
-    ...getContent("en").projects.map((p) => `/projects/${p.slug}`),
-    ...getAllPosts("en").map((p) => `/writing/${p.slug}`),
+    ...(await getContent("en")).projects.map((p) => `/projects/${p.slug}`),
+    ...(await getAllPosts("en")).map((p) => `/writing/${p.slug}`),
   ];
 
   return paths.flatMap((path) =>

@@ -30,6 +30,9 @@ export interface Profile {
   cvPdf?: string;
   githubUsername: string;
   siteUrl: string;
+  website?: string;
+  websiteLabel?: string;
+  motherTongue?: string;
   socials: SocialLink[];
 }
 

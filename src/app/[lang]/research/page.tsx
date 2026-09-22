@@ -14,16 +14,16 @@ import { sortPublications } from "@/lib/utils";
 export async function generateMetadata(props: PageProps<"/[lang]/research">): Promise<Metadata> {
   const { lang } = await props.params;
   if (!hasLocale(lang)) return {};
-  return { title: getDictionary(lang).research.title, description: getContent(lang).researchStatement };
+  return { title: getDictionary(lang).research.title, description: (await getContent(lang)).researchStatement };
 }
 
 export default async function ResearchPage(props: PageProps<"/[lang]/research">) {
   const { lang } = await props.params;
   if (!hasLocale(lang)) notFound();
   const t = getDictionary(lang);
-  const { profile, projects, publications, researchDirections, researchStatement, getProject } = getContent(lang);
+  const { profile, projects, publications, researchDirections, researchStatement, getProject } = await getContent(lang);
   const systems = projects.filter((p) => p.kind === "research");
-  const articles = getAllPosts(lang).filter((p) => p.category === "research");
+  const articles = await (await getAllPosts(lang)).filter((p) => p.category === "research");
 
   return (
     <div className="space-y-20">

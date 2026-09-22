@@ -11,7 +11,7 @@ export interface ClapStrings {
   count: string;
 }
 
-/** Remembers the clap in this browser too, so the button is filled before the count loads. */
+/** Remembers the clap in this browser too, as a backup to the server cookie. */
 const STORAGE_KEY = "portfolio-clapped";
 const NOTE_TIME = 2200;
 const SPARKS = 8;
@@ -59,19 +59,17 @@ export function ClapButton({ t }: { t: ClapStrings }) {
   const noteTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
 
   useEffect(() => {
-    setClapped(rememberedClap());
     let active = true;
     fetch("/api/claps")
       .then((res) => res.json())
       .then((data: { count: number; clapped: boolean }) => {
         if (!active) return;
         setCount(data.count);
-        if (data.clapped) {
-          setClapped(true);
-          rememberClap();
-        }
+        if (data.clapped) rememberClap();
+        setClapped(data.clapped || rememberedClap());
       })
-      .catch(() => {});
+      // Offline or failed: at least show this browser's own clap.
+      .catch(() => active && setClapped(rememberedClap()));
     return () => {
       active = false;
       clearTimeout(noteTimer.current);
@@ -116,8 +114,10 @@ export function ClapButton({ t }: { t: ClapStrings }) {
     }
   }
 
+  const showCount = count !== null && count > 0;
+
   return (
-    <div className="no-print fixed bottom-10 left-5 z-40 flex items-center gap-2.5 lg:bottom-12 lg:left-6">
+    <div className="no-print fixed bottom-10 left-5 z-40 lg:bottom-12 lg:left-6">
       <div className="relative">
         {/* The note floats above the button, like Medium's "+1" bubble. */}
         <AnimatePresence>
@@ -171,34 +171,34 @@ export function ClapButton({ t }: { t: ClapStrings }) {
           onClick={clap}
           whileHover={{ scale: 1.06 }}
           whileTap={{ scale: 0.9 }}
-          aria-label={t.label}
+          aria-label={showCount ? `${t.label} (${t.count.replace("{count}", String(count))})` : t.label}
           aria-pressed={clapped}
           title={clapped ? t.already : t.label}
           className={cn(
-            "relative flex size-14 items-center justify-center rounded-full border bg-surface shadow-[0_10px_30px_-12px_rgb(0_0_0/0.35)] transition-colors",
+            "relative flex size-14 flex-col items-center justify-center rounded-full border bg-surface shadow-[0_10px_30px_-12px_rgb(0_0_0/0.35)] transition-colors",
             clapped ? "border-accent bg-accent-soft text-accent" : "text-muted-foreground hover:border-border-strong hover:text-foreground",
           )}
         >
-          <ClapIcon className="size-7" />
+          {/* The count sits inside the button, so it stays readable over any page content. */}
+          <ClapIcon className={cn("transition-all", showCount ? "-mt-1 size-6" : "size-7")} />
+          {showCount && (
+            <span className="-mb-0.5 h-3.5 overflow-hidden text-[11px] font-semibold leading-3.5 tabular-nums">
+              <AnimatePresence mode="popLayout" initial={false}>
+                <motion.span
+                  key={count}
+                  className="block"
+                  initial={{ y: 10, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  exit={{ y: -10, opacity: 0 }}
+                  transition={{ duration: 0.25, ease: "easeOut" }}
+                >
+                  {count}
+                </motion.span>
+              </AnimatePresence>
+            </span>
+          )}
         </motion.button>
       </div>
-
-      {count !== null && count > 0 && (
-        <span className="min-w-[2ch] overflow-hidden text-sm font-medium tabular-nums text-muted-foreground" aria-label={t.count.replace("{count}", String(count))}>
-          <AnimatePresence mode="popLayout" initial={false}>
-            <motion.span
-              key={count}
-              className="inline-block"
-              initial={{ y: 12, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              exit={{ y: -12, opacity: 0 }}
-              transition={{ duration: 0.25, ease: "easeOut" }}
-            >
-              {count}
-            </motion.span>
-          </AnimatePresence>
-        </span>
-      )}
     </div>
   );
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import { Command } from "cmdk";
-import { ArrowUpRight, FileText, FolderKanban, Monitor, Moon, PenLine, Search, Sun } from "lucide-react";
+import { ArrowUpRight, FileText, FolderKanban, Moon, PenLine, Search, Sun } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
@@ -145,9 +145,6 @@ export function CommandMenu({ entries, nav, socials, t, groupLabels, variant }: 
                 </Command.Item>
                 <Command.Item className={itemClass} onSelect={() => run(() => setTheme("dark"))}>
                   <Moon className="size-4 text-subtle-foreground" /> {t.dark}
-                </Command.Item>
-                <Command.Item className={itemClass} onSelect={() => run(() => setTheme("system"))}>
-                  <Monitor className="size-4 text-subtle-foreground" /> {t.system}
                 </Command.Item>
               </Command.Group>
             </Command.List>

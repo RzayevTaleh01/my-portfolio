@@ -17,7 +17,6 @@ export const en = {
     theme: "Theme",
     light: "Light",
     dark: "Dark",
-    system: "System",
     toggleTheme: "Toggle theme",
     openMenu: "Open menu",
     closeMenu: "Close menu",
@@ -176,7 +175,7 @@ export const en = {
     label: "Applaud this portfolio",
     thanks: "Thanks for the applause!",
     already: "You've already applauded - thank you!",
-    count: "{count} claps",
+    count: "claps: {count}",
   },
   notFound: {
     title: "Page not found",

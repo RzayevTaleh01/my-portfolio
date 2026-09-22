@@ -394,14 +394,21 @@ export function siteHeader(source: CvSource, language: Locale, region: Region): 
     headline: t.profile.headline,
     summary: t.profile.intro,
     email: t.profile.email ?? "",
-    website: siteUrlOf(t.profile),
+    website: PORTFOLIO_URL,
     location: t.regionLocation[region],
   };
 }
 
-/** The site URL only once it is a real domain (NEXT_PUBLIC_SITE_URL). */
-function siteUrlOf(profile: Profile) {
-  return /localhost|127\.0\.0\.1/.test(profile.siteUrl) ? "" : profile.siteUrl;
+/**
+ * The portfolio's public address. The CV always links here - never the
+ * deployment URL from NEXT_PUBLIC_SITE_URL (e.g. a *.vercel.app domain).
+ */
+export const PORTFOLIO_URL = "https://therzayev.site";
+export const PORTFOLIO_LABEL = "TheRzayev.Site";
+
+/** A saved website that is the deployment address becomes the portfolio domain. */
+function publicSite(url: string) {
+  return /\.vercel\.app/i.test(url) ? PORTFOLIO_URL : url;
 }
 
 /**
@@ -456,6 +463,8 @@ export interface CvLabels {
   technologies: string;
   portfolio: string;
   portfolioText: string;
+  download: string;
+  page: string;
 }
 
 const labels: Record<Locale, CvLabels> = {
@@ -474,6 +483,8 @@ const labels: Record<Locale, CvLabels> = {
     technologies: "Technologies",
     portfolio: "Portfolio",
     portfolioText: "For more detailed information, have a look at my portfolio - all my experience and projects are there.",
+    download: "Latest version",
+    page: "Page",
   },
   sk: {
     aboutMe: "O mne",
@@ -490,6 +501,8 @@ const labels: Record<Locale, CvLabels> = {
     technologies: "Technológie",
     portfolio: "Portfólio",
     portfolioText: "Podrobnejšie informácie nájdete v mojom portfóliu - sú tam všetky moje skúsenosti a projekty.",
+    download: "Aktuálna verzia",
+    page: "Strana",
   },
 };
 
@@ -534,10 +547,9 @@ export interface CvDocumentData {
   publications: string[];
   /** The live site in the CV's language, linked at the end of the CV. */
   portfolio: { href: string; label: string };
+  /** Where this CV's latest PDF is published - printed at the top of every page. */
+  download: { href: string; label: string };
 }
-
-/** The live portfolio; used for the closing link while NEXT_PUBLIC_SITE_URL is unset (local runs). */
-const LIVE_SITE = "https://therzayev.site";
 
 export const pretty = (href: string) => href.replace(/^(https?:\/\/(www\.)?|mailto:|tel:)/, "").replace(/\/$/, "");
 const lines = (s: string) => s.split("\n").map((x) => x.trim()).filter(Boolean);
@@ -614,9 +626,11 @@ export function buildCvData(source: CvSource, config: CvRegionConfig, region: Re
   if (email && on.has("social:email")) contact.push({ icon: "email", value: email, href: `mailto:${email}` });
   const phone = header(config.phone, "");
   if (phone) contact.push({ icon: "phone", value: phone, href: `tel:${phone.replace(/[^\d+]/g, "")}` });
-  const siteUrl = siteUrlOf(t.profile);
-  const website = header(config.website, siteUrl);
-  if (website) contact.push({ icon: "website", value: pretty(website), href: /^https?:/.test(website) ? website : `https://${website}` });
+  const website = publicSite(header(config.website, PORTFOLIO_URL));
+  if (website) {
+    const href = /^https?:/.test(website) ? website : `https://${website}`;
+    contact.push({ icon: "website", value: href.replace(/\/$/, "") === PORTFOLIO_URL ? PORTFOLIO_LABEL : pretty(website), href });
+  }
   const location = header(config.location, t.regionLocation[region]);
   if (location) contact.push({ icon: "location", value: location });
   const nationality = header(config.nationality, "");
@@ -653,6 +667,7 @@ export function buildCvData(source: CvSource, config: CvRegionConfig, region: Re
       return { title: v.title, issuer: v.issuer, link: v.link || undefined };
     }),
     publications: approved("publications").map((i) => val(i).text).filter(Boolean),
-    portfolio: { href: `${(siteUrl || LIVE_SITE).replace(/\/$/, "")}/${config.language}`, label: pretty(siteUrl || LIVE_SITE) },
+    portfolio: { href: `${PORTFOLIO_URL}/${config.language}`, label: PORTFOLIO_LABEL },
+    download: { href: `${PORTFOLIO_URL}/cv/${cvFiles[region]}`, label: `${PORTFOLIO_LABEL}/cv/${cvFiles[region]}` },
   };
 }

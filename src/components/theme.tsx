@@ -4,9 +4,13 @@ import { Moon, Sun } from "lucide-react";
 import { ThemeProvider as NextThemesProvider, useTheme } from "next-themes";
 import { cn } from "@/lib/utils";
 
+/**
+ * Light by default for every visitor, whatever the OS setting; dark only once they pick it.
+ * A new storage key, so an old "system"/"dark" choice from before this rule does not carry over.
+ */
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   return (
-    <NextThemesProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+    <NextThemesProvider attribute="class" defaultTheme="light" enableSystem={false} storageKey="theme-choice" disableTransitionOnChange>
       {children}
     </NextThemesProvider>
   );

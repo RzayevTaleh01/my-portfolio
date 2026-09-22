@@ -41,7 +41,7 @@ const s = StyleSheet.create({
     fontSize: 9.2,
     lineHeight: 1.45,
     color: INK,
-    paddingTop: 34,
+    paddingTop: 30,
     paddingBottom: 40,
     paddingHorizontal: 40,
   },
@@ -103,7 +103,23 @@ const s = StyleSheet.create({
   },
   portfolioTitle: { fontSize: 9.5, fontWeight: 700, color: ACCENT },
   portfolioLink: { fontSize: 9.5, fontWeight: 600, color: ACCENT, textDecoration: "none" },
-  footer: { position: "absolute", bottom: 18, left: 40, right: 40, fontSize: 7.5, color: MUTED, flexDirection: "row", justifyContent: "space-between" },
+  // Running header on every page: where to download the latest CV, and the page number.
+  // In the page flow (not absolute): react-pdf drops parts of absolute `fixed` rows.
+  pageHeader: {
+    marginTop: -16,
+    marginBottom: 16,
+    paddingBottom: 5,
+    borderBottomWidth: 0.6,
+    borderBottomColor: RULE,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    fontSize: 7.5,
+    color: MUTED,
+  },
+  pageHeaderLink: { flexDirection: "row", alignItems: "center", gap: 4 },
+  pageNumber: { position: "absolute", top: 14.5, right: 40, fontSize: 7.5, color: MUTED },
+  footer: { position: "absolute", bottom: 18, left: 40, right: 40, fontSize: 7.5, color: MUTED, textAlign: "center" },
 });
 
 /**
@@ -230,6 +246,20 @@ export function CvDocument({ data }: { data: CvDocumentData }) {
   return (
     <Document title={`${data.name} - CV`} author={data.name} subject={data.headline} language={data.language}>
       <Page size="A4" style={s.page}>
+        <View style={s.pageHeader} fixed>
+          <View style={s.pageHeaderLink}>
+            <PdfIcon icon="website" size={7.5} color={ACCENT} />
+            <Text>
+              {L.download}:{" "}
+              <Link src={data.download.href} style={s.link}>
+                {data.download.label}
+              </Link>
+            </Text>
+          </View>
+        </View>
+        {/* Its own absolute element: react-pdf draws dynamic text only there, not inside the header row. */}
+        <Text style={s.pageNumber} fixed render={({ pageNumber, totalPages }) => `${L.page} ${pageNumber} / ${totalPages}`} />
+
         <View style={s.identity}>
           {/* eslint-disable-next-line jsx-a11y/alt-text -- react-pdf Image has no alt */}
           {data.photo ? <Image src={data.photo} style={s.photo} /> : null}
@@ -380,7 +410,6 @@ export function CvDocument({ data }: { data: CvDocumentData }) {
 
         <View style={s.footer} fixed>
           <Text>{data.name}</Text>
-          <Text render={({ pageNumber, totalPages }) => `${pageNumber} / ${totalPages}`} />
         </View>
       </Page>
     </Document>

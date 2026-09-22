@@ -18,7 +18,6 @@ export const sk: Dictionary = {
     theme: "Motív",
     light: "Svetlý",
     dark: "Tmavý",
-    system: "Systémový",
     toggleTheme: "Prepnúť motív",
     openMenu: "Otvoriť menu",
     closeMenu: "Zavrieť menu",
@@ -176,7 +175,7 @@ export const sk: Dictionary = {
     label: "Zatlieskať tomuto portfóliu",
     thanks: "Ďakujem za potlesk!",
     already: "Už ste zatlieskali - ďakujem!",
-    count: "{count} potleskov",
+    count: "potlesk: {count}",
   },
   notFound: {
     title: "Stránka sa nenašla",

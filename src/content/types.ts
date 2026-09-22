@@ -32,6 +32,7 @@ export interface Profile {
   siteUrl: string;
   website?: string;
   websiteLabel?: string;
+  sourceRepo?: string;
   motherTongue?: string;
   socials: SocialLink[];
 }

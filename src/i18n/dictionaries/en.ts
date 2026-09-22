@@ -175,6 +175,89 @@ export const en = {
     prompt: "Enjoying the portfolio? Give it a clap!",
     dismiss: "Dismiss",
   },
+  footer: {
+    madeWith: "Made with {heart} by {name}",
+    sourceTitle: "Like the design and the project?",
+    sourceText: "The source code is open - explore it, star it or fork it.",
+    star: "Star",
+    fork: "Fork",
+  },
+  privacy: {
+    title: "Privacy",
+    description: "What this site stores about visitors, and why.",
+    footerLink: "Privacy",
+    updated: "Last updated: 22 September 2026",
+    sections: [
+      {
+        title: "Who is responsible",
+        paragraphs: [
+          "This website is run by {name}, who is responsible for the data described here. Questions and requests: {email}.",
+        ],
+        items: [],
+      },
+      {
+        title: "Reading the site",
+        paragraphs: [
+          "You can read every page without giving any personal data. There are no advertising or analytics cookies and no third-party trackers.",
+          "The site is hosted by Vercel Inc. To deliver the pages, Vercel processes technical request data such as your IP address and browser type, and keeps short-lived server logs. Vercel may process this data outside the European Union.",
+        ],
+        items: [],
+      },
+      {
+        title: "When you clap",
+        paragraphs: [
+          "Only if you click the applause button, the following is stored together with the clap:",
+        ],
+        items: [
+          "the date and time,",
+          "your IP address,",
+          "the approximate location the hosting provider derives from the IP address (country, region, city),",
+          "your browser's preferred language and its user-agent string (browser and operating system),",
+          "the page you clapped on.",
+        ],
+      },
+      {
+        title: "Why, and on what basis",
+        paragraphs: [
+          "The data lets each visitor clap only once, helps to recognise abuse, and shows the site owner roughly where the applause comes from. The legal basis is legitimate interest (Art. 6(1)(f) GDPR). Clapping is voluntary - if you do not clap, none of this is stored.",
+        ],
+        items: [],
+      },
+      {
+        title: "Cookies and browser storage",
+        paragraphs: [
+          "The site only uses what it needs to work:",
+        ],
+        items: [
+          "portfolio_clap (cookie, 1 year) - set after you clap, so the same browser is not counted twice,",
+          "NEXT_LOCALE (cookie, 1 year) - set when you choose a language,",
+          "theme-choice (local storage) - your light or dark theme,",
+          "portfolio-clapped (local storage) and portfolio-clap-prompt (session storage) - whether you already clapped or closed the applause prompt.",
+        ],
+      },
+      {
+        title: "How long it is kept",
+        paragraphs: [
+          "Claps are stored in a private Vercel Blob store that only the site owner can read. They are kept until the site owner deletes them, and you can ask for yours to be deleted at any time.",
+        ],
+        items: [],
+      },
+      {
+        title: "Your rights",
+        paragraphs: [
+          "Under the GDPR you have the right to access your data, to have it corrected or deleted, to restrict or object to its processing, and to data portability. Write to {email}. You can also lodge a complaint with a data protection authority - in Slovakia, the Office for Personal Data Protection (Úrad na ochranu osobných údajov SR).",
+        ],
+        items: [],
+      },
+      {
+        title: "Other features",
+        paragraphs: [
+          "The AI assistant runs in your browser with prepared answers; nothing you click in it is sent anywhere. The list of GitHub repositories is loaded by the server, so your browser does not contact GitHub.",
+        ],
+        items: [],
+      },
+    ],
+  },
   notFound: {
     title: "Page not found",
     text: "The page you are looking for does not exist or has moved.",

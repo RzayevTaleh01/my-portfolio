@@ -101,7 +101,7 @@ export default async function RootLayout(props: LayoutProps<"/[lang]">) {
               <MobileHeader lang={lang} profile={profile} menu={menu} />
               <div className="min-w-0 max-w-[720px] pb-12 pt-10 lg:pt-20">
                 <main>{props.children}</main>
-                <SiteFooter profile={profile} />
+                <SiteFooter profile={profile} privacy={{ href: localize(lang, "/privacy"), label: t.privacy.footerLink }} t={t.footer} />
               </div>
             </div>
             <ClapButton t={t.clap} />

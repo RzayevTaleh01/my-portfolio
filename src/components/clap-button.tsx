@@ -188,7 +188,7 @@ export function ClapButton({ t }: { t: ClapStrings }) {
               className="absolute bottom-full left-0 mb-2 flex items-center gap-2 whitespace-nowrap rounded-full bg-primary py-1.5 pl-1.5 pr-3.5 text-xs font-medium text-primary-foreground shadow-[0_10px_30px_-12px_rgb(0_0_0/0.5)]"
             >
               {note === "thanks" && (
-                <span className="flex size-6 items-center justify-center rounded-full bg-emerald-500 text-[11px] font-semibold text-white">+1</span>
+                <span className="flex size-6 items-center justify-center rounded-full bg-accent text-[11px] font-semibold text-white">+1</span>
               )}
               <span className={cn(note === "already" && "pl-2")}>{note === "thanks" ? t.thanks : t.already}</span>
             </motion.div>
@@ -199,7 +199,7 @@ export function ClapButton({ t }: { t: ClapStrings }) {
           {burst > 0 && (
             <motion.span key={burst} className="pointer-events-none absolute inset-0" initial={{ opacity: 1 }} exit={{ opacity: 0 }}>
               <motion.span
-                className="absolute inset-1 rounded-full border-2 border-emerald-500"
+                className="absolute inset-1 rounded-full border-2 border-accent"
                 initial={{ scale: 0.8, opacity: 0.8 }}
                 animate={{ scale: 1.8, opacity: 0 }}
                 transition={{ duration: 0.6, ease: "easeOut" }}
@@ -209,7 +209,7 @@ export function ClapButton({ t }: { t: ClapStrings }) {
                 return (
                   <motion.span
                     key={i}
-                    className={cn("absolute left-1/2 top-1/2 -ml-[3px] -mt-[3px] size-1.5", i % 2 ? "rounded-full bg-emerald-400" : "rotate-45 rounded-[1px] bg-emerald-600")}
+                    className={cn("absolute left-1/2 top-1/2 -ml-[3px] -mt-[3px] size-1.5", i % 2 ? "rounded-full bg-accent" : "rotate-45 rounded-[1px] bg-accent/60")}
                     initial={{ x: 0, y: 0, scale: 0.4, opacity: 1 }}
                     animate={{ x: Math.cos(angle) * 38, y: Math.sin(angle) * 38, scale: [0.4, 1.3, 0.2], opacity: [1, 1, 0] }}
                     transition={{ duration: 0.65, ease: "easeOut", delay: 0.04 }}
@@ -231,7 +231,7 @@ export function ClapButton({ t }: { t: ClapStrings }) {
           title={clapped ? t.already : t.label}
           className={cn(
             "relative flex size-14 flex-col items-center justify-center bg-transparent transition-colors",
-            clapped ? "text-emerald-500" : "text-muted-foreground hover:text-emerald-500",
+            clapped ? "text-accent" : "text-muted-foreground hover:text-accent",
           )}
         >
           <ClapIcon className="size-7" />

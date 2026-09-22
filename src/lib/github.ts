@@ -38,6 +38,13 @@ interface RawRepo {
   archived: boolean;
 }
 
+export async function getRepoStats(url: string): Promise<{ stars: number; forks: number } | null> {
+  const match = url.match(/github\.com\/([\w.-]+)\/([\w.-]+?)(?:\.git)?\/?$/);
+  if (!match) return null;
+  const repo = await gh<RawRepo>(`/repos/${match[1]}/${match[2]}`);
+  return repo ? { stars: repo.stargazers_count, forks: repo.forks_count } : null;
+}
+
 async function ownRepos(username: string) {
   const data = await gh<RawRepo[]>(`/users/${username}/repos?per_page=100&sort=pushed`);
   return data?.filter((r) => !r.fork && !r.archived) ?? null;

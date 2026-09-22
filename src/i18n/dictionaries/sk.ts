@@ -177,6 +177,89 @@ export const sk: Dictionary = {
     prompt: "Páči sa vám portfólio? Zatlieskajte!",
     dismiss: "Zavrieť",
   },
+  footer: {
+    madeWith: "Vytvorené s {heart} - {name}",
+    sourceTitle: "Páči sa vám dizajn a projekt?",
+    sourceText: "Zdrojový kód je otvorený - pozrite si ho, dajte mu hviezdičku alebo si ho forknite.",
+    star: "Star",
+    fork: "Fork",
+  },
+  privacy: {
+    title: "Ochrana súkromia",
+    description: "Čo táto stránka ukladá o návštevníkoch a prečo.",
+    footerLink: "Ochrana súkromia",
+    updated: "Posledná aktualizácia: 22. septembra 2026",
+    sections: [
+      {
+        title: "Kto zodpovedá",
+        paragraphs: [
+          "Prevádzkovateľ tejto stránky a zodpovedná osoba za tu opísané údaje: {name}. Otázky a žiadosti: {email}.",
+        ],
+        items: [],
+      },
+      {
+        title: "Čítanie stránky",
+        paragraphs: [
+          "Všetky stránky si môžete prečítať bez poskytnutia akýchkoľvek osobných údajov. Nepoužívame reklamné ani analytické cookies a žiadne sledovače tretích strán.",
+          "Stránku hostí Vercel Inc. Na doručenie stránok Vercel spracúva technické údaje o požiadavke, napríklad vašu IP adresu a typ prehliadača, a uchováva krátkodobé serverové záznamy. Vercel môže tieto údaje spracúvať aj mimo Európskej únie.",
+        ],
+        items: [],
+      },
+      {
+        title: "Keď zatlieskate",
+        paragraphs: [
+          "Iba ak kliknete na tlačidlo potlesku, spolu s potleskom sa uloží:",
+        ],
+        items: [
+          "dátum a čas,",
+          "vaša IP adresa,",
+          "približná poloha, ktorú z IP adresy odvodí poskytovateľ hostingu (krajina, región, mesto),",
+          "preferovaný jazyk prehliadača a jeho identifikácia (prehliadač a operačný systém),",
+          "stránka, na ktorej ste zatlieskali.",
+        ],
+      },
+      {
+        title: "Prečo a na akom základe",
+        paragraphs: [
+          "Údaje umožňujú, aby každý návštevník zatlieskal iba raz, pomáhajú odhaliť zneužitie a ukazujú prevádzkovateľovi, odkiaľ potlesk približne prichádza. Právnym základom je oprávnený záujem (čl. 6 ods. 1 písm. f) GDPR). Potlesk je dobrovoľný - ak nezatlieskate, nič z toho sa neuloží.",
+        ],
+        items: [],
+      },
+      {
+        title: "Cookies a úložisko prehliadača",
+        paragraphs: [
+          "Stránka používa iba to, čo potrebuje na fungovanie:",
+        ],
+        items: [
+          "portfolio_clap (cookie, 1 rok) - nastaví sa po potlesku, aby sa ten istý prehliadač nezapočítal dvakrát,",
+          "NEXT_LOCALE (cookie, 1 rok) - nastaví sa pri výbere jazyka,",
+          "theme-choice (lokálne úložisko) - svetlý alebo tmavý režim,",
+          "portfolio-clapped (lokálne úložisko) a portfolio-clap-prompt (úložisko relácie) - či ste už zatlieskali alebo zavreli výzvu na potlesk.",
+        ],
+      },
+      {
+        title: "Ako dlho sa uchovávajú",
+        paragraphs: [
+          "Potlesky sú uložené v súkromnom úložisku Vercel Blob, ku ktorému má prístup iba prevádzkovateľ stránky. Uchovávajú sa, kým ich prevádzkovateľ nevymaže, a o vymazanie svojich údajov môžete kedykoľvek požiadať.",
+        ],
+        items: [],
+      },
+      {
+        title: "Vaše práva",
+        paragraphs: [
+          "Podľa GDPR máte právo na prístup k svojim údajom, na ich opravu alebo vymazanie, na obmedzenie spracúvania, právo namietať a právo na prenosnosť. Napíšte na {email}. Sťažnosť môžete podať aj dozornému orgánu - na Slovensku je to Úrad na ochranu osobných údajov SR.",
+        ],
+        items: [],
+      },
+      {
+        title: "Ďalšie funkcie",
+        paragraphs: [
+          "AI asistent beží vo vašom prehliadači s pripravenými odpoveďami; nič, na čo v ňom kliknete, sa nikam neodosiela. Zoznam repozitárov z GitHubu načítava server, takže váš prehliadač GitHub nekontaktuje.",
+        ],
+        items: [],
+      },
+    ],
+  },
   notFound: {
     title: "Stránka sa nenašla",
     text: "Hľadaná stránka neexistuje alebo bola presunutá.",

@@ -46,6 +46,7 @@ export interface RegionProfile {
 export interface SiteProfile extends Omit<Profile, "location" | "now" | "avatar" | "cvPdf" | "siteUrl"> {
   website: string;
   websiteLabel: string;
+  sourceRepo?: string;
   motherTongue: string;
 }
 

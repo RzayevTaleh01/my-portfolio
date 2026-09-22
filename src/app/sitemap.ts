@@ -7,6 +7,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = (await getContent("en")).profile.siteUrl.replace(/\/$/, "");
   const paths = [
     ...navigation.map((n) => n.href),
+    "/privacy",
     ...(await getContent("en")).projects.map((p) => `/projects/${p.slug}`),
     ...(await getAllPosts("en")).map((p) => `/writing/${p.slug}`),
   ];

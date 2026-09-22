@@ -1,5 +1,6 @@
 "use client";
 
+import { X } from "lucide-react";
 import { AnimatePresence, motion, useAnimate } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
@@ -9,11 +10,29 @@ export interface ClapStrings {
   thanks: string;
   already: string;
   count: string;
+  prompt: string;
+  dismiss: string;
 }
 
 const STORAGE_KEY = "portfolio-clapped";
+const PROMPT_KEY = "portfolio-clap-prompt";
 const NOTE_TIME = 2200;
-const SPARKS = 8;
+const PROMPT_DELAY = 25000;
+const SPARKS = 10;
+
+function promptDismissed() {
+  try {
+    return sessionStorage.getItem(PROMPT_KEY) === "1";
+  } catch {
+    return false;
+  }
+}
+
+function dismissPrompt() {
+  try {
+    sessionStorage.setItem(PROMPT_KEY, "1");
+  } catch {}
+}
 
 function rememberedClap() {
   try {
@@ -48,6 +67,8 @@ export function ClapButton({ t }: { t: ClapStrings }) {
   const [clapped, setClapped] = useState(false);
   const [burst, setBurst] = useState(0);
   const [note, setNote] = useState<"thanks" | "already" | null>(null);
+  const [prompt, setPrompt] = useState(false);
+  const [ready, setReady] = useState(false);
   const [scope, animate] = useAnimate();
   const noteTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
 
@@ -60,13 +81,29 @@ export function ClapButton({ t }: { t: ClapStrings }) {
         setCount(data.count);
         if (data.clapped) rememberClap();
         setClapped(data.clapped || rememberedClap());
+        setReady(true);
       })
-      .catch(() => active && setClapped(rememberedClap()));
+      .catch(() => {
+        if (!active) return;
+        setClapped(rememberedClap());
+        setReady(true);
+      });
     return () => {
       active = false;
       clearTimeout(noteTimer.current);
     };
   }, []);
+
+  useEffect(() => {
+    if (!ready || clapped || promptDismissed()) return;
+    const timer = setTimeout(() => setPrompt(true), PROMPT_DELAY);
+    return () => clearTimeout(timer);
+  }, [ready, clapped]);
+
+  function closePrompt() {
+    setPrompt(false);
+    dismissPrompt();
+  }
 
   function showNote(kind: "thanks" | "already") {
     clearTimeout(noteTimer.current);
@@ -75,6 +112,7 @@ export function ClapButton({ t }: { t: ClapStrings }) {
   }
 
   async function clap() {
+    if (prompt) closePrompt();
     if (clapped) {
       animate(scope.current, { x: [0, -5, 5, -3, 3, 0] }, { duration: 0.4 });
       showNote("already");
@@ -90,7 +128,11 @@ export function ClapButton({ t }: { t: ClapStrings }) {
     animate(scope.current, { scale: [1, 1.22, 0.94, 1], rotate: [0, -12, 8, 0] }, { duration: 0.55, ease: "easeOut" });
 
     try {
-      const res = await fetch("/api/claps", { method: "POST" });
+      const res = await fetch("/api/claps", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ page: window.location.pathname }),
+      });
       if (!res.ok) throw new Error(String(res.status));
       const data = (await res.json()) as { count: number };
       setCount(Math.max(data.count, before + 1));
@@ -110,6 +152,31 @@ export function ClapButton({ t }: { t: ClapStrings }) {
     <div className="no-print fixed bottom-10 left-5 z-40 lg:bottom-12 lg:left-6">
       <div className="relative">
         <AnimatePresence>
+          {prompt && !note && (
+            <motion.div
+              key="prompt"
+              initial={{ opacity: 0, y: 8, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 6 }}
+              transition={{ duration: 0.25, ease: "easeOut" }}
+              className="always-light absolute bottom-full left-0 mb-2 flex w-max max-w-[15rem] items-start gap-2 rounded-2xl rounded-bl-sm border bg-surface py-2.5 pl-3.5 pr-2 text-sm leading-snug text-foreground shadow-[0_16px_40px_-20px_rgb(0_0_0/0.4)]"
+            >
+              <button type="button" onClick={clap} className="text-left">
+                {t.prompt}
+              </button>
+              <button
+                type="button"
+                onClick={closePrompt}
+                aria-label={t.dismiss}
+                className="-mt-0.5 grid size-6 shrink-0 place-items-center rounded-md text-subtle-foreground transition-colors hover:bg-muted hover:text-foreground"
+              >
+                <X className="size-3.5" />
+              </button>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        <AnimatePresence>
           {note && (
             <motion.div
               key={note}
@@ -118,10 +185,10 @@ export function ClapButton({ t }: { t: ClapStrings }) {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -6 }}
               transition={{ duration: 0.22, ease: "easeOut" }}
-              className="absolute bottom-full left-0 mb-3 flex items-center gap-2 whitespace-nowrap rounded-full bg-primary py-1.5 pl-1.5 pr-3.5 text-xs font-medium text-primary-foreground shadow-[0_10px_30px_-12px_rgb(0_0_0/0.5)]"
+              className="absolute bottom-full left-0 mb-2 flex items-center gap-2 whitespace-nowrap rounded-full bg-primary py-1.5 pl-1.5 pr-3.5 text-xs font-medium text-primary-foreground shadow-[0_10px_30px_-12px_rgb(0_0_0/0.5)]"
             >
               {note === "thanks" && (
-                <span className="flex size-6 items-center justify-center rounded-full bg-accent text-[11px] font-semibold text-white">+1</span>
+                <span className="flex size-6 items-center justify-center rounded-full bg-emerald-500 text-[11px] font-semibold text-white">+1</span>
               )}
               <span className={cn(note === "already" && "pl-2")}>{note === "thanks" ? t.thanks : t.already}</span>
             </motion.div>
@@ -132,9 +199,9 @@ export function ClapButton({ t }: { t: ClapStrings }) {
           {burst > 0 && (
             <motion.span key={burst} className="pointer-events-none absolute inset-0" initial={{ opacity: 1 }} exit={{ opacity: 0 }}>
               <motion.span
-                className="absolute inset-0 rounded-full border-2 border-accent"
-                initial={{ scale: 1, opacity: 0.7 }}
-                animate={{ scale: 1.9, opacity: 0 }}
+                className="absolute inset-1 rounded-full border-2 border-emerald-500"
+                initial={{ scale: 0.8, opacity: 0.8 }}
+                animate={{ scale: 1.8, opacity: 0 }}
                 transition={{ duration: 0.6, ease: "easeOut" }}
               />
               {Array.from({ length: SPARKS }, (_, i) => {
@@ -142,9 +209,9 @@ export function ClapButton({ t }: { t: ClapStrings }) {
                 return (
                   <motion.span
                     key={i}
-                    className={cn("absolute left-1/2 top-1/2 -ml-[3px] -mt-[3px] size-1.5", i % 2 ? "rounded-full bg-accent" : "rotate-45 rounded-[1px] bg-primary")}
+                    className={cn("absolute left-1/2 top-1/2 -ml-[3px] -mt-[3px] size-1.5", i % 2 ? "rounded-full bg-emerald-400" : "rotate-45 rounded-[1px] bg-emerald-600")}
                     initial={{ x: 0, y: 0, scale: 0.4, opacity: 1 }}
-                    animate={{ x: Math.cos(angle) * 44, y: Math.sin(angle) * 44, scale: [0.4, 1.3, 0.2], opacity: [1, 1, 0] }}
+                    animate={{ x: Math.cos(angle) * 38, y: Math.sin(angle) * 38, scale: [0.4, 1.3, 0.2], opacity: [1, 1, 0] }}
                     transition={{ duration: 0.65, ease: "easeOut", delay: 0.04 }}
                   />
                 );
@@ -157,19 +224,19 @@ export function ClapButton({ t }: { t: ClapStrings }) {
           ref={scope}
           type="button"
           onClick={clap}
-          whileHover={{ scale: 1.06 }}
+          whileHover={{ scale: 1.08 }}
           whileTap={{ scale: 0.9 }}
           aria-label={showCount ? `${t.label} (${t.count.replace("{count}", String(count))})` : t.label}
           aria-pressed={clapped}
           title={clapped ? t.already : t.label}
           className={cn(
-            "relative flex size-14 flex-col items-center justify-center rounded-full border bg-surface shadow-[0_10px_30px_-12px_rgb(0_0_0/0.35)] transition-colors",
-            clapped ? "border-accent bg-accent-soft text-accent" : "text-muted-foreground hover:border-border-strong hover:text-foreground",
+            "relative flex size-14 flex-col items-center justify-center bg-transparent transition-colors",
+            clapped ? "text-emerald-500" : "text-muted-foreground hover:text-emerald-500",
           )}
         >
-          <ClapIcon className={cn("transition-all", showCount ? "-mt-1 size-6" : "size-7")} />
+          <ClapIcon className="size-7" />
           {showCount && (
-            <span className="-mb-0.5 h-3.5 overflow-hidden text-[11px] font-semibold leading-3.5 tabular-nums">
+            <span className="mt-0.5 h-4 overflow-hidden text-xs font-semibold leading-4 tabular-nums">
               <AnimatePresence mode="popLayout" initial={false}>
                 <motion.span
                   key={count}

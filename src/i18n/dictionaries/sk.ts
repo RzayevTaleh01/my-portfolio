@@ -174,6 +174,8 @@ export const sk: Dictionary = {
     thanks: "Ďakujem za potlesk!",
     already: "Už ste zatlieskali - ďakujem!",
     count: "potlesk: {count}",
+    prompt: "Páči sa vám portfólio? Zatlieskajte!",
+    dismiss: "Zavrieť",
   },
   notFound: {
     title: "Stránka sa nenašla",

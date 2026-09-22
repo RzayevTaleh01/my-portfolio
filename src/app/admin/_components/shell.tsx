@@ -10,6 +10,7 @@ import {
   FlaskConical,
   FolderKanban,
   GraduationCap,
+  Hand,
   HandHeart,
   Image as ImageIcon,
   Languages,
@@ -38,6 +39,7 @@ const groups: { title: string; items: NavItem[] }[] = [
     items: [
       { href: "/admin", label: "Overview", icon: LayoutDashboard },
       { href: "/admin/cv", label: "CV builder", icon: FileText },
+      { href: "/admin/claps", label: "Claps", icon: Hand },
     ],
   },
   {

@@ -172,6 +172,8 @@ export const en = {
     thanks: "Thanks for the applause!",
     already: "You've already applauded - thank you!",
     count: "claps: {count}",
+    prompt: "Enjoying the portfolio? Give it a clap!",
+    dismiss: "Dismiss",
   },
   notFound: {
     title: "Page not found",

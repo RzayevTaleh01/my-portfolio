@@ -91,7 +91,7 @@ const s = StyleSheet.create({
   },
   pageNumber: { position: "absolute", top: 14.5, right: 40, fontSize: 7.5, color: MUTED },
   footer: { position: "absolute", bottom: 16, left: 40, right: 40, paddingTop: 5, borderTopWidth: 0.6, borderTopColor: RULE },
-  footerText: { fontSize: 7, color: MUTED, textAlign: "center" },
+  footerText: { fontSize: 7, color: MUTED },
   footerLabel: { fontWeight: 700, color: ACCENT },
 });
 

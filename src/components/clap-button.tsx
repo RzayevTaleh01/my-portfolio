@@ -19,7 +19,7 @@ const STORAGE_KEY = "portfolio-clapped";
 const PROMPT_KEY = "portfolio-clap-prompt";
 const NOTE_TIME = 2200;
 const PROMPT_DELAY = 25000;
-const PARTY_TIME = 2800;
+const PARTY_TIME = 5200;
 const SPARKS = 10;
 
 function promptDismissed() {
@@ -77,7 +77,7 @@ export function ClapButton({ t }: { t: ClapStrings }) {
   const [note, setNote] = useState<"thanks" | "already" | null>(null);
   const [prompt, setPrompt] = useState(false);
   const [ready, setReady] = useState(false);
-  const [party, setParty] = useState<{ key: number; origin: { x: number; y: number }; pieces: Piece[] } | null>(null);
+  const [party, setParty] = useState<{ key: number; pieces: Piece[] } | null>(null);
   const partyTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
   const [scope, animate] = useAnimate();
   const noteTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
@@ -134,7 +134,10 @@ export function ClapButton({ t }: { t: ClapStrings }) {
     const rect = (scope.current as HTMLElement | null)?.getBoundingClientRect();
     if (rect) {
       clearTimeout(partyTimer.current);
-      setParty({ key: Date.now(), origin: { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 }, pieces: makePieces(90) });
+      setParty({
+        key: Date.now(),
+        pieces: makePieces({ x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 }, window.innerWidth, window.innerHeight),
+      });
       partyTimer.current = setTimeout(() => setParty(null), PARTY_TIME);
     }
 
@@ -167,7 +170,7 @@ export function ClapButton({ t }: { t: ClapStrings }) {
 
   return (
     <div className="no-print fixed bottom-10 left-5 z-40 lg:bottom-12 lg:left-6">
-      {party && <Celebration key={party.key} origin={party.origin} pieces={party.pieces} />}
+      {party && <Celebration key={party.key} pieces={party.pieces} />}
       <div className="relative">
         <AnimatePresence>
           {prompt && !note && (

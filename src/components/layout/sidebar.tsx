@@ -26,7 +26,8 @@ export function DesktopControls({ lang, menu }: Pick<ChromeProps, "lang" | "menu
 /** Desktop sidebar: identity, navigation and links stay in view while content scrolls. */
 export function Sidebar({ profile, menu }: ChromeProps) {
   return (
-    <aside className="no-print sticky top-0 hidden h-dvh flex-col py-14 lg:flex">
+    // Extra bottom room below 2xl: there the fixed clap button sits under the sidebar, not beside it.
+    <aside className="no-print sticky top-0 hidden h-dvh flex-col pb-32 pt-14 lg:flex 2xl:pb-14">
       <ProfileCard profile={profile} homeHref={menu.nav[0].href} t={menu.t} />
       {/* Search and navigation share the same -mx-3 width, so their edges line up. */}
       <div className="-mx-3 mt-10 space-y-3">

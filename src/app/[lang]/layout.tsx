@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import "katex/dist/katex.min.css";
 import "../globals.css";
 import { Assistant } from "@/components/assistant";
+import { ClapButton } from "@/components/clap-button";
 import type { CommandMenuProps } from "@/components/command-menu";
 import { MobileHeader } from "@/components/layout/mobile-header";
 import { DesktopControls, Sidebar } from "@/components/layout/sidebar";
@@ -98,6 +99,7 @@ export default async function RootLayout(props: LayoutProps<"/[lang]">) {
                 <SiteFooter profile={profile} />
               </div>
             </div>
+            <ClapButton t={t.clap} />
             <Assistant topics={buildAssistantTopics(lang, { ...content, profile }, t)} t={t.assistant} />
           </MotionProvider>
         </ThemeProvider>

@@ -1,6 +1,6 @@
 "use client";
 
-import { Download, ExternalLink, FileJson, LoaderCircle, LogOut, Pencil, RefreshCw, RotateCcw, Save } from "lucide-react";
+import { Download, ExternalLink, FileJson, Import, LoaderCircle, LogOut, Pencil, RefreshCw, Save } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -12,7 +12,11 @@ import {
   catalogIds,
   editableIds,
   cvFiles,
+  flatItems,
   regionLabels,
+  siteFields,
+  siteHeader,
+  withOwnCopy,
   type CatalogGroup,
   type CatalogItem,
   type CvConfig,
@@ -132,10 +136,20 @@ function useCvPreview(source: CvSource, config: CvRegionConfig, region: Region) 
   return { url, busy, error, regenerate: generate };
 }
 
+/** Every region with its own full copy of the CV text (see withOwnCopy). */
+function ownCopies(source: CvSource, config: CvConfig): CvConfig {
+  const regions = Object.fromEntries(
+    (Object.keys(config.regions) as Region[]).map((r) => [r, withOwnCopy(source, r, config.regions[r])]),
+  ) as CvConfig["regions"];
+  return { ...config, regions };
+}
+
 export function AdminApp({ source, initialConfig, storage }: Props) {
   const router = useRouter();
   const [saved, setSaved] = useState(initialConfig);
-  const [config, setConfig] = useState(initialConfig);
+  // The builder edits its own copy; site text only comes in through "Import from site".
+  // Anything filled in here that the saved config lacks shows up as unsaved.
+  const [config, setConfig] = useState(() => ownCopies(source, initialConfig));
   const [region, setRegion] = useState<Region>("sk");
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<{ tone: "ok" | "error"; text: string } | null>(null);
@@ -172,10 +186,25 @@ export function AdminApp({ source, initialConfig, storage }: Props) {
     update({ overrides });
   };
 
-  const resetEntry = (id: string) => {
+  /** Replaces the CV text of these entries with the site's current text. */
+  const importItems = (items: CatalogItem[]) => {
     const overrides = { ...current.overrides };
-    delete overrides[id];
+    items.filter((i) => i.fields.length).forEach((i) => (overrides[i.id] = siteFields(i)));
     update({ overrides });
+  };
+
+  const importHeader = () => update(siteHeader(source, current.language, region));
+
+  const changeLanguage = (language: Locale) => {
+    const imported = confirm(
+      `Import every text in ${language === "sk" ? "Slovak" : "English"} from the site?\n\nOK - replaces the CV text (your edits are lost).\nCancel - keeps the current text; import cards one by one later.`,
+    );
+    if (!imported) return update({ language });
+    const overrides = { ...current.overrides };
+    flatItems(buildCatalog(source, language)).forEach((i) => {
+      if (i.fields.length) overrides[i.id] = siteFields(i);
+    });
+    update({ language, ...siteHeader(source, language, region), overrides });
   };
 
   useEffect(() => {
@@ -197,7 +226,7 @@ export function AdminApp({ source, initialConfig, storage }: Props) {
       const body = await res.json();
       if (!res.ok) throw new Error(body.error ?? `HTTP ${res.status}`);
       setSaved(body.config);
-      setConfig(body.config);
+      setConfig(ownCopies(source, body.config));
       setMessage({
         tone: "ok",
         text:
@@ -227,8 +256,6 @@ export function AdminApp({ source, initialConfig, storage }: Props) {
     router.refresh();
   }
 
-  const profile = source[current.language].profile;
-  const siteUrl = /localhost|127\.0\.0\.1/.test(profile.siteUrl) ? "" : profile.siteUrl;
 
   return (
     <div className="min-h-dvh">
@@ -295,21 +322,24 @@ export function AdminApp({ source, initialConfig, storage }: Props) {
           <Card
             title={`${regionLabels[region]} CV`}
             aside={
-              <Button
-                size="sm"
-                variant="ghost"
-                onClick={() => update({ ...config.regions[other] })}
-                title={`Replace everything here with the ${regionLabels[other]} CV`}
-              >
-                Copy from {regionLabels[other]}
-              </Button>
+              <>
+                <ImportButton what="the header" onImport={importHeader} />
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={() => update({ ...config.regions[other] })}
+                  title={`Replace everything here with the ${regionLabels[other]} CV`}
+                >
+                  Copy from {regionLabels[other]}
+                </Button>
+              </>
             }
           >
             <div className="grid gap-3 sm:grid-cols-2">
               <Field label="CV language">
                 <select
                   value={current.language}
-                  onChange={(e) => update({ language: e.target.value as Locale })}
+                  onChange={(e) => changeLanguage(e.target.value as Locale)}
                   className={inputClass}
                 >
                   <option value="en">English</option>
@@ -317,43 +347,43 @@ export function AdminApp({ source, initialConfig, storage }: Props) {
                 </select>
               </Field>
               <Field label="Name">
-                <HeaderInput value={current.name} fallback={profile.name} onChange={(name) => update({ name })} />
+                <HeaderInput value={current.name} onChange={(name) => update({ name })} />
               </Field>
               <Field label="Headline" wide>
-                <HeaderInput value={current.headline} fallback={profile.headline} onChange={(headline) => update({ headline })} />
+                <HeaderInput value={current.headline} onChange={(headline) => update({ headline })} />
               </Field>
               <Field label="About me" wide>
-                <HeaderInput multiline value={current.summary} fallback={profile.intro} onChange={(summary) => update({ summary })} />
+                <HeaderInput multiline value={current.summary} onChange={(summary) => update({ summary })} />
               </Field>
               <Field label="Email">
-                <HeaderInput value={current.email} fallback={profile.email ?? ""} onChange={(email) => update({ email })} />
+                <HeaderInput value={current.email} onChange={(email) => update({ email })} />
               </Field>
               <Field label="Phone number">
-                <HeaderInput value={current.phone} fallback="" onChange={(phone) => update({ phone })} placeholder="+421 …" />
+                <HeaderInput value={current.phone} onChange={(phone) => update({ phone })} placeholder="+421 …" />
               </Field>
               <Field label="Website">
-                <HeaderInput value={current.website} fallback={siteUrl} onChange={(website) => update({ website })} placeholder="yourdomain.com" />
+                <HeaderInput value={current.website} onChange={(website) => update({ website })} placeholder="yourdomain.com" />
               </Field>
               <Field label="Address">
                 <HeaderInput
                   value={current.location}
-                  fallback={source[current.language].regionLocation[region]}
+                 
                   onChange={(location) => update({ location })}
                 />
               </Field>
               <Field label="Nationality">
-                <HeaderInput value={current.nationality} fallback="" onChange={(nationality) => update({ nationality })} />
+                <HeaderInput value={current.nationality} onChange={(nationality) => update({ nationality })} />
               </Field>
               <Field label="Date of birth">
-                <HeaderInput value={current.dateOfBirth} fallback="" onChange={(dateOfBirth) => update({ dateOfBirth })} placeholder="DD/MM/YYYY" />
+                <HeaderInput value={current.dateOfBirth} onChange={(dateOfBirth) => update({ dateOfBirth })} placeholder="DD/MM/YYYY" />
               </Field>
               <Field label="Mother tongue">
-                <HeaderInput value={current.motherTongue} fallback="" onChange={(motherTongue) => update({ motherTongue })} />
+                <HeaderInput value={current.motherTongue} onChange={(motherTongue) => update({ motherTongue })} />
               </Field>
             </div>
             <p className="mt-2 text-xs text-muted-foreground">
-              Fields start with the site&apos;s text; clear one to leave it out of the CV. The pencil next to any entry below edits its
-              CV text.
+              The CV keeps its own copy of every text - editing the site does not change it. &quot;Import from site&quot; on a card
+              replaces that card&apos;s text with the site&apos;s current text. Clear a field to leave it out of the CV.
             </p>
             <div className="mt-3 flex flex-wrap gap-x-6 gap-y-2">
               <Toggle checked={current.photo} onChange={(photo) => update({ photo })} label="Photo" />
@@ -386,7 +416,7 @@ export function AdminApp({ source, initialConfig, storage }: Props) {
               onChange={setItems}
               overrides={current.overrides}
               onEdit={editField}
-              onReset={resetEntry}
+              onImport={importItems}
             />
           ))}
         </div>
@@ -468,7 +498,20 @@ function leafIds(item: CatalogItem): string[] {
 interface EditProps {
   overrides: CvOverrides;
   onEdit: (id: string, key: string, value: string | null) => void;
-  onReset: (id: string) => void;
+  onImport: (items: CatalogItem[]) => void;
+}
+
+function ImportButton({ what, onImport }: { what: string; onImport: () => void }) {
+  return (
+    <Button
+      size="sm"
+      variant="ghost"
+      title={`Replace the CV text of ${what} with the site's current text`}
+      onClick={() => confirm(`Import ${what} from the site? Your CV edits there are replaced.`) && onImport()}
+    >
+      <Import className="size-3.5" /> Import from site
+    </Button>
+  );
 }
 
 function CatalogCard({
@@ -491,6 +534,7 @@ function CatalogCard({
       aside={
         all.length > 0 && (
           <>
+            <ImportButton what={`all of "${group.title}"`} onImport={() => edit.onImport(flatItems([group]))} />
             <span className="font-mono text-xs text-muted-foreground">
               {count}/{all.length}
             </span>
@@ -559,7 +603,7 @@ function Row({
   onChange,
   overrides,
   onEdit,
-  onReset,
+  onImport,
 }: {
   item: CatalogItem;
   checked: boolean;
@@ -571,7 +615,9 @@ function Row({
 } & EditProps) {
   const [open, setOpen] = useState(false);
   const edits = overrides[item.id];
-  const edited = Boolean(edits && Object.keys(edits).length);
+  // "edited" = the CV text differs from the site's current text.
+  const differs = (key: string, site: string) => edits?.[key] !== undefined && edits[key] !== site;
+  const edited = item.fields.some((f) => differs(f.key, f.value));
   // Show the CV wording in the list once it is edited.
   const label = edits?.title ?? edits?.label ?? edits?.name ?? item.label;
 
@@ -620,9 +666,8 @@ function Row({
         <div className="space-y-2.5 px-3 pb-3 pt-1.5">
           {item.fields.map((f) => {
             const value = edits?.[f.key] ?? f.value;
-            const changed = edits?.[f.key] !== undefined;
-            // Typing the site text back removes the edit.
-            const set = (v: string) => onEdit(item.id, f.key, v === f.value ? null : v);
+            const changed = differs(f.key, f.value);
+            const set = (v: string) => onEdit(item.id, f.key, v);
             return (
               <label key={f.key} className="block space-y-1">
                 <span className="flex items-center gap-2 text-xs font-medium text-muted-foreground">
@@ -643,12 +688,8 @@ function Row({
             );
           })}
           <div className="flex items-center gap-2 pt-0.5">
-            <p className="mr-auto text-xs text-muted-foreground">Changes apply to this CV only; the site keeps its text.</p>
-            {edited && (
-              <Button size="sm" variant="ghost" onClick={() => onReset(item.id)}>
-                <RotateCcw className="size-3.5" /> Site text
-              </Button>
-            )}
+            <p className="mr-auto text-xs text-muted-foreground">Saved with this CV only; the site keeps its text.</p>
+            {edited && <ImportButton what="this entry" onImport={() => onImport([item])} />}
           </div>
         </div>
       )}
@@ -656,25 +697,18 @@ function Row({
   );
 }
 
-/**
- * A header field shown with its current CV text. Empty in the config means the
- * site value, "-" means left out - so clearing the box hides it on the CV.
- */
+/** A header field with the CV's own text; an empty box leaves it out of the CV. */
 function HeaderInput({
-  value,
-  fallback,
-  onChange,
+  value: shown,
+  onChange: set,
   multiline,
   placeholder,
 }: {
   value: string;
-  fallback: string;
   onChange: (v: string) => void;
   multiline?: boolean;
   placeholder?: string;
 }) {
-  const shown = value === "-" ? "" : value || fallback;
-  const set = (v: string) => onChange(v === fallback ? "" : v === "" ? (fallback ? "-" : "") : v);
   return multiline ? (
     <textarea
       value={shown}

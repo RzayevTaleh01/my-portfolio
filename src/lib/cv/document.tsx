@@ -3,6 +3,7 @@
  * Used by the PDF route (server) and the admin preview (browser).
  */
 import { Document, Font, Image, Link, Page, StyleSheet, Text, View } from "@react-pdf/renderer";
+import { Children } from "react";
 import { PdfIcon } from "./icons";
 import type { CvDocumentData, CvEntry } from "./model";
 
@@ -80,17 +81,58 @@ const s = StyleSheet.create({
   row: { flexDirection: "row", marginBottom: 3 },
   rowLabel: { width: 120, fontWeight: 600 },
   rowValue: { flex: 1 },
+  // Several roles at one company: the company once, the roles on a rule beneath it.
+  groupHead: { flexDirection: "row", justifyContent: "space-between", alignItems: "baseline" },
+  groupOrg: { fontSize: 10, fontWeight: 700, color: ACCENT },
+  roles: { marginTop: 4, marginLeft: 3, paddingLeft: 9, borderLeftWidth: 1.2, borderLeftColor: RULE },
+  role: { marginBottom: 6 },
+  roleHead: { flexDirection: "row", justifyContent: "space-between", alignItems: "baseline", gap: 8 },
+  rolePeriod: { fontSize: 7.8, color: MUTED, letterSpacing: 0.3 },
+  // Closing call-out: the live portfolio.
+  portfolio: {
+    marginTop: 16,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+    paddingVertical: 9,
+    paddingHorizontal: 12,
+    backgroundColor: BAND,
+    borderLeftWidth: 3,
+    borderLeftColor: ACCENT,
+    borderRadius: 4,
+  },
+  portfolioTitle: { fontSize: 9.5, fontWeight: 700, color: ACCENT },
+  portfolioLink: { fontSize: 9.5, fontWeight: 600, color: ACCENT, textDecoration: "none" },
   footer: { position: "absolute", bottom: 18, left: 40, right: 40, fontSize: 7.5, color: MUTED, flexDirection: "row", justifyContent: "space-between" },
 });
 
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
+/**
+ * A titled section. The title is kept on one page with the first item, so it is
+ * never left alone at the bottom (minPresenceAhead does not handle unbreakable items).
+ * `keepWithFirst={false}` for a first item that may be long enough to span pages.
+ */
+function Section({ title, keepWithFirst = true, children }: { title: string; keepWithFirst?: boolean; children: React.ReactNode }) {
+  const head = (
+    <View style={s.sectionHead} minPresenceAhead={40}>
+      <Text style={s.sectionTitle}>{title}</Text>
+      <View style={s.sectionRule} />
+    </View>
+  );
+  const [first, ...rest] = Children.toArray(children);
   return (
     <View style={s.section}>
-      <View style={s.sectionHead} minPresenceAhead={40}>
-        <Text style={s.sectionTitle}>{title}</Text>
-        <View style={s.sectionRule} />
-      </View>
-      {children}
+      {keepWithFirst ? (
+        <View wrap={false}>
+          {head}
+          {first}
+        </View>
+      ) : (
+        <>
+          {head}
+          {first}
+        </>
+      )}
+      {rest}
     </View>
   );
 }
@@ -111,6 +153,19 @@ function Entry({ entry, technologies }: { entry: CvEntry; technologies: string }
         ) : null}
       </Text>
       {entry.summary ? <Text style={s.para}>{entry.summary}</Text> : null}
+      <Bullets entry={entry} technologies={technologies} />
+      {entry.link ? (
+        <Link src={entry.link} style={[s.stack, s.link]}>
+          {entry.link.replace(/^https?:\/\/(www\.)?/, "")}
+        </Link>
+      ) : null}
+    </View>
+  );
+}
+
+function Bullets({ entry, technologies }: { entry: CvEntry; technologies: string }) {
+  return (
+    <>
       {entry.bullets.map((b, i) => (
         <View key={i} style={s.bulletRow}>
           <Text style={s.bulletDot}>•</Text>
@@ -123,11 +178,49 @@ function Entry({ entry, technologies }: { entry: CvEntry; technologies: string }
           {entry.stack.join(" | ")}
         </Text>
       ) : null}
-      {entry.link ? (
-        <Link src={entry.link} style={[s.stack, s.link]}>
-          {entry.link.replace(/^https?:\/\/(www\.)?/, "")}
-        </Link>
-      ) : null}
+    </>
+  );
+}
+
+/** Entries of one organisation together, in their original order (newest first). */
+function byOrganization(entries: CvEntry[]) {
+  const groups = new Map<string, CvEntry[]>();
+  entries.forEach((e, i) => {
+    const key = e.organization.trim().toLowerCase() || `#${i}`;
+    groups.set(key, [...(groups.get(key) ?? []), e]);
+  });
+  return [...groups.values()];
+}
+
+const same = (values: (string | undefined)[]) => values.every((v) => v === values[0]);
+const periodEdges = (p: string) => p.split(/\s+[-–]\s+/);
+
+/** One company, several roles: the company, place and overall period once, then each role. */
+function RoleGroup({ roles, technologies }: { roles: CvEntry[]; technologies: string }) {
+  const [latest] = roles;
+  const earliest = roles[roles.length - 1];
+  const period = `${periodEdges(earliest.period)[0]} - ${periodEdges(latest.period).at(-1)}`;
+  const sharedLocation = same(roles.map((r) => r.location));
+  const sharedSummary = same(roles.map((r) => r.summary));
+  return (
+    <View style={s.entry}>
+      <View minPresenceAhead={60}>
+        <Text style={s.meta}>{[period, sharedLocation ? latest.location : ""].filter(Boolean).join("  ·  ")}</Text>
+        <Text style={s.groupOrg}>{latest.organization}</Text>
+        {sharedSummary && latest.summary ? <Text style={s.para}>{latest.summary}</Text> : null}
+      </View>
+      <View style={s.roles}>
+        {roles.map((r, i) => (
+          <View key={i} style={s.role} wrap={r.bullets.length > 4}>
+            <View style={s.roleHead}>
+              <Text style={s.title}>{r.title}</Text>
+              <Text style={s.rolePeriod}>{[r.period, sharedLocation ? "" : r.location].filter(Boolean).join("  ·  ")}</Text>
+            </View>
+            {!sharedSummary && r.summary ? <Text style={s.para}>{r.summary}</Text> : null}
+            <Bullets entry={r} technologies={technologies} />
+          </View>
+        ))}
+      </View>
     </View>
   );
 }
@@ -170,9 +263,24 @@ export function CvDocument({ data }: { data: CvDocumentData }) {
         ) : null}
 
         {data.experience.length > 0 && (
-          <Section title={L.workExperience}>
-            {data.experience.map((e, i) => (
-              <Entry key={i} entry={e} technologies={L.technologies} />
+          <Section title={L.workExperience} keepWithFirst={false}>
+            {byOrganization(data.experience).map((roles, i) =>
+              roles.length > 1 ? (
+                <RoleGroup key={i} roles={roles} technologies={L.technologies} />
+              ) : (
+                <Entry key={i} entry={roles[0]} technologies={L.technologies} />
+              ),
+            )}
+          </Section>
+        )}
+
+        {data.skills.length > 0 && (
+          <Section title={L.digitalSkills}>
+            {data.skills.map((g) => (
+              <View key={g.title} style={s.row} wrap={false}>
+                <Text style={s.rowLabel}>{g.title}</Text>
+                <Text style={s.rowValue}>{g.items.join(" | ")}</Text>
+              </View>
             ))}
           </Section>
         )}
@@ -180,14 +288,6 @@ export function CvDocument({ data }: { data: CvDocumentData }) {
         {data.education.length > 0 && (
           <Section title={L.education}>
             {data.education.map((e, i) => (
-              <Entry key={i} entry={e} technologies={L.technologies} />
-            ))}
-          </Section>
-        )}
-
-        {data.projects.length > 0 && (
-          <Section title={L.projects}>
-            {data.projects.map((e, i) => (
               <Entry key={i} entry={e} technologies={L.technologies} />
             ))}
           </Section>
@@ -218,13 +318,10 @@ export function CvDocument({ data }: { data: CvDocumentData }) {
           </Section>
         )}
 
-        {data.skills.length > 0 && (
-          <Section title={L.digitalSkills}>
-            {data.skills.map((g) => (
-              <View key={g.title} style={s.row} wrap={false}>
-                <Text style={s.rowLabel}>{g.title}</Text>
-                <Text style={s.rowValue}>{g.items.join(" | ")}</Text>
-              </View>
+        {data.projects.length > 0 && (
+          <Section title={L.projects}>
+            {data.projects.map((e, i) => (
+              <Entry key={i} entry={e} technologies={L.technologies} />
             ))}
           </Section>
         )}
@@ -267,6 +364,19 @@ export function CvDocument({ data }: { data: CvDocumentData }) {
             ))}
           </Section>
         )}
+
+        <View style={s.portfolio} wrap={false}>
+          <PdfIcon icon="website" size={16} color={ACCENT} />
+          <View style={{ flex: 1 }}>
+            <Text>
+              <Text style={s.portfolioTitle}>{L.portfolio}: </Text>
+              <Link src={data.portfolio.href} style={s.portfolioLink}>
+                {data.portfolio.label}
+              </Link>
+            </Text>
+            <Text style={{ color: MUTED, marginTop: 1 }}>{L.portfolioText}</Text>
+          </View>
+        </View>
 
         <View style={s.footer} fixed>
           <Text>{data.name}</Text>

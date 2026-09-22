@@ -45,13 +45,21 @@ export type CvSource = Record<Locale, CvLocaleSource>;
 
 // ─── Config: what is approved for each region ─────────────
 
-/** CV-only text, by entry id and field. A field that is present wins over the site text, even when empty. */
+/**
+ * The CV's own text, by entry id and field. A field that is present wins over the site text, even when empty.
+ * With `ownCopy` every entry is stored in full, so later site edits never reach the CV unless imported.
+ */
 export type CvOverrides = Record<string, Record<string, string>>;
 
 export interface CvRegionConfig {
   /** Language the CV is written in. */
   language: Locale;
-  // Header. Empty → the site value; "-" → left out.
+  /**
+   * The CV keeps its own copy of every text (header and entries) and never falls back to the site;
+   * "Import from site" in /admin refreshes it. False only in configs saved before the copy existed.
+   */
+  ownCopy: boolean;
+  // Header. With `ownCopy` the text as is (empty → left out); without it, empty → the site value, "-" → left out.
   name: string;
   headline: string;
   summary: string;
@@ -112,6 +120,7 @@ export const ids = {
 
 const emptyRegion: CvRegionConfig = {
   language: "en",
+  ownCopy: false,
   name: "",
   headline: "",
   summary: "",
@@ -146,6 +155,7 @@ export function normalizeConfig(raw: unknown): CvConfig {
     const given = (input.regions?.[r] ?? {}) as Partial<CvRegionConfig>;
     const out = { ...emptyRegion, ...given };
     out.language = given.language === "sk" ? "sk" : "en";
+    out.ownCopy = given.ownCopy === true;
     out.items = Array.isArray(given.items) ? given.items.filter((i): i is string => typeof i === "string") : [];
     out.overrides = cleanOverrides(given.overrides);
     return out;
@@ -363,6 +373,60 @@ export function catalogIds(catalog: CatalogGroup[]) {
   return out;
 }
 
+/** Every entry, children included. */
+export function flatItems(catalog: CatalogGroup[] | CatalogItem[]): CatalogItem[] {
+  const items = (catalog as (CatalogGroup | CatalogItem)[]).flatMap((x) => ("items" in x ? x.items : [x]));
+  return items.flatMap((i) => [i, ...flatItems(i.children ?? [])]);
+}
+
+/** An entry's text as the site has it. */
+export function siteFields(item: CatalogItem): Record<string, string> {
+  return Object.fromEntries(item.fields.map((f) => [f.key, f.value]));
+}
+
+/** The header fields the site can fill (phone, nationality… have no site value). */
+export const siteHeaderKeys = ["name", "headline", "summary", "email", "website", "location"] as const;
+
+export function siteHeader(source: CvSource, language: Locale, region: Region): Record<(typeof siteHeaderKeys)[number], string> {
+  const t = source[language];
+  return {
+    name: t.profile.name,
+    headline: t.profile.headline,
+    summary: t.profile.intro,
+    email: t.profile.email ?? "",
+    website: siteUrlOf(t.profile),
+    location: t.regionLocation[region],
+  };
+}
+
+/** The site URL only once it is a real domain (NEXT_PUBLIC_SITE_URL). */
+function siteUrlOf(profile: Profile) {
+  return /localhost|127\.0\.0\.1/.test(profile.siteUrl) ? "" : profile.siteUrl;
+}
+
+/**
+ * The region config with its own full copy of the CV text: every entry the CV
+ * has no text for yet (new on the site, or an older config) is filled from the
+ * site once; what is already there is kept as is.
+ */
+export function withOwnCopy(source: CvSource, region: Region, config: CvRegionConfig): CvRegionConfig {
+  const header = siteHeader(source, config.language, region);
+  const out: CvRegionConfig = { ...config, overrides: { ...config.overrides }, ownCopy: true };
+  if (!config.ownCopy) {
+    for (const key of siteHeaderKeys) {
+      const v = config[key].trim();
+      out[key] = v === "-" ? "" : v || header[key];
+    }
+    for (const key of ["phone", "nationality", "dateOfBirth", "motherTongue"] as const) {
+      out[key] = config[key].trim() === "-" ? "" : config[key];
+    }
+  }
+  for (const item of flatItems(buildCatalog(source, config.language))) {
+    if (item.fields.length) out.overrides[item.id] = { ...siteFields(item), ...config.overrides[item.id] };
+  }
+  return out;
+}
+
 /** Ids that can carry edits: every entry, including group rows. */
 export function editableIds(catalog: CatalogGroup[]) {
   const out = new Set<string>();
@@ -390,6 +454,8 @@ export interface CvLabels {
   certificates: string;
   publications: string;
   technologies: string;
+  portfolio: string;
+  portfolioText: string;
 }
 
 const labels: Record<Locale, CvLabels> = {
@@ -406,6 +472,8 @@ const labels: Record<Locale, CvLabels> = {
     certificates: "Certificates",
     publications: "Publications",
     technologies: "Technologies",
+    portfolio: "Portfolio",
+    portfolioText: "For more detailed information, have a look at my portfolio - all my experience and projects are there.",
   },
   sk: {
     aboutMe: "O mne",
@@ -420,6 +488,8 @@ const labels: Record<Locale, CvLabels> = {
     certificates: "Certifikáty",
     publications: "Publikácie",
     technologies: "Technológie",
+    portfolio: "Portfólio",
+    portfolioText: "Podrobnejšie informácie nájdete v mojom portfóliu - sú tam všetky moje skúsenosti a projekty.",
   },
 };
 
@@ -462,7 +532,12 @@ export interface CvDocumentData {
   volunteering: CvEntry[];
   certificates: { title: string; issuer: string; link?: string }[];
   publications: string[];
+  /** The live site in the CV's language, linked at the end of the CV. */
+  portfolio: { href: string; label: string };
 }
+
+/** The live portfolio; used for the closing link while NEXT_PUBLIC_SITE_URL is unset (local runs). */
+const LIVE_SITE = "https://therzayev.site";
 
 export const pretty = (href: string) => href.replace(/^(https?:\/\/(www\.)?|mailto:|tel:)/, "").replace(/\/$/, "");
 const lines = (s: string) => s.split("\n").map((x) => x.trim()).filter(Boolean);
@@ -476,8 +551,8 @@ function byPeriodDesc<T extends { period: string }>(items: T[]) {
   return [...items].sort((a, b) => start(b.period) - start(a.period));
 }
 
-/** A header field: empty → the site value, "-" → left out. */
-function header(value: string, fallback: string) {
+/** A header field in a config without its own copy: empty → the site value, "-" → left out. */
+function siteFallback(value: string, fallback: string) {
   const v = value.trim();
   if (v === "-") return "";
   return v || fallback;
@@ -530,14 +605,16 @@ export function buildCvData(source: CvSource, config: CvRegionConfig, region: Re
     }))
     .filter((g) => g.items.length > 0);
 
+  // Own copy: the header text as saved. Older configs: empty → the site value.
+  const header = (value: string, fallback: string) => (config.ownCopy ? (value.trim() === "-" ? "" : value.trim()) : siteFallback(value, fallback));
+
   // Header: e-mail, phone, website, address, then the approved links.
   const contact: CvContact[] = [];
   const email = header(config.email, t.profile.email ?? "");
   if (email && on.has("social:email")) contact.push({ icon: "email", value: email, href: `mailto:${email}` });
   const phone = header(config.phone, "");
   if (phone) contact.push({ icon: "phone", value: phone, href: `tel:${phone.replace(/[^\d+]/g, "")}` });
-  // The site URL only once it is a real domain (NEXT_PUBLIC_SITE_URL).
-  const siteUrl = /localhost|127\.0\.0\.1/.test(t.profile.siteUrl) ? "" : t.profile.siteUrl;
+  const siteUrl = siteUrlOf(t.profile);
   const website = header(config.website, siteUrl);
   if (website) contact.push({ icon: "website", value: pretty(website), href: /^https?:/.test(website) ? website : `https://${website}` });
   const location = header(config.location, t.regionLocation[region]);
@@ -576,5 +653,6 @@ export function buildCvData(source: CvSource, config: CvRegionConfig, region: Re
       return { title: v.title, issuer: v.issuer, link: v.link || undefined };
     }),
     publications: approved("publications").map((i) => val(i).text).filter(Boolean),
+    portfolio: { href: `${(siteUrl || LIVE_SITE).replace(/\/$/, "")}/${config.language}`, label: pretty(siteUrl || LIVE_SITE) },
   };
 }

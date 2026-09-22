@@ -155,6 +155,12 @@ export const sk: Dictionary = {
     },
     links: { home: "Pozrieť skúsenosti", skills: "Pozrieť zručnosti", projects: "Všetky projekty", research: "Výskum", articles: "Čítať články", cv: "Otvoriť životopis", contact: "Napísať e-mail" },
   },
+  clap: {
+    label: "Zatlieskať tomuto portfóliu",
+    thanks: "Ďakujem za potlesk!",
+    already: "Už ste zatlieskali - ďakujem!",
+    count: "{count} potleskov",
+  },
   notFound: {
     title: "Stránka sa nenašla",
     text: "Hľadaná stránka neexistuje alebo bola presunutá.",

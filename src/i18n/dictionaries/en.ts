@@ -155,6 +155,12 @@ export const en = {
     },
     links: { home: "See experience", skills: "See skills", projects: "All projects", research: "Research", articles: "Read articles", cv: "Open resume", contact: "Send email" },
   },
+  clap: {
+    label: "Applaud this portfolio",
+    thanks: "Thanks for the applause!",
+    already: "You've already applauded - thank you!",
+    count: "{count} claps",
+  },
   notFound: {
     title: "Page not found",
     text: "The page you are looking for does not exist or has moved.",

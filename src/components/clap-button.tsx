@@ -42,6 +42,12 @@ function rememberedClap() {
   }
 }
 
+function forgetClap() {
+  try {
+    localStorage.removeItem(STORAGE_KEY);
+  } catch {}
+}
+
 function rememberClap() {
   try {
     localStorage.setItem(STORAGE_KEY, "1");
@@ -80,7 +86,8 @@ export function ClapButton({ t }: { t: ClapStrings }) {
         if (!active) return;
         setCount(data.count);
         if (data.clapped) rememberClap();
-        setClapped(data.clapped || rememberedClap());
+        else forgetClap();
+        setClapped(data.clapped);
         setReady(true);
       })
       .catch(() => {
@@ -140,9 +147,7 @@ export function ClapButton({ t }: { t: ClapStrings }) {
       setClapped(false);
       setCount(before);
       setNote(null);
-      try {
-        localStorage.removeItem(STORAGE_KEY);
-      } catch {}
+      forgetClap();
     }
   }
 

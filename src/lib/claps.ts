@@ -1,5 +1,5 @@
 import "server-only";
-import { del, get, list, put } from "@vercel/blob";
+import { BlobNotFoundError, del, get, head, list, put } from "@vercel/blob";
 import { unstable_cache } from "next/cache";
 import { hasBlobStore } from "@/lib/cv/store";
 
@@ -84,6 +84,19 @@ export async function listClaps(): Promise<ClapRecord[]> {
     records.push(...(await Promise.all(blobs.slice(i, i + 10).map(readRecord))));
   }
   return records.sort((a, b) => b.at.localeCompare(a.at));
+}
+
+export async function clapExists(id: string): Promise<boolean> {
+  if (!/^[\w-]+$/.test(id)) return false;
+  if (!hasBlobStore()) return devClaps.has(id);
+  try {
+    await head(`${PREFIX}${id}.json`);
+    return true;
+  } catch (error) {
+    if (error instanceof BlobNotFoundError) return false;
+    console.error("[claps] Checking a clap in Vercel Blob failed:", error);
+    return true;
+  }
 }
 
 export async function deleteClap(id: string) {

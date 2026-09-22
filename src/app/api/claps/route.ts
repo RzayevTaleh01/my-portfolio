@@ -1,7 +1,7 @@
 import { randomUUID } from "node:crypto";
 import { revalidateTag } from "next/cache";
 import { cookies, headers } from "next/headers";
-import { addClap, CLAPS_CACHE_TAG, getClapCount, type ClapRecord } from "@/lib/claps";
+import { addClap, clapExists, CLAPS_CACHE_TAG, getClapCount, type ClapRecord } from "@/lib/claps";
 
 const COOKIE = "portfolio_clap";
 const ONE_YEAR = 60 * 60 * 24 * 365;
@@ -32,16 +32,25 @@ async function visitor(id: string, page: string | undefined): Promise<ClapRecord
   };
 }
 
+async function currentClap() {
+  const store = await cookies();
+  const id = store.get(COOKIE)?.value;
+  if (!id) return false;
+  if (await clapExists(id)) return true;
+  store.delete(COOKIE);
+  return false;
+}
+
 export async function GET() {
-  const clapped = Boolean((await cookies()).get(COOKIE)?.value);
+  const clapped = await currentClap();
   return Response.json({ count: await getClapCount(), clapped }, { headers: { "Cache-Control": "no-store" } });
 }
 
 export async function POST(request: Request) {
-  const store = await cookies();
-  if (store.get(COOKIE)?.value) {
+  if (await currentClap()) {
     return Response.json({ count: await getClapCount(), clapped: true });
   }
+  const store = await cookies();
 
   const body = (await request.json().catch(() => ({}))) as { page?: unknown };
   const page = typeof body.page === "string" ? body.page.slice(0, 200) : undefined;

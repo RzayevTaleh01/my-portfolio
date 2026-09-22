@@ -81,7 +81,7 @@ export function buildContent(data: SiteData, locale: Locale): SiteContent {
     bio: [...siteProfile.bio, home.bioClosing].filter(Boolean),
     avatar: mediaUrl("avatar", data.mediaVersion),
     cvPdf: `/cv/${cvFileName(siteProfile.name)}`,
-    siteUrl: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
+    siteUrl: (siteProfile.website || process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000").replace(/\/$/, ""),
   };
 
   const education = resolve<SiteEducation[]>(data.education, locale);

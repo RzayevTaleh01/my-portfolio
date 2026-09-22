@@ -199,9 +199,9 @@ export function ClapButton({ t }: { t: ClapStrings }) {
           {burst > 0 && (
             <motion.span key={burst} className="pointer-events-none absolute inset-0" initial={{ opacity: 1 }} exit={{ opacity: 0 }}>
               <motion.span
-                className="absolute inset-1 rounded-full border-2 border-accent"
-                initial={{ scale: 0.8, opacity: 0.8 }}
-                animate={{ scale: 1.8, opacity: 0 }}
+                className="absolute inset-0 rounded-full border-2 border-accent"
+                initial={{ scale: 1, opacity: 0.7 }}
+                animate={{ scale: 1.9, opacity: 0 }}
                 transition={{ duration: 0.6, ease: "easeOut" }}
               />
               {Array.from({ length: SPARKS }, (_, i) => {
@@ -211,7 +211,7 @@ export function ClapButton({ t }: { t: ClapStrings }) {
                     key={i}
                     className={cn("absolute left-1/2 top-1/2 -ml-[3px] -mt-[3px] size-1.5", i % 2 ? "rounded-full bg-accent" : "rotate-45 rounded-[1px] bg-accent/60")}
                     initial={{ x: 0, y: 0, scale: 0.4, opacity: 1 }}
-                    animate={{ x: Math.cos(angle) * 38, y: Math.sin(angle) * 38, scale: [0.4, 1.3, 0.2], opacity: [1, 1, 0] }}
+                    animate={{ x: Math.cos(angle) * 44, y: Math.sin(angle) * 44, scale: [0.4, 1.3, 0.2], opacity: [1, 1, 0] }}
                     transition={{ duration: 0.65, ease: "easeOut", delay: 0.04 }}
                   />
                 );
@@ -230,13 +230,13 @@ export function ClapButton({ t }: { t: ClapStrings }) {
           aria-pressed={clapped}
           title={clapped ? t.already : t.label}
           className={cn(
-            "relative flex size-14 flex-col items-center justify-center bg-transparent transition-colors",
-            clapped ? "text-accent" : "text-muted-foreground hover:text-accent",
+            "relative flex size-14 flex-col items-center justify-center rounded-full border bg-surface shadow-[0_10px_30px_-12px_rgb(0_0_0/0.35)] transition-colors",
+            clapped ? "border-accent text-accent" : "text-muted-foreground hover:border-border-strong hover:text-accent",
           )}
         >
-          <ClapIcon className="size-7" />
+          <ClapIcon className={cn("transition-all", showCount ? "-mt-1 size-6" : "size-7")} />
           {showCount && (
-            <span className="mt-0.5 h-4 overflow-hidden text-xs font-semibold leading-4 tabular-nums">
+            <span className="-mb-0.5 h-3.5 overflow-hidden text-[11px] font-semibold leading-3.5 tabular-nums">
               <AnimatePresence mode="popLayout" initial={false}>
                 <motion.span
                   key={count}

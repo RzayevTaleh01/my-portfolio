@@ -1,6 +1,6 @@
 "use client";
 
-import { Download, ExternalLink, FileJson, LoaderCircle, LogOut, RefreshCw, Save } from "lucide-react";
+import { Download, ExternalLink, FileJson, LoaderCircle, LogOut, Pencil, RefreshCw, RotateCcw, Save } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -10,11 +10,13 @@ import {
   buildCatalog,
   buildCvData,
   catalogIds,
+  editableIds,
   cvFiles,
   regionLabels,
   type CatalogGroup,
   type CatalogItem,
   type CvConfig,
+  type CvOverrides,
   type CvRegionConfig,
   type CvSource,
 } from "@/lib/cv/model";
@@ -142,7 +144,11 @@ export function AdminApp({ source, initialConfig, storage }: Props) {
   const other: Region = region === "sk" ? "intl" : "sk";
   const catalog = useMemo(() => buildCatalog(source, current.language), [source, current.language]);
   const known = useMemo(() => catalogIds(catalog), [catalog]);
-  const stale = current.items.filter((i) => !known.has(i));
+  const editable = useMemo(() => editableIds(catalog), [catalog]);
+  const stale = [
+    ...current.items.filter((i) => !known.has(i)),
+    ...Object.keys(current.overrides).filter((id) => !editable.has(id)),
+  ];
   const dirty = JSON.stringify(config.regions) !== JSON.stringify(saved.regions);
   const preview = useCvPreview(source, current, region);
 
@@ -155,6 +161,21 @@ export function AdminApp({ source, initialConfig, storage }: Props) {
     // Keep the file order stable: catalog order first, unknown ids last.
     const ordered = [...known].filter((id) => set.has(id));
     update({ items: [...ordered, ...[...set].filter((id) => !known.has(id))] });
+  };
+
+  const editField = (id: string, key: string, value: string | null) => {
+    const fields = { ...current.overrides[id] };
+    if (value === null) delete fields[key];
+    else fields[key] = value;
+    const overrides = { ...current.overrides, [id]: fields };
+    if (Object.keys(fields).length === 0) delete overrides[id];
+    update({ overrides });
+  };
+
+  const resetEntry = (id: string) => {
+    const overrides = { ...current.overrides };
+    delete overrides[id];
+    update({ overrides });
   };
 
   useEffect(() => {
@@ -207,6 +228,7 @@ export function AdminApp({ source, initialConfig, storage }: Props) {
   }
 
   const profile = source[current.language].profile;
+  const siteUrl = /localhost|127\.0\.0\.1/.test(profile.siteUrl) ? "" : profile.siteUrl;
 
   return (
     <div className="min-h-dvh">
@@ -294,49 +316,45 @@ export function AdminApp({ source, initialConfig, storage }: Props) {
                   <option value="sk">Slovenčina</option>
                 </select>
               </Field>
-              <Field label="Address">
-                <input
-                  value={current.location}
-                  onChange={(e) => update({ location: e.target.value })}
-                  placeholder={source[current.language].regionLocation[region]}
-                  className={inputClass}
-                />
+              <Field label="Name">
+                <HeaderInput value={current.name} fallback={profile.name} onChange={(name) => update({ name })} />
               </Field>
               <Field label="Headline" wide>
-                <input
-                  value={current.headline}
-                  onChange={(e) => update({ headline: e.target.value })}
-                  placeholder={profile.headline}
-                  className={inputClass}
-                />
+                <HeaderInput value={current.headline} fallback={profile.headline} onChange={(headline) => update({ headline })} />
               </Field>
-              <Field label="About me (empty = the site intro)" wide>
-                <textarea
-                  value={current.summary}
-                  onChange={(e) => update({ summary: e.target.value })}
-                  placeholder={profile.intro}
-                  rows={5}
-                  className={cn(inputClass, "h-auto py-2 leading-6")}
+              <Field label="About me" wide>
+                <HeaderInput multiline value={current.summary} fallback={profile.intro} onChange={(summary) => update({ summary })} />
+              </Field>
+              <Field label="Email">
+                <HeaderInput value={current.email} fallback={profile.email ?? ""} onChange={(email) => update({ email })} />
+              </Field>
+              <Field label="Phone number">
+                <HeaderInput value={current.phone} fallback="" onChange={(phone) => update({ phone })} placeholder="+421 …" />
+              </Field>
+              <Field label="Website">
+                <HeaderInput value={current.website} fallback={siteUrl} onChange={(website) => update({ website })} placeholder="yourdomain.com" />
+              </Field>
+              <Field label="Address">
+                <HeaderInput
+                  value={current.location}
+                  fallback={source[current.language].regionLocation[region]}
+                  onChange={(location) => update({ location })}
                 />
               </Field>
               <Field label="Nationality">
-                <input value={current.nationality} onChange={(e) => update({ nationality: e.target.value })} className={inputClass} />
+                <HeaderInput value={current.nationality} fallback="" onChange={(nationality) => update({ nationality })} />
               </Field>
               <Field label="Date of birth">
-                <input
-                  value={current.dateOfBirth}
-                  onChange={(e) => update({ dateOfBirth: e.target.value })}
-                  placeholder="DD/MM/YYYY"
-                  className={inputClass}
-                />
-              </Field>
-              <Field label="Phone number">
-                <input value={current.phone} onChange={(e) => update({ phone: e.target.value })} className={inputClass} />
+                <HeaderInput value={current.dateOfBirth} fallback="" onChange={(dateOfBirth) => update({ dateOfBirth })} placeholder="DD/MM/YYYY" />
               </Field>
               <Field label="Mother tongue">
-                <input value={current.motherTongue} onChange={(e) => update({ motherTongue: e.target.value })} className={inputClass} />
+                <HeaderInput value={current.motherTongue} fallback="" onChange={(motherTongue) => update({ motherTongue })} />
               </Field>
             </div>
+            <p className="mt-2 text-xs text-muted-foreground">
+              Fields start with the site&apos;s text; clear one to leave it out of the CV. The pencil next to any entry below edits its
+              CV text.
+            </p>
             <div className="mt-3 flex flex-wrap gap-x-6 gap-y-2">
               <Toggle checked={current.photo} onChange={(photo) => update({ photo })} label="Photo" />
               <Toggle checked={current.showStack} onChange={(showStack) => update({ showStack })} label="Technologies under entries" />
@@ -346,17 +364,30 @@ export function AdminApp({ source, initialConfig, storage }: Props) {
           {stale.length > 0 && (
             <div className="flex flex-wrap items-center gap-3 rounded-xl border border-amber-300 bg-amber-50 px-4 py-3 text-[13px] text-amber-900">
               <span className="mr-auto">
-                {stale.length} approved {stale.length === 1 ? "entry no longer exists" : "entries no longer exist"} in the content (renamed or
+                {stale.length} saved {stale.length === 1 ? "entry no longer exists" : "entries no longer exist"} in the content (renamed or
                 removed).
               </span>
-              <Button size="sm" variant="outline" onClick={() => update({ items: current.items.filter((i) => known.has(i)) })}>
+              <Button size="sm" variant="outline" onClick={() =>
+                  update({
+                    items: current.items.filter((i) => known.has(i)),
+                    overrides: Object.fromEntries(Object.entries(current.overrides).filter(([id]) => editable.has(id))),
+                  })
+                }>
                 Clean up
               </Button>
             </div>
           )}
 
           {catalog.map((group) => (
-            <CatalogCard key={group.key} group={group} selected={current.items} onChange={setItems} />
+            <CatalogCard
+              key={group.key}
+              group={group}
+              selected={current.items}
+              onChange={setItems}
+              overrides={current.overrides}
+              onEdit={editField}
+              onReset={resetEntry}
+            />
           ))}
         </div>
 
@@ -434,15 +465,22 @@ function leafIds(item: CatalogItem): string[] {
   return item.id.startsWith("group:") ? (item.children ?? []).map((c) => c.id) : [item.id, ...(item.children ?? []).map((c) => c.id)];
 }
 
+interface EditProps {
+  overrides: CvOverrides;
+  onEdit: (id: string, key: string, value: string | null) => void;
+  onReset: (id: string) => void;
+}
+
 function CatalogCard({
   group,
   selected,
   onChange,
+  ...edit
 }: {
   group: CatalogGroup;
   selected: string[];
   onChange: (ids: string[], on: boolean) => void;
-}) {
+} & EditProps) {
   const on = new Set(selected);
   const all = group.items.flatMap(leafIds);
   const count = all.filter((id) => on.has(id)).length;
@@ -479,23 +517,24 @@ function CatalogCard({
             return (
               <li key={item.id}>
                 <Row
+                  item={item}
                   checked={checked}
                   indeterminate={mixed}
-                  label={item.label}
-                  detail={item.detail}
                   onChange={(v) => onChange(isGroup ? children.map((c) => c.id) : v ? [item.id] : leafIds(item), v)}
                   strong
+                  {...edit}
                 />
                 {children.length > 0 && (
-                  <ul className={cn("ml-6 mt-0.5 space-y-0.5 border-l pl-3", isGroup && "flex flex-wrap gap-x-4 space-y-0")}>
+                  <ul className={cn("ml-6 mt-0.5 space-y-0.5 border-l pl-3", isGroup && "grid gap-x-4 space-y-0 sm:grid-cols-2")}>
                     {children.map((c) => (
                       <li key={c.id}>
                         <Row
+                          item={c}
                           checked={on.has(c.id)}
                           disabled={!isGroup && !on.has(item.id)}
-                          label={c.label}
-                          detail={isGroup ? undefined : c.detail}
+                          hideDetail={isGroup}
                           onChange={(v) => onChange([c.id], v)}
+                          {...edit}
                         />
                       </li>
                     ))}
@@ -511,43 +550,140 @@ function CatalogCard({
 }
 
 function Row({
+  item,
   checked,
   indeterminate,
   disabled,
-  label,
-  detail,
   strong,
+  hideDetail,
   onChange,
+  overrides,
+  onEdit,
+  onReset,
 }: {
+  item: CatalogItem;
   checked: boolean;
   indeterminate?: boolean;
   disabled?: boolean;
-  label: string;
-  detail?: string;
   strong?: boolean;
+  hideDetail?: boolean;
   onChange: (v: boolean) => void;
-}) {
+} & EditProps) {
+  const [open, setOpen] = useState(false);
+  const edits = overrides[item.id];
+  const edited = Boolean(edits && Object.keys(edits).length);
+  // Show the CV wording in the list once it is edited.
+  const label = edits?.title ?? edits?.label ?? edits?.name ?? item.label;
+
   return (
-    <label
-      className={cn(
-        "flex cursor-pointer items-start gap-2.5 rounded-md px-1.5 py-1 text-sm hover:bg-muted/60",
-        disabled && "cursor-not-allowed opacity-45 hover:bg-transparent",
+    <div className={cn("rounded-md", open && "bg-muted/40 ring-1 ring-border")}>
+      <div className={cn("flex items-start gap-1 rounded-md hover:bg-muted/60", disabled && "opacity-45 hover:bg-transparent")}>
+        <label className={cn("flex min-w-0 flex-1 cursor-pointer items-start gap-2.5 px-1.5 py-1 text-sm", disabled && "cursor-not-allowed")}>
+          <input
+            type="checkbox"
+            checked={checked}
+            disabled={disabled}
+            ref={(el) => {
+              if (el) el.indeterminate = !!indeterminate;
+            }}
+            onChange={(e) => onChange(e.target.checked)}
+            className="mt-[3px] size-4 shrink-0 accent-[var(--accent)]"
+          />
+          <span className="min-w-0">
+            <span className={cn(strong && "font-medium")}>{label}</span>
+            {edited && (
+              <span className="ml-2 rounded bg-accent-soft px-1.5 py-px align-middle text-[10px] font-medium uppercase tracking-wide text-accent">
+                edited
+              </span>
+            )}
+            {item.detail && !hideDetail && <span className="block text-xs leading-5 text-muted-foreground">{item.detail}</span>}
+          </span>
+        </label>
+        {item.fields.length > 0 && (
+          <button
+            type="button"
+            onClick={() => setOpen((o) => !o)}
+            aria-expanded={open}
+            aria-label={`Edit ${item.label}`}
+            title="Edit for the CV"
+            className={cn(
+              "mt-0.5 grid size-7 shrink-0 place-items-center rounded-md text-muted-foreground hover:bg-muted hover:text-foreground",
+              open && "bg-muted text-foreground",
+            )}
+          >
+            <Pencil className="size-3.5" />
+          </button>
+        )}
+      </div>
+
+      {open && (
+        <div className="space-y-2.5 px-3 pb-3 pt-1.5">
+          {item.fields.map((f) => {
+            const value = edits?.[f.key] ?? f.value;
+            const changed = edits?.[f.key] !== undefined;
+            // Typing the site text back removes the edit.
+            const set = (v: string) => onEdit(item.id, f.key, v === f.value ? null : v);
+            return (
+              <label key={f.key} className="block space-y-1">
+                <span className="flex items-center gap-2 text-xs font-medium text-muted-foreground">
+                  {f.label}
+                  {changed && <span className="text-accent">· edited</span>}
+                </span>
+                {f.multiline ? (
+                  <textarea
+                    value={value}
+                    onChange={(e) => set(e.target.value)}
+                    rows={Math.min(8, Math.max(2, value.split("\n").length + 1))}
+                    className={cn(inputClass, "h-auto bg-surface py-2 leading-6")}
+                  />
+                ) : (
+                  <input value={value} onChange={(e) => set(e.target.value)} className={cn(inputClass, "bg-surface")} />
+                )}
+              </label>
+            );
+          })}
+          <div className="flex items-center gap-2 pt-0.5">
+            <p className="mr-auto text-xs text-muted-foreground">Changes apply to this CV only; the site keeps its text.</p>
+            {edited && (
+              <Button size="sm" variant="ghost" onClick={() => onReset(item.id)}>
+                <RotateCcw className="size-3.5" /> Site text
+              </Button>
+            )}
+          </div>
+        </div>
       )}
-    >
-      <input
-        type="checkbox"
-        checked={checked}
-        disabled={disabled}
-        ref={(el) => {
-          if (el) el.indeterminate = !!indeterminate;
-        }}
-        onChange={(e) => onChange(e.target.checked)}
-        className="mt-[3px] size-4 shrink-0 accent-[var(--accent)]"
-      />
-      <span className="min-w-0">
-        <span className={cn(strong && "font-medium")}>{label}</span>
-        {detail && <span className="block text-xs leading-5 text-muted-foreground">{detail}</span>}
-      </span>
-    </label>
+    </div>
+  );
+}
+
+/**
+ * A header field shown with its current CV text. Empty in the config means the
+ * site value, "-" means left out - so clearing the box hides it on the CV.
+ */
+function HeaderInput({
+  value,
+  fallback,
+  onChange,
+  multiline,
+  placeholder,
+}: {
+  value: string;
+  fallback: string;
+  onChange: (v: string) => void;
+  multiline?: boolean;
+  placeholder?: string;
+}) {
+  const shown = value === "-" ? "" : value || fallback;
+  const set = (v: string) => onChange(v === fallback ? "" : v === "" ? (fallback ? "-" : "") : v);
+  return multiline ? (
+    <textarea
+      value={shown}
+      onChange={(e) => set(e.target.value)}
+      placeholder={placeholder ?? "Left out of the CV"}
+      rows={5}
+      className={cn(inputClass, "h-auto py-2 leading-6")}
+    />
+  ) : (
+    <input value={shown} onChange={(e) => set(e.target.value)} placeholder={placeholder ?? "Left out of the CV"} className={inputClass} />
   );
 }

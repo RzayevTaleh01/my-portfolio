@@ -3,12 +3,14 @@
  * Used by the PDF route (server) and the admin preview (browser).
  */
 import { Document, Font, Image, Link, Page, StyleSheet, Text, View } from "@react-pdf/renderer";
+import { PdfIcon } from "./icons";
 import type { CvDocumentData, CvEntry } from "./model";
 
 const ACCENT = "#1b4f9c";
 const INK = "#1f2430";
 const MUTED = "#5b6472";
 const RULE = "#b9c7de";
+const BAND = "#eef2f9";
 
 let fontsFrom: string | null = null;
 
@@ -42,13 +44,24 @@ const s = StyleSheet.create({
     paddingBottom: 40,
     paddingHorizontal: 40,
   },
-  header: { flexDirection: "row", gap: 16, marginBottom: 14 },
-  photo: { width: 74, height: 74, objectFit: "cover", borderRadius: 4 },
-  name: { fontSize: 21, fontWeight: 700, color: ACCENT, lineHeight: 1.15 },
-  headline: { fontSize: 10.5, fontWeight: 600, marginTop: 2, marginBottom: 6 },
-  contactRow: { flexDirection: "row", flexWrap: "wrap", columnGap: 10, rowGap: 1 },
-  contactItem: { fontSize: 8.4 },
-  contactLabel: { fontWeight: 700 },
+  identity: { flexDirection: "row", alignItems: "center", gap: 16 },
+  photo: { width: 70, height: 70, objectFit: "cover", borderRadius: 4 },
+  name: { fontSize: 22, fontWeight: 700, color: ACCENT, lineHeight: 1.15 },
+  headline: { fontSize: 11, fontWeight: 600, marginTop: 3 },
+  // Full-width strip under the name: icon + value, three per row.
+  contactBar: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    rowGap: 5,
+    marginTop: 12,
+    marginBottom: 4,
+    paddingVertical: 7,
+    paddingHorizontal: 10,
+    backgroundColor: BAND,
+    borderRadius: 4,
+  },
+  contactCell: { width: "33.33%", flexDirection: "row", alignItems: "center", gap: 5, paddingRight: 6 },
+  contactText: { flex: 1, fontSize: 8.4 },
   link: { color: ACCENT, textDecoration: "none" },
   section: { marginTop: 12 },
   sectionHead: { flexDirection: "row", alignItems: "center", gap: 8, marginBottom: 7 },
@@ -124,40 +137,31 @@ export function CvDocument({ data }: { data: CvDocumentData }) {
   return (
     <Document title={`${data.name} - CV`} author={data.name} subject={data.headline} language={data.language}>
       <Page size="A4" style={s.page}>
-        <View style={s.header}>
+        <View style={s.identity}>
           {/* eslint-disable-next-line jsx-a11y/alt-text -- react-pdf Image has no alt */}
           {data.photo ? <Image src={data.photo} style={s.photo} /> : null}
           <View style={{ flex: 1 }}>
             <Text style={s.name}>{data.name}</Text>
-            <Text style={s.headline}>{data.headline}</Text>
-            <View style={s.contactRow}>
-              {data.contact.map((c) => (
-                <Text key={c.label} style={s.contactItem}>
-                  <Text style={s.contactLabel}>{c.label}: </Text>
-                  {c.href ? (
-                    <Link src={c.href} style={s.link}>
-                      {c.value}
-                    </Link>
-                  ) : (
-                    c.value
-                  )}
-                </Text>
-              ))}
-            </View>
-            {data.links.length > 0 && (
-              <View style={[s.contactRow, { marginTop: 2 }]}>
-                {data.links.map((l) => (
-                  <Text key={l.href} style={s.contactItem}>
-                    <Text style={s.contactLabel}>{l.label}: </Text>
-                    <Link src={l.href} style={s.link}>
-                      {l.href.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "")}
-                    </Link>
-                  </Text>
-                ))}
-              </View>
-            )}
+            {data.headline ? <Text style={s.headline}>{data.headline}</Text> : null}
           </View>
         </View>
+
+        {data.contact.length > 0 && (
+          <View style={s.contactBar}>
+            {data.contact.map((c) => (
+              <View key={`${c.icon}-${c.value}`} style={s.contactCell}>
+                <PdfIcon icon={c.icon} size={9} color={ACCENT} />
+                {c.href ? (
+                  <Link src={c.href} style={[s.contactText, s.link]}>
+                    {c.value}
+                  </Link>
+                ) : (
+                  <Text style={s.contactText}>{c.value}</Text>
+                )}
+              </View>
+            ))}
+          </View>
+        )}
 
         {data.summary ? (
           <Section title={L.aboutMe}>

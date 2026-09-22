@@ -62,7 +62,8 @@ export default async function RootLayout(props: LayoutProps<"/[lang]">) {
   const content = getContent(lang);
   const { projects } = content;
   // Location depends on where the visitor is (see src/content/locations.ts).
-  const profile = withRegion(content.profile, lang, await getRegion());
+  const region = await getRegion();
+  const profile = withRegion(content.profile, lang, region);
 
   const menu: CommandMenuProps = {
     nav: navigation.map((n) => ({ href: localize(lang, n.href), label: t.nav[n.key] })),
@@ -100,7 +101,7 @@ export default async function RootLayout(props: LayoutProps<"/[lang]">) {
               </div>
             </div>
             <ClapButton t={t.clap} />
-            <Assistant topics={buildAssistantTopics(lang, { ...content, profile }, t)} t={t.assistant} />
+            <Assistant topics={buildAssistantTopics(lang, region, { ...content, profile }, t)} t={t.assistant} />
           </MotionProvider>
         </ThemeProvider>
       </body>

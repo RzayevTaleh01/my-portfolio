@@ -165,7 +165,7 @@ export function Assistant({ topics, t }: { topics: AssistantTopic[]; t: Assistan
               <div key={`${turn.topic.id}-${i}`} className="space-y-3">
                 <Question>{turn.question}</Question>
                 <Bubble>
-                  {turn.topic.answer}
+                  <span className="whitespace-pre-line">{turn.topic.answer}</span>
                   {turn.topic.link && (
                     <Link
                       href={turn.topic.link.href}

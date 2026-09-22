@@ -45,7 +45,6 @@ export default async function ResearchPage(props: PageProps<"/[lang]/research">)
                       </span>
                     ))}
                   </div>
-                  {/* A direction can be something I am only reading into, with nothing built yet. */}
                   {d.projects.length > 0 && (
                     <p className="text-xs text-subtle-foreground">
                       {t.research.in}{" "}

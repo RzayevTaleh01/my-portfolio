@@ -41,7 +41,6 @@ export default async function ProjectPage(props: PageProps<"/[lang]/projects/[sl
 
   const next = projects[(projects.findIndex((p) => p.slug === project.slug) + 1) % projects.length];
 
-  // Only sections with content get a number, so numbering never skips.
   const sections = [
     "overview",
     project.problem?.length ? "problem" : null,

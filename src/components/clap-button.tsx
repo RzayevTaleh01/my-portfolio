@@ -11,7 +11,6 @@ export interface ClapStrings {
   count: string;
 }
 
-/** Remembers the clap in this browser too, as a backup to the server cookie. */
 const STORAGE_KEY = "portfolio-clapped";
 const NOTE_TIME = 2200;
 const SPARKS = 8;
@@ -30,7 +29,6 @@ function rememberClap() {
   } catch {}
 }
 
-/** A raised hand with three motion lines - the "clap". Paths after lucide's Hand icon. */
 function ClapIcon({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" aria-hidden className={className}>
@@ -45,11 +43,6 @@ function ClapIcon({ className }: { className?: string }) {
   );
 }
 
-/**
- * Medium-style applause, pinned to the bottom-left corner. One clap per
- * visitor (a cookie on the server, localStorage in the browser); the total
- * is shared by everyone and stored with the site's Vercel Blob store.
- */
 export function ClapButton({ t }: { t: ClapStrings }) {
   const [count, setCount] = useState<number | null>(null);
   const [clapped, setClapped] = useState(false);
@@ -68,7 +61,6 @@ export function ClapButton({ t }: { t: ClapStrings }) {
         if (data.clapped) rememberClap();
         setClapped(data.clapped || rememberedClap());
       })
-      // Offline or failed: at least show this browser's own clap.
       .catch(() => active && setClapped(rememberedClap()));
     return () => {
       active = false;
@@ -89,7 +81,6 @@ export function ClapButton({ t }: { t: ClapStrings }) {
       return;
     }
 
-    // Optimistic: the animation and +1 play at once, the server catches up.
     const before = count ?? 0;
     setClapped(true);
     setCount(before + 1);
@@ -102,7 +93,6 @@ export function ClapButton({ t }: { t: ClapStrings }) {
       const res = await fetch("/api/claps", { method: "POST" });
       if (!res.ok) throw new Error(String(res.status));
       const data = (await res.json()) as { count: number };
-      // A freshly written blob can be missing from the first listing.
       setCount(Math.max(data.count, before + 1));
     } catch {
       setClapped(false);
@@ -119,7 +109,6 @@ export function ClapButton({ t }: { t: ClapStrings }) {
   return (
     <div className="no-print fixed bottom-10 left-5 z-40 lg:bottom-12 lg:left-6">
       <div className="relative">
-        {/* The note floats above the button, like Medium's "+1" bubble. */}
         <AnimatePresence>
           {note && (
             <motion.div
@@ -139,7 +128,6 @@ export function ClapButton({ t }: { t: ClapStrings }) {
           )}
         </AnimatePresence>
 
-        {/* Burst: a ring and sparks thrown out from the button on the clap. */}
         <AnimatePresence>
           {burst > 0 && (
             <motion.span key={burst} className="pointer-events-none absolute inset-0" initial={{ opacity: 1 }} exit={{ opacity: 0 }}>
@@ -179,7 +167,6 @@ export function ClapButton({ t }: { t: ClapStrings }) {
             clapped ? "border-accent bg-accent-soft text-accent" : "text-muted-foreground hover:border-border-strong hover:text-foreground",
           )}
         >
-          {/* The count sits inside the button, so it stays readable over any page content. */}
           <ClapIcon className={cn("transition-all", showCount ? "-mt-1 size-6" : "size-7")} />
           {showCount && (
             <span className="-mb-0.5 h-3.5 overflow-hidden text-[11px] font-semibold leading-3.5 tabular-nums">

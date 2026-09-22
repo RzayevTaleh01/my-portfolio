@@ -12,7 +12,6 @@ const prettyCode: PrettyCodeOptions = {
   keepBackground: false,
 };
 
-/** Internal links in posts are written without a locale ("/projects/x") and prefixed here. */
 function anchorFor(lang: Locale) {
   return function Anchor({ href = "", ...props }: React.ComponentProps<"a">) {
     if (href.startsWith("#")) return <a href={href} {...props} />;
@@ -21,7 +20,6 @@ function anchorFor(lang: Locale) {
   };
 }
 
-/** Use inside posts: <Callout>Text</Callout> */
 function Callout({ children }: { children: React.ReactNode }) {
   return <div className="not-prose my-6 rounded-lg border bg-muted/40 px-4 py-3 text-sm leading-relaxed">{children}</div>;
 }

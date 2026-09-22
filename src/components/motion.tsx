@@ -2,12 +2,10 @@
 
 import { MotionConfig, motion, type HTMLMotionProps } from "motion/react";
 
-/** Respects the user's "reduce motion" OS setting for every animation. */
 export function MotionProvider({ children }: { children: React.ReactNode }) {
   return <MotionConfig reducedMotion="user">{children}</MotionConfig>;
 }
 
-/** A short, quiet fade the first time a section scrolls into view. */
 export function Reveal(props: HTMLMotionProps<"div">) {
   return (
     <motion.div

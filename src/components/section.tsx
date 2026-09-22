@@ -3,7 +3,6 @@ import Link from "next/link";
 import { Reveal } from "@/components/motion";
 import { cn } from "@/lib/utils";
 
-/** Title block at the top of a page. */
 export function PageHeader({ title, description }: { title: string; description?: React.ReactNode }) {
   return (
     <header className="mb-14 space-y-3">
@@ -13,7 +12,6 @@ export function PageHeader({ title, description }: { title: string; description?
   );
 }
 
-/** A titled section. The whole section fades in once as it scrolls into view. */
 export function Section({
   title,
   index,
@@ -24,7 +22,6 @@ export function Section({
   children,
 }: {
   title: string;
-  /** Optional "01"-style number - used only on long case-study pages. */
   index?: string;
   href?: string;
   linkLabel?: string;
@@ -68,7 +65,6 @@ export function ArrowLink({ href, children, className }: { href: string; childre
   );
 }
 
-/** Underlined inline text link (used in publication rows). */
 export function TextLink({ href, children }: { href: string; children: React.ReactNode }) {
   return (
     <a

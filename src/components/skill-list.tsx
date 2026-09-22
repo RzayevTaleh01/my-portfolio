@@ -1,6 +1,5 @@
 import type { SkillGroup } from "@/content";
 
-/** Skills grouped by area - one definition list, shared by the home page and the resume. */
 export function SkillList({ groups }: { groups: SkillGroup[] }) {
   return (
     <dl className="space-y-4">

@@ -1,8 +1,5 @@
 import type { Project } from "../types";
 
-// Built at ITM for UNEC's Student Scientific Society. Editorial work happens in OJS;
-// the public journal site and the surrounding tooling are ours.
-
 export const unecTtj: Project = {
   slug: "unec-ttj",
   title: "UNEC Student Research Journal",

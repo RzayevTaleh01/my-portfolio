@@ -3,15 +3,8 @@
 import { usePathname } from "next/navigation";
 import { useEffect, useRef } from "react";
 
-/**
- * Thin accent-coloured progress bar at the top of the page during navigation.
- * Starts on internal link clicks (and on `startRouteProgress()` before a
- * programmatic router.push), completes when the new pathname renders.
- */
-
 const START_EVENT = "route-progress:start";
 
-/** Call before `router.push(...)` so programmatic navigations show the bar too. */
 export function startRouteProgress() {
   window.dispatchEvent(new Event(START_EVENT));
 }
@@ -33,10 +26,8 @@ function start(el: HTMLDivElement, s: BarState) {
   s.value = 0.08;
   el.style.transition = "none";
   render(el, s.value, true);
-  // Force a reflow so the next transition starts from the reset position.
   void el.offsetWidth;
   el.style.transition = "transform 200ms ease-out, opacity 300ms ease";
-  // Trickle towards 90% while the next page loads.
   s.timer = setInterval(() => {
     s.value += (0.9 - s.value) * 0.12;
     render(el, s.value, true);
@@ -58,7 +49,6 @@ function isInternalNavigation(event: MouseEvent): boolean {
   if (!anchor || anchor.target === "_blank" || anchor.hasAttribute("download")) return false;
   const url = new URL(anchor.href, window.location.href);
   if (url.origin !== window.location.origin) return false;
-  // Same page (or only the #hash differs): no navigation to wait for.
   return url.pathname !== window.location.pathname || url.search !== window.location.search;
 }
 
@@ -78,7 +68,6 @@ export function TopLoader() {
     };
   }, []);
 
-  // The new route has rendered.
   useEffect(() => {
     if (bar.current) done(bar.current, state.current);
   }, [pathname]);

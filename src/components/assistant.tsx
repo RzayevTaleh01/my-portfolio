@@ -35,10 +35,6 @@ interface Turn {
 const TEASER_DELAY = 2000;
 const THINKING_TIME = 900;
 
-/**
- * Floating "AI assistant". The answers are scripted from the site content -
- * no model behind it yet, and the panel says so.
- */
 export function Assistant({ topics, t }: { topics: AssistantTopic[]; t: AssistantStrings }) {
   const [open, setOpen] = useState(false);
   const [turns, setTurns] = useState<Turn[]>([]);
@@ -50,20 +46,17 @@ export function Assistant({ topics, t }: { topics: AssistantTopic[]; t: Assistan
   const asked = new Set(turns.map((turn) => turn.topic.id));
   const remaining = topics.filter((topic) => !asked.has(topic.id) && topic.id !== thinking?.topic.id);
 
-  // The nudge comes back a couple of seconds after every close, not just on the first visit.
   useEffect(() => {
     if (open || dismissed) return;
     const timer = setTimeout(() => setTeaser(true), TEASER_DELAY);
     return () => clearTimeout(timer);
   }, [open, dismissed]);
 
-  // Follow the conversation like a real chat (the container scrolls smoothly via CSS).
   useEffect(() => {
     const el = feed.current;
     if (el) el.scrollTop = el.scrollHeight;
   }, [turns, thinking]);
 
-  // Dismissing silences the nudge until the panel is opened again.
   const hideTeaser = () => {
     setTeaser(false);
     setDismissed(true);
@@ -83,14 +76,12 @@ export function Assistant({ topics, t }: { topics: AssistantTopic[]; t: Assistan
       open={open}
       onOpenChange={(next) => {
         setOpen(next);
-        // Opening clears the nudge and re-arms it for the next time the panel closes.
         if (next) {
           setTeaser(false);
           setDismissed(false);
         }
       }}
     >
-      {/* Same backdrop as the search dialog, so the chat reads as a layer above the page. */}
       {open && <div className="assistant-overlay fixed inset-0 z-40 bg-black/30 backdrop-blur-[2px]" aria-hidden />}
 
       <div className="no-print fixed bottom-10 right-5 z-50 flex flex-col items-end gap-3 lg:bottom-12 lg:right-6">
@@ -114,7 +105,6 @@ export function Assistant({ topics, t }: { topics: AssistantTopic[]; t: Assistan
           className="relative flex size-14 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-[0_10px_30px_-10px_rgb(0_0_0/0.45)] transition-transform hover:scale-105 data-[state=open]:scale-95"
         >
           {open ? <X className="size-6" /> : <Bot className="size-8" />}
-          {/* "Online" dot, hidden while the panel is open */}
           {!open && (
             <span className="absolute right-1 top-1 flex size-3.5">
               <span className="status-ping absolute inline-flex size-full rounded-full bg-accent" />

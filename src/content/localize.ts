@@ -1,10 +1,3 @@
-/**
- * Content translations are written as *overrides* of the English content:
- * same shape, text fields only. Technical fields (stack, code, formulas, links)
- * are never repeated. Arrays are merged index by index, and a length mismatch
- * fails the build so a translation can never silently drift out of place.
- */
-
 export type DeepPartial<T> = T extends (infer U)[]
   ? DeepPartial<U>[]
   : T extends object

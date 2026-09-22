@@ -32,10 +32,6 @@ function CredentialLink({ label, href, note }: { label: string; href: string; no
   );
 }
 
-/**
- * Projects done in a role, all on the same level: name and a green link to the
- * project page, a one-line description, and points that belong to that project only.
- */
 function Projects({ items, lang }: { items: RoleProject[]; lang: Locale }) {
   const t = getDictionary(lang).experience;
   return (
@@ -73,7 +69,6 @@ function Projects({ items, lang }: { items: RoleProject[]; lang: Locale }) {
   );
 }
 
-/** One title held at the organisation. Several of them stack up into a promotion track. */
 function Role({ role, lang, showPeriod }: { role: ExperienceRole; lang: Locale; showPeriod: boolean }) {
   const t = getDictionary(lang).experience;
   return (
@@ -81,7 +76,6 @@ function Role({ role, lang, showPeriod }: { role: ExperienceRole; lang: Locale; 
       <div>
         <h4 className="text-[15px] font-semibold tracking-tight">{role.title}</h4>
         <p className="flex flex-wrap items-center gap-x-2 text-xs text-muted-foreground">
-          {/* A single role repeats the organisation's own span, so it is left out. */}
           {showPeriod && (
             <>
               <span className="font-mono">{role.period}</span>
@@ -110,11 +104,6 @@ function Role({ role, lang, showPeriod }: { role: ExperienceRole; lang: Locale; 
   );
 }
 
-/**
- * One organisation on the experience timeline (render inside <Timeline>).
- * A single role reads as one block; several roles are grouped under the company,
- * the way a promotion track is normally shown.
- */
 export function ExperienceItem({ item, lang }: { item: Experience; lang: Locale }) {
   const single = item.roles.length === 1;
 
@@ -144,7 +133,6 @@ export function ExperienceItem({ item, lang }: { item: Experience; lang: Locale 
   );
 }
 
-/** Unpaid work and training programmes - same shape, no employment kind. */
 export function VolunteeringItem({ item, lang }: { item: Volunteering; lang: Locale }) {
   const t = getDictionary(lang).experience;
   return (

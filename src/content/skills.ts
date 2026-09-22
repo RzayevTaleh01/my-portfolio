@@ -34,8 +34,6 @@ export const researchDirections: ResearchDirection[] = [
   },
 ];
 
-// Source: resume, plus the AI group from the projects on GitHub.
-
 export const skills: SkillGroup[] = [
   {
     title: "Frontend",

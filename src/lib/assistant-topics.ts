@@ -9,22 +9,15 @@ import { getAllPosts } from "@/lib/posts";
 const SKILLS_PER_GROUP = 5;
 const FEATURED_PROJECTS = 4;
 
-/** "4 years" / "4 roky" / "5 rokov". */
 function yearsText(forms: Dictionary["assistant"]["years"], n: number) {
   const form = n === 1 ? forms.one : n >= 2 && n <= 4 ? forms.few : forms.other;
   return fmt(form, { n });
 }
 
-/** Earliest start year in "03/2023 - 08/2026" or "2021 - 2022". */
 function startYear(period: string) {
   return Number(period.match(/\d{4}/)?.[0] ?? new Date().getFullYear());
 }
 
-/**
- * Scripted answers for the quick-guide chat. They describe Taleh in the third
- * person and are assembled from the same content the pages render, so roles,
- * dates and counts stay correct (and translated) without a second copy.
- */
 export function buildAssistantTopics(lang: Locale, region: Region, content: SiteContent, dict: Dictionary): AssistantTopic[] {
   const t = dict.assistant;
   const { profile, experience, skills, projects, researchDirections, languages } = content;

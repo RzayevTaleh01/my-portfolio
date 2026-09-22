@@ -4,7 +4,6 @@ import { getPublishedConfig, hasBlobStore } from "@/lib/cv/store";
 import { AdminApp, Login } from "./admin-app";
 
 export default async function AdminPage() {
-  // Nothing about the CV reaches the browser before the code is checked on the server.
   if (!(await isAdmin())) return <Login configured={isAdminConfigured()} />;
 
   const storage = hasBlobStore() ? "blob" : process.env.NODE_ENV === "development" ? "file" : "none";

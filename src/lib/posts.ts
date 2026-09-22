@@ -5,12 +5,6 @@ import matter from "gray-matter";
 import readingTime from "reading-time";
 import { defaultLocale, hasLocale, type Locale } from "@/i18n/config";
 
-/**
- * Articles live in content/posts:
- *   my-post.mdx      English (required)
- *   my-post.sk.mdx   Slovak translation (optional)
- * A missing translation falls back to English.
- */
 const POSTS_DIR = path.join(process.cwd(), "content", "posts");
 
 export type PostCategory = "engineering" | "research";
@@ -24,7 +18,6 @@ export interface PostMeta {
   tags: string[];
   minutes: number;
   draft: boolean;
-  /** Language the post is actually shown in (differs from the page when it falls back). */
   locale: Locale;
 }
 
@@ -47,7 +40,6 @@ function parse(file: string, slug: string, locale: Locale): Post {
     slug,
     title: data.title,
     summary: data.summary,
-    // gray-matter parses bare YAML dates into Date objects.
     date: data.date instanceof Date ? data.date.toISOString() : String(data.date),
     category: data.category,
     tags: data.tags ?? [],
@@ -68,7 +60,6 @@ function findFile(slug: string, locale: Locale): { file: string; locale: Locale 
   return null;
 }
 
-/** Base slugs: files without a locale suffix. */
 function slugs(): string[] {
   if (!fs.existsSync(POSTS_DIR)) return [];
   return fs

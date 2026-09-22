@@ -1,9 +1,5 @@
 import type { Project } from "../types";
 
-// Built at Edumedia-Azerbaijan, mostly for the Ministry of Science and Education.
-// Short pages: what the system is and what I did on it - these are production
-// systems I worked on in a team, not case studies with my own architecture.
-
 const base = { kind: "work", organization: "Edumedia", links: {} } as const;
 
 export const edumediaProjects: Project[] = [

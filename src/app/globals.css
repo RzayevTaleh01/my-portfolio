@@ -3,12 +3,6 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
-/*
- * Design tokens - flat colours only, no gradients.
- * Soft warm off-white page, white cards, one quiet accent.
- * `.always-light` re-declares the same values, so anything carrying it keeps
- * the light palette even inside `.dark`.
- */
 :root,
 .always-light {
   --background: #fcfcfa;
@@ -95,7 +89,6 @@
   }
 }
 
-/* Page transition - a short, quiet fade on every route change. */
 @keyframes page-in {
   from {
     opacity: 0;
@@ -105,7 +98,6 @@
   animation: page-in 0.3s ease-out both;
 }
 
-/* Dialog (command menu) open animation */
 @keyframes overlay-in {
   from {
     opacity: 0;
@@ -124,7 +116,6 @@
   animation: dialog-in 0.2s ease-out;
 }
 
-/* Assistant: message entrance, typing dots and the "online" ping. */
 @keyframes msg-in {
   from {
     opacity: 0;
@@ -168,7 +159,6 @@
   animation: overlay-in 0.25s ease-out;
 }
 
-/* Popover (assistant panel) - anchored, so it must not shift sideways like the modal does. */
 @keyframes popover-in {
   from {
     opacity: 0;
@@ -179,7 +169,6 @@
   animation: popover-in 0.18s ease-out;
 }
 
-/* Mobile menu drawer - slides in from the left, out to the left. */
 @keyframes sheet-in {
   from {
     transform: translateX(-100%);
@@ -208,7 +197,6 @@
   animation: overlay-out 0.2s ease-in;
 }
 
-/* Long-form writing */
 .prose {
   --tw-prose-body: var(--foreground);
   --tw-prose-headings: var(--foreground);
@@ -238,7 +226,6 @@
   @apply no-underline;
 }
 
-/* Code blocks - rehype-pretty-code (posts) and shiki (case studies) */
 .prose pre,
 .code-block pre {
   @apply overflow-x-auto bg-transparent px-4 py-3.5 text-[13px] leading-relaxed;
@@ -282,7 +269,6 @@ code[data-theme] span,
     opacity: 1 !important;
     transform: none !important;
   }
-  /* The scroll-filled timeline line would print half-drawn; the static line stays. */
   .timeline-fill {
     display: none !important;
   }

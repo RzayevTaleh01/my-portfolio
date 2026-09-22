@@ -1,31 +1,34 @@
-import type { Region } from "@/i18n/region";
-import { cvFiles } from "@/lib/cv/model";
+import { unstable_cache } from "next/cache";
+import type { NextRequest } from "next/server";
+import { isRegion, type Region } from "@/i18n/region";
+import { CV_DOWNLOAD_NAME, CV_FILE, CV_PATH } from "@/lib/cv/model";
 import { renderCvPdf } from "@/lib/cv/render";
-import { getPublishedConfig } from "@/lib/cv/store";
+import { CV_CACHE_TAG, getPublishedConfig } from "@/lib/cv/store";
+import { visitorRegion } from "@/lib/visitor-region";
 
-/**
- * The downloadable CVs, generated from the site content and the selection
- * approved in /admin:
- *   /cv/taleh-rzayev-cv-sk.pdf - Slovakia
- *   /cv/taleh-rzayev-cv.pdf    - other countries
- * Built once and cached; saving in /admin expires the cache (see api/admin/cv-config).
- */
-export const dynamicParams = false;
+const LEGACY_FILES = ["taleh-rzayev-cv-sk.pdf"];
 
-export function generateStaticParams() {
-  return Object.values(cvFiles).map((file) => ({ file }));
-}
+const cachedPdf = unstable_cache(
+  async (region: Region) => (await renderCvPdf(region, await getPublishedConfig())).toString("base64"),
+  ["cv-pdf"],
+  { tags: [CV_CACHE_TAG] },
+);
 
-export async function GET(_request: Request, ctx: RouteContext<"/cv/[file]">) {
+export async function GET(request: NextRequest, ctx: RouteContext<"/cv/[file]">) {
   const { file } = await ctx.params;
-  const region = (Object.keys(cvFiles) as Region[]).find((r) => cvFiles[r] === file);
-  if (!region) return new Response("Not found", { status: 404 });
+  if (LEGACY_FILES.includes(file)) return Response.redirect(new URL(CV_PATH, request.url), 308);
+  if (file !== CV_FILE) return new Response("Not found", { status: 404 });
 
-  const pdf = await renderCvPdf(region, await getPublishedConfig());
+  const asked = request.nextUrl.searchParams.get("region");
+  const region = isRegion(asked) ? asked : visitorRegion(request);
+  const pdf = Buffer.from(await cachedPdf(region), "base64");
+
   return new Response(new Uint8Array(pdf), {
     headers: {
       "Content-Type": "application/pdf",
-      "Content-Disposition": 'inline; filename="Taleh_Rzayev_Resume.pdf"',
+      "Content-Disposition": `inline; filename="${CV_DOWNLOAD_NAME}"`,
+      "Cache-Control": "private, no-store",
+      Vary: "x-vercel-ip-country",
     },
   });
 }

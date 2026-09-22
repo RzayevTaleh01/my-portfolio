@@ -1,4 +1,3 @@
-/** Interface strings. `sk.ts` must have exactly the same shape. */
 export const en = {
   nav: {
     home: "Home",
@@ -56,7 +55,6 @@ export const en = {
     title: "Projects",
     description:
       "Each project is written up as a case study: the problem, the architecture layer by layer, how data flows, and the decisions behind it.",
-    // One group per project kind; empty groups are skipped.
     groups: {
       work: { title: "Work", intro: "Built at the companies I worked for." },
       freelance: { title: "Freelance", intro: "Client projects designed and delivered end to end." },
@@ -133,7 +131,6 @@ export const en = {
     teaser: "Want to know who Taleh Rzayev is? Quick answers about his work and research - have a look.",
     dismiss: "Dismiss",
     typing: "Thinking",
-    // {n} years - "1 year" / "4 years".
     years: { one: "{n} year", few: "{n} years", other: "{n} years" },
     topics: {
       who: "Who is Taleh Rzayev?",

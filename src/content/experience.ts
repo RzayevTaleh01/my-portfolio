@@ -1,7 +1,5 @@
 import type { Certificate, Education, Experience, Language, Volunteering } from "./types";
 
-// Source: Taleh_Rzayev_Resume_2026_09.pdf. Most recent first.
-
 export const experience: Experience[] = [
   {
     organization: "ITM - Information Technology Center",
@@ -100,7 +98,6 @@ export const experience: Experience[] = [
   },
 ];
 
-/** Unpaid work and the training programmes around it. Most recent first. */
 export const volunteering: Volunteering[] = [
   {
     organization: "Azerbaijan State Oil and Industry University - IT Department",
@@ -135,11 +132,6 @@ export const volunteering: Volunteering[] = [
   },
 ];
 
-/**
- * Two versions, picked by visitor region (see src/content/locations.ts):
- * `education` for visitors from Slovakia, `educationIntl` for everyone else.
- * Source: Taleh_Rzayev_Resume_2026_09.pdf and Taleh_Rzayev_FlowCV_Resume_2026-03-10.pdf.
- */
 export const education: Education[] = [
   {
     degree: "Bachelor",

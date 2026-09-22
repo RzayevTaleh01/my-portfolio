@@ -1,6 +1,5 @@
 import { codeToHtml } from "shiki";
 
-/** Server-rendered, syntax-highlighted code with light and dark themes. */
 export async function CodeBlock({ lang, title, source }: { lang: string; title?: string; source: string }) {
   const html = await codeToHtml(source, {
     lang,

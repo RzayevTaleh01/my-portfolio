@@ -11,7 +11,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...getAllPosts("en").map((p) => `/writing/${p.slug}`),
   ];
 
-  // One entry per page and language, each listing its translations.
   return paths.flatMap((path) =>
     locales.map((lang) => ({
       url: `${base}${localize(lang, path)}`,

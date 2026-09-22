@@ -4,10 +4,8 @@ import { withRegion } from "@/content/locations";
 import { locales, type Locale } from "@/i18n/config";
 import { ids, type CvLocaleSource, type CvSource } from "./model";
 
-/** The site content the CV is generated from, in every language. Plain data, safe to send to the browser. */
 export function getCvSource(): CvSource {
   const en = getContent("en");
-  // Both education lists, English first, each entry once. Same picks in every language.
   const seen = new Set<string>();
   const picks: { list: "education" | "educationIntl"; index: number }[] = [];
   (["education", "educationIntl"] as const).forEach((list) =>

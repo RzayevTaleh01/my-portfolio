@@ -3,7 +3,6 @@ import Link from "next/link";
 import { AvatarZoom, type AvatarZoomLabels } from "@/components/layout/avatar-zoom";
 import type { Profile } from "@/content";
 
-/** Photo, name and role - the identity block at the top of the sidebar. */
 export function ProfileCard({
   profile,
   homeHref,
@@ -15,7 +14,6 @@ export function ProfileCard({
 }) {
   return (
     <div className="space-y-4">
-      {/* Square, like the source photo, so nothing is cropped out of the frame. */}
       <AvatarZoom
         src={profile.avatar}
         name={profile.name}

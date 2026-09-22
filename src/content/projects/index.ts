@@ -10,7 +10,6 @@ import { langvis } from "./langvis";
 import { unecTtj } from "./unec-ttj";
 import { vacancyBot } from "./vacancy-bot";
 
-// Order here is the display order.
 export const projects: Project[] = [
   diaspor,
   unecTtj,

@@ -43,7 +43,6 @@ export default async function HomePage(props: PageProps<"/[lang]">) {
 
   return (
     <div className="space-y-20">
-      {/* Intro */}
       <section className="space-y-6">
         <h1 className="text-[26px] font-semibold leading-snug tracking-tight sm:text-[32px]">
           {fmt(t.home.greeting, { name: profile.name })}
@@ -67,7 +66,6 @@ export default async function HomePage(props: PageProps<"/[lang]">) {
         </div>
       </section>
 
-      {/* Two tracks */}
       <div className="grid gap-3 sm:grid-cols-2">
         {tracks.map(({ icon: Icon, ...track }) => (
           <Link
@@ -92,7 +90,6 @@ export default async function HomePage(props: PageProps<"/[lang]">) {
           ))}
         </Timeline>
       </Section>
-
 
       <Section id="skills" title={t.home.skills}>
         <SkillList groups={skills} />

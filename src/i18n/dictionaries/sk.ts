@@ -133,7 +133,6 @@ export const sk: Dictionary = {
     teaser: "Chcete vedieť, kto je Taleh Rzayev? Rýchle odpovede o jeho práci a výskume - pozrite sa.",
     dismiss: "Zavrieť",
     typing: "Rozmýšľa",
-    // {n} rokov - "1 rok" / "4 roky" / "5 rokov".
     years: { one: "{n} rok", few: "{n} roky", other: "{n} rokov" },
     topics: {
       who: "Kto je Taleh Rzayev?",

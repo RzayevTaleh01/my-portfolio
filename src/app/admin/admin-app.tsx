@@ -11,7 +11,8 @@ import {
   buildCvData,
   catalogIds,
   editableIds,
-  cvFiles,
+  CV_DOWNLOAD_NAME,
+  CV_PATH,
   flatItems,
   regionLabels,
   siteFields,
@@ -31,13 +32,9 @@ type Storage = "blob" | "file" | "none";
 interface Props {
   source: CvSource;
   initialConfig: CvConfig;
-  /** Where Save writes: Vercel Blob (live), the local JSON file (npm run dev), or nowhere. */
   storage: Storage;
 }
 
-// ─── Login ────────────────────────────────────────────────
-
-/** The code is checked on the server (ADMIN_CODE); a correct one sets a session cookie. */
 export function Login({ configured }: { configured: boolean }) {
   const router = useRouter();
   const [code, setCode] = useState("");
@@ -96,8 +93,6 @@ export function Login({ configured }: { configured: boolean }) {
   );
 }
 
-// ─── CV builder ───────────────────────────────────────────
-
 function useCvPreview(source: CvSource, config: CvRegionConfig, region: Region) {
   const [url, setUrl] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
@@ -136,7 +131,6 @@ function useCvPreview(source: CvSource, config: CvRegionConfig, region: Region) 
   return { url, busy, error, regenerate: generate };
 }
 
-/** Every region with its own full copy of the CV text (see withOwnCopy). */
 function ownCopies(source: CvSource, config: CvConfig): CvConfig {
   const regions = Object.fromEntries(
     (Object.keys(config.regions) as Region[]).map((r) => [r, withOwnCopy(source, r, config.regions[r])]),
@@ -147,8 +141,6 @@ function ownCopies(source: CvSource, config: CvConfig): CvConfig {
 export function AdminApp({ source, initialConfig, storage }: Props) {
   const router = useRouter();
   const [saved, setSaved] = useState(initialConfig);
-  // The builder edits its own copy; site text only comes in through "Import from site".
-  // Anything filled in here that the saved config lacks shows up as unsaved.
   const [config, setConfig] = useState(() => ownCopies(source, initialConfig));
   const [region, setRegion] = useState<Region>("sk");
   const [saving, setSaving] = useState(false);
@@ -172,7 +164,6 @@ export function AdminApp({ source, initialConfig, storage }: Props) {
   const setItems = (ids: string[], on: boolean) => {
     const set = new Set(current.items);
     ids.forEach((id) => (on ? set.add(id) : set.delete(id)));
-    // Keep the file order stable: catalog order first, unknown ids last.
     const ordered = [...known].filter((id) => set.has(id));
     update({ items: [...ordered, ...[...set].filter((id) => !known.has(id))] });
   };
@@ -186,7 +177,6 @@ export function AdminApp({ source, initialConfig, storage }: Props) {
     update({ overrides });
   };
 
-  /** Replaces the CV text of these entries with the site's current text. */
   const importItems = (items: CatalogItem[]) => {
     const overrides = { ...current.overrides };
     items.filter((i) => i.fields.length).forEach((i) => (overrides[i.id] = siteFields(i)));
@@ -255,7 +245,6 @@ export function AdminApp({ source, initialConfig, storage }: Props) {
     await fetch("/api/admin/session", { method: "DELETE" });
     router.refresh();
   }
-
 
   return (
     <div className="min-h-dvh">
@@ -432,13 +421,13 @@ export function AdminApp({ source, initialConfig, storage }: Props) {
               </Button>
               {preview.url && (
                 <Button size="sm" variant="outline" asChild>
-                  <a href={preview.url} download="Taleh_Rzayev_Resume.pdf">
+                  <a href={preview.url} download={CV_DOWNLOAD_NAME}>
                     <Download className="size-3.5" /> Draft PDF
                   </a>
                 </Button>
               )}
               <Button size="sm" variant="outline" asChild>
-                <a href={`/cv/${cvFiles[region]}`} target="_blank" rel="noreferrer" title="The PDF the site serves right now">
+                <a href={`${CV_PATH}?region=${region}`} target="_blank" rel="noreferrer" title="The PDF the site serves right now">
                   <ExternalLink className="size-3.5" /> Published
                 </a>
               </Button>
@@ -456,8 +445,6 @@ export function AdminApp({ source, initialConfig, storage }: Props) {
     </div>
   );
 }
-
-// ─── Pieces ───────────────────────────────────────────────
 
 const inputClass = "h-9 w-full rounded-lg border bg-background px-3 text-sm outline-none focus:border-ring";
 
@@ -615,10 +602,8 @@ function Row({
 } & EditProps) {
   const [open, setOpen] = useState(false);
   const edits = overrides[item.id];
-  // "edited" = the CV text differs from the site's current text.
   const differs = (key: string, site: string) => edits?.[key] !== undefined && edits[key] !== site;
   const edited = item.fields.some((f) => differs(f.key, f.value));
-  // Show the CV wording in the list once it is edited.
   const label = edits?.title ?? edits?.label ?? edits?.name ?? item.label;
 
   return (
@@ -697,7 +682,6 @@ function Row({
   );
 }
 
-/** A header field with the CV's own text; an empty box leaves it out of the CV. */
 function HeaderInput({
   value: shown,
   onChange: set,

@@ -13,7 +13,6 @@ import type { ChromeProps } from "@/components/layout/sidebar";
 import { Socials } from "@/components/layout/socials";
 import { ThemeToggle } from "@/components/theme";
 
-/** Top bar shown below the `lg` breakpoint; the menu slides in from the left as a drawer. */
 export function MobileHeader({ lang, profile, menu }: ChromeProps) {
   const [open, setOpen] = useState(false);
   const home = menu.nav[0].href;

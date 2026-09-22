@@ -8,10 +8,8 @@ import { CvDocument, registerCvFonts } from "./document";
 import { buildCvData, type CvConfig } from "./model";
 import { getCvSource } from "./source";
 
-// Traced into the server functions by outputFileTracingIncludes in next.config.ts.
 const publicDir = path.join(process.cwd(), "public");
 
-/** A region's CV, as PDF bytes, from the given selection. */
 export async function renderCvPdf(region: Region, config: CvConfig) {
   registerCvFonts(path.join(publicDir, "fonts", "cv"));
   const photo = { data: await readFile(path.join(publicDir, "avatar-cv.jpg")), format: "jpg" as const };

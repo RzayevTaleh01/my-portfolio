@@ -1,7 +1,3 @@
-/**
- * Header icons for the PDF. Outlines are Lucide's (ISC), the brand marks are
- * the same paths as src/components/icons.tsx.
- */
 import { Circle, Path, Rect, Svg } from "@react-pdf/renderer";
 import type { CvIcon } from "./model";
 

@@ -28,7 +28,6 @@ export default async function ProjectsPage(props: PageProps<"/[lang]/projects">)
   const repos = await getRepos(profile.githubUsername);
   const githubUrl = `https://github.com/${profile.githubUsername}`;
 
-  // Display order; a kind with no projects is skipped.
   const groups = (["work", "freelance", "research", "hobby"] as const).map((kind) => ({ kind, ...t.groups[kind] }));
 
   return (
@@ -41,7 +40,6 @@ export default async function ProjectsPage(props: PageProps<"/[lang]/projects">)
         return (
           <Section key={kind} id={kind} title={title}>
             <p className="-mt-2 mb-6 text-sm text-muted-foreground">{intro}</p>
-            {/* A compact list rather than cards: year, name, one line, and the two links. */}
             <Timeline gap="space-y-8">
               {items.map((p) => (
                 <div key={p.slug} className="relative grid gap-1 sm:grid-cols-[1fr_auto] sm:gap-6">

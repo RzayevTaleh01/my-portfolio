@@ -1,9 +1,5 @@
 import type { ArchLayer } from "@/content";
 
-/**
- * Layered architecture diagram rendered from data.
- * Layers run top (closest to the user) to bottom (data & infrastructure).
- */
 export function ArchitectureDiagram({ layers, label }: { layers: ArchLayer[]; label: string }) {
   return (
     <div className="rounded-xl border bg-muted/40 p-3 sm:p-4" role="figure" aria-label={label}>
@@ -12,7 +8,6 @@ export function ArchitectureDiagram({ layers, label }: { layers: ArchLayer[]; la
           {i > 0 && <Connector />}
           <div className="grid gap-2 sm:grid-cols-[92px_1fr] sm:items-center sm:gap-4">
             <p className="px-1 text-[11px] font-medium uppercase tracking-wider text-subtle-foreground">{layer.name}</p>
-            {/* One column per node on desktop, so every layer is a single even row. */}
             <div
               className={`grid gap-2 sm:grid-cols-[repeat(var(--nodes),minmax(0,1fr))] ${layer.nodes.length > 1 ? "grid-cols-2" : "grid-cols-1"}`}
               style={{ "--nodes": layer.nodes.length } as React.CSSProperties}

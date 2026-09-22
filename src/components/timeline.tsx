@@ -3,10 +3,6 @@
 import { motion, useReducedMotion, useScroll, useSpring } from "motion/react";
 import { useRef } from "react";
 
-/**
- * Vertical timeline whose accent line fills as the reader scrolls through it.
- * Children should render a <TimelineDot /> as their first element.
- */
 export function Timeline({ children, gap = "space-y-12" }: { children: React.ReactNode; gap?: string }) {
   const ref = useRef<HTMLDivElement>(null);
   const reduce = useReducedMotion();
@@ -26,7 +22,6 @@ export function Timeline({ children, gap = "space-y-12" }: { children: React.Rea
   );
 }
 
-/** Marker on the line; lights up as the fill reaches it. */
 export function TimelineDot() {
   return (
     <motion.span

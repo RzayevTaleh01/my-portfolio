@@ -9,7 +9,6 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-/** Separate root layout: the admin panel has none of the site's chrome. */
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">

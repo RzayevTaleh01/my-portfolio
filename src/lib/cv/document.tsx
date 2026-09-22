@@ -1,7 +1,3 @@
-/**
- * The Europass-style CV page, drawn with @react-pdf/renderer.
- * Used by the PDF route (server) and the admin preview (browser).
- */
 import { Document, Font, Image, Link, Page, StyleSheet, Text, View } from "@react-pdf/renderer";
 import { Children } from "react";
 import { PdfIcon } from "./icons";
@@ -15,10 +11,6 @@ const BAND = "#eef2f9";
 
 let fontsFrom: string | null = null;
 
-/**
- * Open Sans covers Slovak (č, ľ, ž…) and Azerbaijani (ə) - the built-in PDF fonts don't.
- * `base` is "/fonts/cv" in the browser, the absolute folder path on the server.
- */
 export function registerCvFonts(base: string) {
   if (fontsFrom === base) return;
   fontsFrom = base;
@@ -31,7 +23,6 @@ export function registerCvFonts(base: string) {
       { src: `${base}/OpenSans_700Bold.ttf`, fontWeight: 700 },
     ],
   });
-  // Never split words across lines.
   Font.registerHyphenationCallback((word) => [word]);
 }
 
@@ -42,14 +33,13 @@ const s = StyleSheet.create({
     lineHeight: 1.45,
     color: INK,
     paddingTop: 30,
-    paddingBottom: 40,
+    paddingBottom: 44,
     paddingHorizontal: 40,
   },
   identity: { flexDirection: "row", alignItems: "center", gap: 16 },
   photo: { width: 70, height: 70, objectFit: "cover", borderRadius: 4 },
   name: { fontSize: 22, fontWeight: 700, color: ACCENT, lineHeight: 1.15 },
   headline: { fontSize: 11, fontWeight: 600, marginTop: 3 },
-  // Full-width strip under the name: icon + value, three per row.
   contactBar: {
     flexDirection: "row",
     flexWrap: "wrap",
@@ -81,30 +71,12 @@ const s = StyleSheet.create({
   row: { flexDirection: "row", marginBottom: 3 },
   rowLabel: { width: 120, fontWeight: 600 },
   rowValue: { flex: 1 },
-  // Several roles at one company: the company once, the roles on a rule beneath it.
   groupHead: { flexDirection: "row", justifyContent: "space-between", alignItems: "baseline" },
   groupOrg: { fontSize: 10, fontWeight: 700, color: ACCENT },
   roles: { marginTop: 4, marginLeft: 3, paddingLeft: 9, borderLeftWidth: 1.2, borderLeftColor: RULE },
   role: { marginBottom: 6 },
   roleHead: { flexDirection: "row", justifyContent: "space-between", alignItems: "baseline", gap: 8 },
   rolePeriod: { fontSize: 7.8, color: MUTED, letterSpacing: 0.3 },
-  // Closing call-out: the live portfolio.
-  portfolio: {
-    marginTop: 16,
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 10,
-    paddingVertical: 9,
-    paddingHorizontal: 12,
-    backgroundColor: BAND,
-    borderLeftWidth: 3,
-    borderLeftColor: ACCENT,
-    borderRadius: 4,
-  },
-  portfolioTitle: { fontSize: 9.5, fontWeight: 700, color: ACCENT },
-  portfolioLink: { fontSize: 9.5, fontWeight: 600, color: ACCENT, textDecoration: "none" },
-  // Running header on every page: where to download the latest CV, and the page number.
-  // In the page flow (not absolute): react-pdf drops parts of absolute `fixed` rows.
   pageHeader: {
     marginTop: -16,
     marginBottom: 16,
@@ -117,16 +89,12 @@ const s = StyleSheet.create({
     fontSize: 7.5,
     color: MUTED,
   },
-  pageHeaderLink: { flexDirection: "row", alignItems: "center", gap: 4 },
   pageNumber: { position: "absolute", top: 14.5, right: 40, fontSize: 7.5, color: MUTED },
-  footer: { position: "absolute", bottom: 18, left: 40, right: 40, fontSize: 7.5, color: MUTED, textAlign: "center" },
+  footer: { position: "absolute", bottom: 16, left: 40, right: 40, paddingTop: 5, borderTopWidth: 0.6, borderTopColor: RULE },
+  footerText: { fontSize: 7, color: MUTED, textAlign: "center" },
+  footerLabel: { fontWeight: 700, color: ACCENT },
 });
 
-/**
- * A titled section. The title is kept on one page with the first item, so it is
- * never left alone at the bottom (minPresenceAhead does not handle unbreakable items).
- * `keepWithFirst={false}` for a first item that may be long enough to span pages.
- */
 function Section({ title, keepWithFirst = true, children }: { title: string; keepWithFirst?: boolean; children: React.ReactNode }) {
   const head = (
     <View style={s.sectionHead} minPresenceAhead={40}>
@@ -198,7 +166,6 @@ function Bullets({ entry, technologies }: { entry: CvEntry; technologies: string
   );
 }
 
-/** Entries of one organisation together, in their original order (newest first). */
 function byOrganization(entries: CvEntry[]) {
   const groups = new Map<string, CvEntry[]>();
   entries.forEach((e, i) => {
@@ -211,7 +178,6 @@ function byOrganization(entries: CvEntry[]) {
 const same = (values: (string | undefined)[]) => values.every((v) => v === values[0]);
 const periodEdges = (p: string) => p.split(/\s+[-–]\s+/);
 
-/** One company, several roles: the company, place and overall period once, then each role. */
 function RoleGroup({ roles, technologies }: { roles: CvEntry[]; technologies: string }) {
   const [latest] = roles;
   const earliest = roles[roles.length - 1];
@@ -247,17 +213,13 @@ export function CvDocument({ data }: { data: CvDocumentData }) {
     <Document title={`${data.name} - CV`} author={data.name} subject={data.headline} language={data.language}>
       <Page size="A4" style={s.page}>
         <View style={s.pageHeader} fixed>
-          <View style={s.pageHeaderLink}>
-            <PdfIcon icon="website" size={7.5} color={ACCENT} />
-            <Text>
-              {L.download}:{" "}
-              <Link src={data.download.href} style={s.link}>
-                {data.download.label}
-              </Link>
-            </Text>
-          </View>
+          <Text>
+            {L.download}:{" "}
+            <Link src={data.download.href} style={s.link}>
+              {data.download.label}
+            </Link>
+          </Text>
         </View>
-        {/* Its own absolute element: react-pdf draws dynamic text only there, not inside the header row. */}
         <Text style={s.pageNumber} fixed render={({ pageNumber, totalPages }) => `${L.page} ${pageNumber} / ${totalPages}`} />
 
         <View style={s.identity}>
@@ -395,21 +357,15 @@ export function CvDocument({ data }: { data: CvDocumentData }) {
           </Section>
         )}
 
-        <View style={s.portfolio} wrap={false}>
-          <PdfIcon icon="website" size={16} color={ACCENT} />
-          <View style={{ flex: 1 }}>
-            <Text>
-              <Text style={s.portfolioTitle}>{L.portfolio}: </Text>
-              <Link src={data.portfolio.href} style={s.portfolioLink}>
-                {data.portfolio.label}
-              </Link>
-            </Text>
-            <Text style={{ color: MUTED, marginTop: 1 }}>{L.portfolioText}</Text>
-          </View>
-        </View>
-
         <View style={s.footer} fixed>
-          <Text>{data.name}</Text>
+          <Text style={s.footerText}>
+            <Text style={s.footerLabel}>{L.portfolio}: </Text>
+            <Link src={data.portfolio.href} style={[s.link, s.footerLabel]}>
+              {data.portfolio.label}
+            </Link>
+            {"  ·  "}
+            {L.portfolioText}
+          </Text>
         </View>
       </Page>
     </Document>

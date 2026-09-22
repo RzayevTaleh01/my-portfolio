@@ -1,7 +1,5 @@
 import type { Project } from "../types";
 
-// Built at ITM. A ground-up rebuild of etacxi.az, the institute's public site.
-
 export const etacxi: Project = {
   slug: "etacxi",
   title: "Institute of Lung Diseases",

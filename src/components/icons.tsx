@@ -61,10 +61,8 @@ export function SocialIcon({ platform, ...props }: IconProps & { platform: Socia
   const size = props.size ?? 16;
   switch (platform) {
     case "hackerrank":
-      // HackerRank has no Lucide brand icon; a code glyph keeps the row consistent.
       return <Code2 {...props} size={size} />;
     case "eolymp":
-      // Competitive-programming judge - a trophy reads closer than a code glyph.
       return <Trophy {...props} size={size} />;
     case "telegram":
       return <TelegramIcon {...props} size={size} />;

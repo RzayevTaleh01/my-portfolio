@@ -17,20 +17,14 @@ interface AvatarZoomProps {
   src: string;
   name: string;
   t: AvatarZoomLabels;
-  /** Sizing of the cropped frame - the caller owns width and aspect ratio. */
   className?: string;
   sizes: string;
   priority?: boolean;
 }
 
-/**
- * The profile photo in a cropped frame; clicking it opens the full picture,
- * where a second click (or the button) toggles a magnified, scrollable view.
- */
 export function AvatarZoom({ src, name, t, className, sizes, priority }: AvatarZoomProps) {
   const [zoomed, setZoomed] = useState(false);
   const viewport = useRef<HTMLDivElement>(null);
-  // The magnified photo is wider than the viewport, so start the reader in the middle of it.
   const centre = useCallback(() => {
     const el = viewport.current;
     if (el) el.scrollLeft = (el.scrollWidth - el.clientWidth) / 2;
@@ -47,7 +41,6 @@ export function AvatarZoom({ src, name, t, className, sizes, priority }: AvatarZ
           className,
         )}
       >
-        {/* The source is a square headshot, so the crop is biased upwards to keep the face centred. */}
         <Image
           src={src}
           alt={name}
@@ -68,7 +61,6 @@ export function AvatarZoom({ src, name, t, className, sizes, priority }: AvatarZ
           className="dialog-content fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-10"
         >
           <Dialog.Title className="sr-only">{name}</Dialog.Title>
-          {/* Anywhere around the photo closes the lightbox. */}
           <Dialog.Close aria-label={t.closePhoto} className="absolute inset-0 cursor-zoom-out" />
 
           <div ref={viewport} className="relative max-h-[86vh] max-w-[92vw] overflow-auto overscroll-contain rounded-2xl shadow-[0_30px_80px_-20px_rgb(0_0_0/0.6)]">

@@ -50,7 +50,7 @@ Pages only render data - everything shown on the site lives in `src/content/` an
 
 ### Resume PDFs
 
-The downloadable CVs are generated from the content above, in a Europass layout - no PDF is kept by hand. There is one per visitor region: `/cv/taleh-rzayev-cv-sk.pdf` for Slovakia and `/cv/taleh-rzayev-cv.pdf` for everyone else, and the resume page links the right one.
+The downloadable CVs are generated from the content above, in a Europass layout - no PDF is kept by hand. There is one link for everyone, `/cv/taleh-rzayev-cv.pdf`: visitors from Slovakia get the Slovak-region CV, everyone else the international one, always under the same file name.
 
 1. Open `/admin` on the live site and sign in with the admin code
 2. Pick a region, tick the entries that go in, fill the personal fields - the preview updates live

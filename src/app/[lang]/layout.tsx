@@ -23,7 +23,6 @@ import { getRegion } from "@/lib/region";
 const jakarta = Plus_Jakarta_Sans({ variable: "--font-jakarta", subsets: ["latin", "latin-ext"] });
 const jetbrains = JetBrains_Mono({ variable: "--font-jetbrains", subsets: ["latin"] });
 
-// Only /en and /sk exist; anything else is a 404.
 export const dynamicParams = false;
 
 export function generateStaticParams() {
@@ -61,7 +60,6 @@ export default async function RootLayout(props: LayoutProps<"/[lang]">) {
   const t = getDictionary(lang);
   const content = getContent(lang);
   const { projects } = content;
-  // Location depends on where the visitor is (see src/content/locations.ts).
   const region = await getRegion();
   const profile = withRegion(content.profile, lang, region);
 
@@ -84,7 +82,6 @@ export default async function RootLayout(props: LayoutProps<"/[lang]">) {
       className={`${jakarta.variable} ${jetbrains.variable} antialiased`}
     >
       <body className="font-sans">
-        {/* Without JavaScript, scroll-reveal content must still be visible. */}
         <noscript>
           <style>{`[data-reveal]{opacity:1!important;transform:none!important}`}</style>
         </noscript>

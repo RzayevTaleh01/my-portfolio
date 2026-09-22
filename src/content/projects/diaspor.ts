@@ -1,7 +1,5 @@
 import type { Project } from "../types";
 
-// Built at ITM - Information Technology Center (see resume). No public repository.
-
 export const diaspor: Project = {
   slug: "diaspor",
   title: "Diaspor.org",

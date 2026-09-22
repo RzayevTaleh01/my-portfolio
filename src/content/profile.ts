@@ -1,12 +1,10 @@
+import { CV_PATH } from "@/lib/cv/model";
 import type { Profile } from "./types";
-
-// Source: Taleh_Rzayev_Resume_2026_09.pdf and Taleh_Rzayev_FlowCV_Resume_2026-03-10.pdf
 
 export const profile: Profile = {
   name: "Taleh Rzayev",
   authorName: "T. Rzayev",
   headline: "Software Engineer · AI Researcher",
-  // location and now are set per visitor (Prešov for Slovakia, Riga elsewhere): see ./locations.ts
   location: "Riga, Latvia",
   email: "TalehRzayev2002@gmail.com",
   intro:
@@ -21,10 +19,8 @@ export const profile: Profile = {
   now: "Based in Riga, Latvia",
   highlights: ["4 years frontend experience", "Backend: Node.js · Spring Boot", "NLP · low-resource languages", "English B2 · Slovak A2"],
   avatar: "/avatar.webp",
-  // Replaced per visitor region in ./locations.ts
-  cvPdf: "/cv/taleh-rzayev-cv.pdf",
+  cvPdf: CV_PATH,
   githubUsername: "RzayevTaleh01",
-  // Set NEXT_PUBLIC_SITE_URL to your domain when you deploy (used for SEO and the sitemap).
   siteUrl: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
   socials: [
     { platform: "github", label: "GitHub", href: "https://github.com/RzayevTaleh01" },

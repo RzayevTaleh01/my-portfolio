@@ -11,7 +11,6 @@ import { researchDirections, researchStatement, skills } from "./skills";
 
 export * from "./types";
 
-/** English is the source; other locales are text-only overrides (see ./localize.ts). */
 const english = {
   profile,
   experience,
@@ -58,7 +57,6 @@ function build(locale: Locale): SiteContent {
 
 const cache = new Map<Locale, SiteContent>();
 
-/** All site content, translated into the given locale. */
 export function getContent(locale: Locale): SiteContent {
   let content = cache.get(locale);
   if (!content) {
@@ -68,7 +66,6 @@ export function getContent(locale: Locale): SiteContent {
   return content;
 }
 
-/** Navigation order; labels come from the dictionary (`dict.nav[key]`). */
 export const navigation = [
   { href: "/", key: "home" },
   { href: "/projects", key: "projects" },

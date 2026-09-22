@@ -23,7 +23,6 @@ export function ProjectMeta({ project, lang, className }: { project: Project; la
   );
 }
 
-/** Case-study card - the whole card links to the detail page. */
 export function ProjectCard({ project, lang }: { project: Project; lang: Locale }) {
   return (
     <Link
@@ -48,7 +47,6 @@ export function ProjectCard({ project, lang }: { project: Project; lang: Locale 
   );
 }
 
-/** Compact row version used on the home page. */
 export function ProjectRow({ project, lang }: { project: Project; lang: Locale }) {
   const t = getDictionary(lang).projects;
   return (

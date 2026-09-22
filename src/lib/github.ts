@@ -11,12 +11,10 @@ export interface GitHubRepo {
   updatedAt: string;
 }
 
-
 const REVALIDATE_SECONDS = 60 * 60;
 
 async function gh<T>(path: string): Promise<T | null> {
   const headers: Record<string, string> = { Accept: "application/vnd.github+json" };
-  // Optional: raises the rate limit from 60 to 5000 requests/hour.
   if (process.env.GITHUB_TOKEN) headers.Authorization = `Bearer ${process.env.GITHUB_TOKEN}`;
   try {
     const res = await fetch(`https://api.github.com${path}`, { headers, next: { revalidate: REVALIDATE_SECONDS } });
@@ -45,7 +43,6 @@ async function ownRepos(username: string) {
   return data?.filter((r) => !r.fork && !r.archived) ?? null;
 }
 
-/** Most recently pushed public repositories. */
 export async function getRepos(username: string, limit = 6): Promise<GitHubRepo[] | null> {
   const repos = await ownRepos(username);
   if (!repos) return null;

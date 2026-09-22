@@ -1,11 +1,3 @@
-/**
- * Europass CV generated from the site content.
- *
- * Every entry comes from src/content. The saved config (see /admin) says which
- * entries are approved for each region and holds any text edited for the CV
- * only - the site keeps its own wording. Pure module: runs on the server (the
- * PDF route) and in the browser (the admin preview).
- */
 import type { Locale } from "@/i18n/config";
 import type { Region } from "@/i18n/region";
 import type {
@@ -21,17 +13,13 @@ import type {
   Volunteering,
 } from "@/content/types";
 
-// ─── Source: the site content, as the CV needs it ─────────
-
 export type CvProject = Pick<Project, "slug" | "title" | "tagline" | "kind" | "organization" | "year" | "links" | "stack">;
 
 export interface CvLocaleSource {
   profile: Profile;
-  /** Where the site says you live, per region (see src/content/locations.ts). */
   regionLocation: Record<Region, string>;
   experience: Experience[];
   volunteering: Volunteering[];
-  /** `education` and `educationIntl` together, without duplicates. */
   education: Education[];
   certificates: Certificate[];
   languages: Language[];
@@ -40,26 +28,13 @@ export interface CvLocaleSource {
   publications: Publication[];
 }
 
-/** English content and its translations. IDs are always taken from English, so they survive translation. */
 export type CvSource = Record<Locale, CvLocaleSource>;
 
-// ─── Config: what is approved for each region ─────────────
-
-/**
- * The CV's own text, by entry id and field. A field that is present wins over the site text, even when empty.
- * With `ownCopy` every entry is stored in full, so later site edits never reach the CV unless imported.
- */
 export type CvOverrides = Record<string, Record<string, string>>;
 
 export interface CvRegionConfig {
-  /** Language the CV is written in. */
   language: Locale;
-  /**
-   * The CV keeps its own copy of every text (header and entries) and never falls back to the site;
-   * "Import from site" in /admin refreshes it. False only in configs saved before the copy existed.
-   */
   ownCopy: boolean;
-  // Header. With `ownCopy` the text as is (empty → left out); without it, empty → the site value, "-" → left out.
   name: string;
   headline: string;
   summary: string;
@@ -71,9 +46,7 @@ export interface CvRegionConfig {
   dateOfBirth: string;
   motherTongue: string;
   photo: boolean;
-  /** Technologies line under each position and project. */
   showStack: boolean;
-  /** Approved entries, by id (see `ids`). Anything not listed stays out of the CV. */
   items: string[];
   overrides: CvOverrides;
 }
@@ -88,11 +61,13 @@ export const regionLabels: Record<Region, string> = {
   intl: "Other countries",
 };
 
-/** Where each region's generated PDF is served (src/app/cv/[file]/route.ts). */
-export const cvFiles: Record<Region, string> = {
-  sk: "taleh-rzayev-cv-sk.pdf",
-  intl: "taleh-rzayev-cv.pdf",
-};
+export const regions: Region[] = ["sk", "intl"];
+
+export const CV_FILE = "taleh-rzayev-cv.pdf";
+
+export const CV_PATH = `/cv/${CV_FILE}`;
+
+export const CV_DOWNLOAD_NAME = "Taleh_Rzayev_Resume.pdf";
 
 export function slug(value: string) {
   return value
@@ -103,7 +78,6 @@ export function slug(value: string) {
     .replace(/^-|-$/g, "");
 }
 
-/** Stable ids, built from the English text. */
 export const ids = {
   role: (e: Experience, r: { title: string }) => `exp:${slug(e.organization)}/${slug(r.title)}`,
   roleProject: (e: Experience, r: { title: string }, p: { name: string }) => `${ids.role(e, r)}/${slug(p.name)}`,
@@ -148,7 +122,6 @@ function cleanOverrides(raw: unknown): CvOverrides {
   return out;
 }
 
-/** Fills anything missing, so an old or hand-edited config still loads. */
 export function normalizeConfig(raw: unknown): CvConfig {
   const input = (raw && typeof raw === "object" ? raw : {}) as Partial<CvConfig>;
   const region = (r: Region): CvRegionConfig => {
@@ -166,12 +139,9 @@ export function normalizeConfig(raw: unknown): CvConfig {
   };
 }
 
-// ─── Catalog: everything in the system, with its editable fields ─
-
 export interface CvField {
   key: string;
   label: string;
-  /** The site's text - what the CV shows unless it is edited. */
   value: string;
   multiline?: boolean;
 }
@@ -181,7 +151,6 @@ export interface CatalogItem {
   label: string;
   detail?: string;
   fields: CvField[];
-  /** Nested entries (projects under a role, skills under a group). */
   children?: CatalogItem[];
   platform?: SocialPlatform;
 }
@@ -202,7 +171,6 @@ const field = (key: string, label: string, value: string | undefined, multiline 
 const bulletsHint = "Bullet points (one per line)";
 const stackHint = "Technologies (comma separated)";
 
-/** Every entry the CV could contain. Text in `locale`, ids from English. */
 export function buildCatalog(source: CvSource, locale: Locale): CatalogGroup[] {
   const en = source.en;
   const t = source[locale];
@@ -354,14 +322,12 @@ export function buildCatalog(source: CvSource, locale: Locale): CatalogGroup[] {
         label: s.label,
         detail: s.href.replace(/^mailto:/, ""),
         platform: s.platform,
-        // The e-mail address is edited in the header fields.
         fields: s.platform === "email" ? [] : [field("url", "URL", s.href)],
       })),
     },
   ];
 }
 
-/** Ids that can be approved (group rows are only a UI shortcut for their children). */
 export function catalogIds(catalog: CatalogGroup[]) {
   const out = new Set<string>();
   const walk = (items: CatalogItem[]) =>
@@ -373,18 +339,15 @@ export function catalogIds(catalog: CatalogGroup[]) {
   return out;
 }
 
-/** Every entry, children included. */
 export function flatItems(catalog: CatalogGroup[] | CatalogItem[]): CatalogItem[] {
   const items = (catalog as (CatalogGroup | CatalogItem)[]).flatMap((x) => ("items" in x ? x.items : [x]));
   return items.flatMap((i) => [i, ...flatItems(i.children ?? [])]);
 }
 
-/** An entry's text as the site has it. */
 export function siteFields(item: CatalogItem): Record<string, string> {
   return Object.fromEntries(item.fields.map((f) => [f.key, f.value]));
 }
 
-/** The header fields the site can fill (phone, nationality… have no site value). */
 export const siteHeaderKeys = ["name", "headline", "summary", "email", "website", "location"] as const;
 
 export function siteHeader(source: CvSource, language: Locale, region: Region): Record<(typeof siteHeaderKeys)[number], string> {
@@ -399,23 +362,13 @@ export function siteHeader(source: CvSource, language: Locale, region: Region): 
   };
 }
 
-/**
- * The portfolio's public address. The CV always links here - never the
- * deployment URL from NEXT_PUBLIC_SITE_URL (e.g. a *.vercel.app domain).
- */
 export const PORTFOLIO_URL = "https://therzayev.site";
 export const PORTFOLIO_LABEL = "TheRzayev.Site";
 
-/** A saved website that is the deployment address becomes the portfolio domain. */
 function publicSite(url: string) {
   return /\.vercel\.app/i.test(url) ? PORTFOLIO_URL : url;
 }
 
-/**
- * The region config with its own full copy of the CV text: every entry the CV
- * has no text for yet (new on the site, or an older config) is filled from the
- * site once; what is already there is kept as is.
- */
 export function withOwnCopy(source: CvSource, region: Region, config: CvRegionConfig): CvRegionConfig {
   const header = siteHeader(source, config.language, region);
   const out: CvRegionConfig = { ...config, overrides: { ...config.overrides }, ownCopy: true };
@@ -434,7 +387,6 @@ export function withOwnCopy(source: CvSource, region: Region, config: CvRegionCo
   return out;
 }
 
-/** Ids that can carry edits: every entry, including group rows. */
 export function editableIds(catalog: CatalogGroup[]) {
   const out = new Set<string>();
   const walk = (items: CatalogItem[]) =>
@@ -445,8 +397,6 @@ export function editableIds(catalog: CatalogGroup[]) {
   catalog.forEach((g) => walk(g.items));
   return out;
 }
-
-// ─── The resolved document ────────────────────────────────
 
 export interface CvLabels {
   aboutMe: string;
@@ -525,7 +475,6 @@ export interface CvEntry {
   link?: string;
 }
 
-/** A URL in the browser, the file bytes on the server. */
 export type CvImage = string | { data: Buffer; format: "jpg" | "png" };
 
 export interface CvDocumentData {
@@ -545,9 +494,7 @@ export interface CvDocumentData {
   volunteering: CvEntry[];
   certificates: { title: string; issuer: string; link?: string }[];
   publications: string[];
-  /** The live site in the CV's language, linked at the end of the CV. */
   portfolio: { href: string; label: string };
-  /** Where this CV's latest PDF is published - printed at the top of every page. */
   download: { href: string; label: string };
 }
 
@@ -563,23 +510,17 @@ function byPeriodDesc<T extends { period: string }>(items: T[]) {
   return [...items].sort((a, b) => start(b.period) - start(a.period));
 }
 
-/** A header field in a config without its own copy: empty → the site value, "-" → left out. */
 function siteFallback(value: string, fallback: string) {
   const v = value.trim();
   if (v === "-") return "";
   return v || fallback;
 }
 
-/** An entry's fields with the CV edits applied. */
 export function resolveFields(item: CatalogItem, overrides: CvOverrides): Record<string, string> {
   const edits = overrides[item.id] ?? {};
   return Object.fromEntries(item.fields.map((f) => [f.key, edits[f.key] ?? f.value]));
 }
 
-/**
- * The CV for one region: approved entries only, in the region's language, with
- * the CV edits applied. `photo` is the picture as the renderer can load it.
- */
 export function buildCvData(source: CvSource, config: CvRegionConfig, region: Region, photo: CvImage): CvDocumentData {
   const t = source[config.language];
   const on = new Set(config.items);
@@ -617,10 +558,8 @@ export function buildCvData(source: CvSource, config: CvRegionConfig, region: Re
     }))
     .filter((g) => g.items.length > 0);
 
-  // Own copy: the header text as saved. Older configs: empty → the site value.
   const header = (value: string, fallback: string) => (config.ownCopy ? (value.trim() === "-" ? "" : value.trim()) : siteFallback(value, fallback));
 
-  // Header: e-mail, phone, website, address, then the approved links.
   const contact: CvContact[] = [];
   const email = header(config.email, t.profile.email ?? "");
   if (email && on.has("social:email")) contact.push({ icon: "email", value: email, href: `mailto:${email}` });
@@ -668,6 +607,6 @@ export function buildCvData(source: CvSource, config: CvRegionConfig, region: Re
     }),
     publications: approved("publications").map((i) => val(i).text).filter(Boolean),
     portfolio: { href: `${PORTFOLIO_URL}/${config.language}`, label: PORTFOLIO_LABEL },
-    download: { href: `${PORTFOLIO_URL}/cv/${cvFiles[region]}`, label: `${PORTFOLIO_LABEL}/cv/${cvFiles[region]}` },
+    download: { href: `${PORTFOLIO_URL}${CV_PATH}`, label: `${PORTFOLIO_LABEL}${CV_PATH}` },
   };
 }

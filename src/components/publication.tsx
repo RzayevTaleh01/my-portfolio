@@ -130,7 +130,6 @@ function PanelToggle({ open, onClick, children }: { open: boolean; onClick: () =
   );
 }
 
-/** Filterable publication list, grouped by year. */
 export function PublicationList({ publications, highlight }: { publications: Publication[]; highlight: string }) {
   const types = useMemo(
     () => (Object.keys(TYPE_LABEL) as PublicationType[]).filter((t) => publications.some((p) => p.type === t)),

@@ -10,7 +10,6 @@ export interface NavItem {
   label: string;
 }
 
-/** Vertical navigation with a sliding active indicator. `items` hrefs are already localized. */
 export function SidebarNav({ id, items, onNavigate }: { id: string; items: NavItem[]; onNavigate?: () => void }) {
   const pathname = usePathname();
   const home = items[0]?.href;
@@ -19,7 +18,6 @@ export function SidebarNav({ id, items, onNavigate }: { id: string; items: NavIt
     href === home ? pathname === href : pathname === href || pathname.startsWith(`${href}/`);
 
   return (
-    // LayoutGroup keeps the desktop and mobile indicators from animating into each other.
     <LayoutGroup id={id}>
       <nav aria-label="Main">
         <ul className="space-y-0.5">

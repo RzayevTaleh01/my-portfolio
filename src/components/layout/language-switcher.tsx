@@ -11,7 +11,6 @@ function rememberLocale(locale: Locale) {
   document.cookie = `${LOCALE_COOKIE}=${locale}; path=/; max-age=31536000; samesite=lax`;
 }
 
-/** Language dropdown - keeps the current page and remembers the choice in a cookie. */
 export function LanguageSwitcher({ current, label, className }: { current: Locale; label: string; className?: string }) {
   const pathname = usePathname();
   const router = useRouter();

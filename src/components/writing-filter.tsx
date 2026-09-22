@@ -8,7 +8,6 @@ import { getDictionary } from "@/i18n/dictionaries";
 import type { PostCategory, PostMeta } from "@/lib/posts";
 import { cn } from "@/lib/utils";
 
-/** Underlined tabs: the active tab gets an accent line that slides between tabs. */
 export function WritingFilter({ posts, lang }: { posts: PostMeta[]; lang: Locale }) {
   const t = getDictionary(lang).writing;
   const [filter, setFilter] = useState<PostCategory | "all">("all");

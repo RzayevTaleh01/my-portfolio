@@ -1,6 +1,5 @@
 import katex from "katex";
 
-/** Server-rendered display formula (LaTeX → HTML, no client JavaScript). */
 export function Formula({ tex }: { tex: string }) {
   const html = katex.renderToString(tex, { displayMode: true, throwOnError: false, output: "html" });
   return (

@@ -46,7 +46,6 @@ export default async function CvPage(props: PageProps<"/[lang]/cv">) {
   const { experience, volunteering, skills, publications, certificates, languages } = content;
   const region = await getRegion();
   const profile = withRegion(content.profile, lang, region);
-  // Visitors from Slovakia see the TU Košice studies, everyone else the Baku ones.
   const education = region === "sk" ? content.education : content.educationIntl;
   const links = profile.socials.filter((s) => s.platform !== "email");
 

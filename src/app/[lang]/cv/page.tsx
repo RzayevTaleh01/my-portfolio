@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Fragment } from "react";
 import { ExperienceItem, VolunteeringItem } from "@/components/experience-item";
-import { PrintButton } from "@/components/print-button";
+import { DownloadButton } from "@/components/download-button";
 import { SkillList } from "@/components/skill-list";
 import { Timeline, TimelineDot } from "@/components/timeline";
 import { getContent } from "@/content";
@@ -69,7 +69,7 @@ export default async function CvPage(props: PageProps<"/[lang]/cv">) {
             ))}
           </p>
         </div>
-        <PrintButton pdf={profile.cvPdf} labels={{ pdf: t.pdf, print: t.print }} />
+        {profile.cvPdf && <DownloadButton href={profile.cvPdf} label={t.pdf} />}
       </header>
 
       <CvSection title={t.profile}>

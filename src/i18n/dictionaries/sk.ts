@@ -120,7 +120,6 @@ export const sk: Dictionary = {
     showCredential: "Zobraziť certifikát",
     languages: "Jazyky",
     pdf: "PDF",
-    print: "Tlačiť",
   },
   assistant: {
     open: "AI asistent",

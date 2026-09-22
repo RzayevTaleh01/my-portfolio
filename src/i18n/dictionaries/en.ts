@@ -118,7 +118,6 @@ export const en = {
     showCredential: "Show credential",
     languages: "Languages",
     pdf: "PDF",
-    print: "Print",
   },
   assistant: {
     open: "AI assistant",

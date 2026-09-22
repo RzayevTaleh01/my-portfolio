@@ -5,6 +5,7 @@ import "katex/dist/katex.min.css";
 import "../globals.css";
 import { Assistant } from "@/components/assistant";
 import { ClapButton } from "@/components/clap-button";
+import { GoogleAnalytics } from "@/components/google-analytics";
 import type { CommandMenuProps } from "@/components/command-menu";
 import { MobileHeader } from "@/components/layout/mobile-header";
 import { DesktopControls, Sidebar } from "@/components/layout/sidebar";
@@ -105,6 +106,7 @@ export default async function RootLayout(props: LayoutProps<"/[lang]">) {
               </div>
             </div>
             <ClapButton t={t.clap} />
+            {profile.gaMeasurementId && <GoogleAnalytics id={profile.gaMeasurementId} />}
             <Assistant topics={buildAssistantTopics(lang, region, { ...content, profile }, t, posts)} t={assistant} />
           </MotionProvider>
         </ThemeProvider>

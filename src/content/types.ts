@@ -33,6 +33,7 @@ export interface Profile {
   website?: string;
   websiteLabel?: string;
   sourceRepo?: string;
+  gaMeasurementId?: string;
   motherTongue?: string;
   socials: SocialLink[];
 }

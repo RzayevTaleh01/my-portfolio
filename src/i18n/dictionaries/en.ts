@@ -236,6 +236,14 @@ export const en = {
         ],
       },
       {
+        title: "Google Analytics",
+        paragraphs: [
+          "This site uses Google Analytics 4 to count visits and see which pages are read. Google Analytics sets its own cookies (for example _ga and _ga_*, up to 2 years) and sends to Google Ireland Ltd. your IP address (shortened by Google before storage), the pages you open, the referring site, and technical details such as device, browser and approximate location. The data is used only as visitor statistics and is not combined with anything else on this site.",
+          "The legal basis is legitimate interest in understanding how the site is used (Art. 6(1)(f) GDPR). You can opt out at any time with Google's browser add-on (tools.google.com/dlpage/gaoptout) or by blocking these cookies in your browser; the site keeps working normally.",
+        ],
+        items: [],
+      },
+      {
         title: "How long it is kept",
         paragraphs: [
           "Claps are stored in a private Vercel Blob store that only the site owner can read. They are kept until the site owner deletes them, and you can ask for yours to be deleted at any time.",

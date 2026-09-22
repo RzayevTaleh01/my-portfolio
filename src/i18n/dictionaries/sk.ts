@@ -238,6 +238,14 @@ export const sk: Dictionary = {
         ],
       },
       {
+        title: "Google Analytics",
+        paragraphs: [
+          "Táto stránka používa Google Analytics 4 na počítanie návštev a zistenie, ktoré stránky sa čítajú. Google Analytics ukladá vlastné cookies (napríklad _ga a _ga_*, s platnosťou až 2 roky) a odosiela spoločnosti Google Ireland Ltd. vašu IP adresu (Google ju pred uložením skracuje), otvorené stránky, odkazujúcu stránku a technické údaje ako zariadenie, prehliadač a približnú polohu. Údaje slúžia iba ako štatistika návštevnosti a nespájajú sa s ničím iným na tejto stránke.",
+          "Právnym základom je oprávnený záujem porozumieť tomu, ako sa stránka používa (čl. 6 ods. 1 písm. f) GDPR). Kedykoľvek sa môžete odhlásiť pomocou doplnku Google pre prehliadač (tools.google.com/dlpage/gaoptout) alebo zablokovaním týchto cookies v prehliadači; stránka bude fungovať ďalej.",
+        ],
+        items: [],
+      },
+      {
         title: "Ako dlho sa uchovávajú",
         paragraphs: [
           "Potlesky sú uložené v súkromnom úložisku Vercel Blob, ku ktorému má prístup iba prevádzkovateľ stránky. Uchovávajú sa, kým ich prevádzkovateľ nevymaže, a o vymazanie svojich údajov môžete kedykoľvek požiadať.",

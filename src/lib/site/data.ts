@@ -47,6 +47,7 @@ export interface SiteProfile extends Omit<Profile, "location" | "now" | "avatar"
   website: string;
   websiteLabel: string;
   sourceRepo?: string;
+  gaMeasurementId?: string;
   motherTongue: string;
 }
 

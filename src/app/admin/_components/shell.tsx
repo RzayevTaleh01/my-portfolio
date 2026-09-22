@@ -3,6 +3,7 @@
 import {
   Award,
   BookOpen,
+  ChartColumn,
   Briefcase,
   Database,
   ExternalLink,
@@ -39,6 +40,7 @@ const groups: { title: string; items: NavItem[] }[] = [
     items: [
       { href: "/admin", label: "Overview", icon: LayoutDashboard },
       { href: "/admin/cv", label: "CV builder", icon: FileText },
+      { href: "/admin/analytics", label: "Analytics", icon: ChartColumn },
       { href: "/admin/claps", label: "Claps", icon: Hand },
     ],
   },

@@ -79,6 +79,7 @@ export const sections: Section[] = [
       { kind: "text", key: "website", label: "Public website (used in the CV)", half: true, placeholder: "https://example.com" },
       { kind: "text", key: "websiteLabel", label: "Website label", half: true, placeholder: "Example.com" },
       { kind: "text", key: "sourceRepo", label: "Source code of this site (GitHub)", optional: true, placeholder: "https://github.com/user/repo" },
+      { kind: "text", key: "gaMeasurementId", label: "Google Analytics ID", optional: true, half: true, placeholder: "G-XXXXXXXXXX" },
       { kind: "text", key: "motherTongue", label: "Mother tongue", localized: true },
       { kind: "textarea", key: "intro", label: "Introduction", localized: true, rows: 4 },
       { kind: "lines", key: "bio", label: "Biography", hint: "One paragraph per line. The last paragraph comes from Locations.", localized: true },

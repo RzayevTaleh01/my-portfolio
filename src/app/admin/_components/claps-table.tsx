@@ -54,6 +54,15 @@ export function ClapsTable({ claps }: { claps: ClapRecord[] }) {
 
   const shown = country === "all" ? claps : claps.filter((c) => (c.country ?? "") === country);
 
+  const [now] = useState(() => Date.now());
+  const since = (days: number) => claps.filter((c) => now - new Date(c.at).getTime() < days * 86400000).length;
+  const stats = [
+    { label: "Total claps", value: claps.length },
+    { label: "Countries", value: byCountry.filter(([code]) => code).length },
+    { label: "Last 7 days", value: since(7) },
+    { label: "Last 24 hours", value: since(1) },
+  ];
+
   async function remove(c: ClapRecord) {
     if (!confirm(`Delete the clap from ${c.ip ?? "an unknown IP"}? The counter goes down by one.`)) return;
     setBusy(c.id);
@@ -68,6 +77,14 @@ export function ClapsTable({ claps }: { claps: ClapRecord[] }) {
 
   return (
     <div className="space-y-5 px-5 py-6 lg:px-8">
+      <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+        {stats.map((s) => (
+          <div key={s.label} className="rounded-xl border bg-surface px-4 py-3">
+            <p className="text-xs text-muted-foreground">{s.label}</p>
+            <p className="mt-1 text-2xl font-semibold tabular-nums tracking-tight">{s.value}</p>
+          </div>
+        ))}
+      </div>
       <div className="flex flex-wrap gap-2">
         {[["all", claps.length] as const, ...byCountry].map(([code, n]) => (
           <button

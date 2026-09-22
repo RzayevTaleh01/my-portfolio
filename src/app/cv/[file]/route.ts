@@ -8,11 +8,14 @@ import { visitorRegion } from "@/lib/visitor-region";
 
 const LEGACY_FILES = ["taleh-rzayev-cv-sk.pdf"];
 
-const cachedPdf = unstable_cache(
-  async (region: Region) => (await renderCvPdf(region, await getPublishedConfig())).toString("base64"),
-  ["cv-pdf"],
-  { tags: [CV_CACHE_TAG] },
-);
+const DEPLOYMENT = process.env.VERCEL_DEPLOYMENT_ID ?? process.env.VERCEL_GIT_COMMIT_SHA ?? "local";
+
+const renderBase64 = async (region: Region) => (await renderCvPdf(region, await getPublishedConfig())).toString("base64");
+
+const cachedPdf =
+  process.env.NODE_ENV === "development"
+    ? renderBase64
+    : unstable_cache(renderBase64, ["cv-pdf", DEPLOYMENT], { tags: [CV_CACHE_TAG] });
 
 export async function GET(request: NextRequest, ctx: RouteContext<"/cv/[file]">) {
   const { file } = await ctx.params;

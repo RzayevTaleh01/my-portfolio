@@ -14,7 +14,7 @@ export default async function MediaPage() {
         <h1 className="text-base font-semibold tracking-tight">Photos</h1>
         <p className="text-xs text-muted-foreground">Stored in Vercel Blob, not in the source code. Up to 5 MB each.</p>
       </header>
-      <div className="max-w-3xl space-y-4 px-5 py-6 lg:px-8">
+      <div className="space-y-4 px-5 py-6 lg:px-8">
         <MediaUploader
           mediaKey="avatar"
           title="Site photo"

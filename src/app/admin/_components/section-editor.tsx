@@ -112,7 +112,7 @@ export function SectionEditor({ sectionKey, initial, storage }: { sectionKey: Se
           </label>
         )}
       </EditorHeader>
-      <div className="max-w-5xl px-5 py-6 lg:px-8">
+      <div className="px-5 py-6 lg:px-8">
         {section.list ? (
           <ListEditor
             field={{ fields: section.fields, itemLabel: section.list.itemLabel, singular: section.list.singular }}

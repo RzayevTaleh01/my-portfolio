@@ -29,7 +29,7 @@ export default async function Overview() {
           {data?.updatedAt ? `Last change ${new Date(data.updatedAt).toLocaleString()}` : "No content saved yet"}
         </p>
       </header>
-      <div className="max-w-4xl space-y-6 px-5 py-6 lg:px-8">
+      <div className="space-y-6 px-5 py-6 lg:px-8">
         <section className="rounded-xl border bg-surface p-4 text-sm sm:p-5">
           <p className="font-medium">Storage</p>
           <p className="mt-1 text-muted-foreground">{storageText[storage]}</p>

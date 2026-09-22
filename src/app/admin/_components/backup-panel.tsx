@@ -51,7 +51,7 @@ export function BackupPanel({ disabled }: { disabled: boolean }) {
   }
 
   return (
-    <div className="max-w-3xl space-y-4 px-5 py-6 lg:px-8">
+    <div className="space-y-4 px-5 py-6 lg:px-8">
       <section className="space-y-2 rounded-xl border bg-surface p-4 sm:p-5">
         <h2 className="text-sm font-semibold tracking-tight">Download a backup</h2>
         <p className="text-[13px] text-muted-foreground">All content as one JSON file: profile, experience, projects, articles and texts. Photos are not included.</p>

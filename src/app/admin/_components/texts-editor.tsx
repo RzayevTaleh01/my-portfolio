@@ -66,7 +66,7 @@ export function TextsEditor({
         onSave={save}
         message={message}
       />
-      <div className="max-w-5xl space-y-6 px-5 py-6 lg:px-8">
+      <div className="space-y-6 px-5 py-6 lg:px-8">
         {groups.map((group) => (
           <section key={group} className="space-y-4 rounded-xl border bg-surface p-4 sm:p-5">
             <h2 className="text-sm font-semibold tracking-tight">{groupTitles[group] ?? group}</h2>

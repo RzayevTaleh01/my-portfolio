@@ -17,7 +17,10 @@ import { getContent, navigation, withRegion } from "@/content";
 import { fmt, hasLocale, localeTags, localize, locales } from "@/i18n/config";
 import { buildAssistantTopics } from "@/lib/assistant-topics";
 import { getAllPosts } from "@/lib/posts";
+import { JsonLd } from "@/components/json-ld";
 import { getRegion } from "@/lib/region";
+import { clamp } from "@/lib/seo";
+import { personSchema, websiteSchema } from "@/lib/structured-data";
 import { getSiteTexts } from "@/lib/site/site-texts";
 
 const jakarta = Plus_Jakarta_Sans({ variable: "--font-jakarta", subsets: ["latin", "latin-ext"] });
@@ -33,23 +36,40 @@ export async function generateMetadata(props: LayoutProps<"/[lang]">): Promise<M
   const { lang } = await props.params;
   if (!hasLocale(lang)) return {};
   const { profile } = await getContent(lang);
+  const description = clamp(profile.intro);
   return {
     metadataBase: new URL(profile.siteUrl),
     title: { default: `${profile.name} - ${profile.headline}`, template: `%s - ${profile.name}` },
-    description: profile.intro,
-    authors: [{ name: profile.name }],
+    description,
+    applicationName: profile.name,
+    authors: [{ name: profile.name, url: profile.siteUrl }],
+    creator: profile.name,
+    publisher: profile.name,
+    category: "technology",
     alternates: {
       canonical: `/${lang}`,
-      languages: Object.fromEntries(locales.map((l) => [localeTags[l], `/${l}`])),
+      languages: {
+        ...Object.fromEntries(locales.map((l) => [localeTags[l], `/${l}`])),
+        "x-default": "/en",
+      },
+      types: { "application/rss+xml": `/${lang}/feed.xml` },
     },
     openGraph: {
       type: "website",
+      url: `/${lang}`,
       locale: localeTags[lang].replace("-", "_"),
-      title: profile.name,
-      description: profile.intro,
+      alternateLocale: locales.filter((l) => l !== lang).map((l) => localeTags[l].replace("-", "_")),
+      title: `${profile.name} - ${profile.headline}`,
+      description,
       siteName: profile.name,
-      images: [profile.avatar],
     },
+    twitter: { card: "summary_large_image", title: `${profile.name} - ${profile.headline}`, description },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1, "max-video-preview": -1 },
+    },
+    verification: process.env.GOOGLE_SITE_VERIFICATION ? { google: process.env.GOOGLE_SITE_VERIFICATION } : undefined,
   };
 }
 
@@ -90,6 +110,12 @@ export default async function RootLayout(props: LayoutProps<"/[lang]">) {
       className={`${jakarta.variable} ${jetbrains.variable} antialiased`}
     >
       <body className="font-sans">
+        <JsonLd
+          data={[
+            personSchema(profile, lang, { experience: content.experience, education: content.education, skills: content.skills }),
+            websiteSchema(profile, lang),
+          ]}
+        />
         <noscript>
           <style>{`[data-reveal]{opacity:1!important;transform:none!important}`}</style>
         </noscript>

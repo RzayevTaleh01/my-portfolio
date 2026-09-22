@@ -6,7 +6,10 @@ import { ArrowLink, PageHeader, Section } from "@/components/section";
 import { Timeline, TimelineDot } from "@/components/timeline";
 import { getContent } from "@/content";
 import { hasLocale, localize } from "@/i18n/config";
+import { JsonLd } from "@/components/json-ld";
+import { pageMetadata } from "@/lib/seo";
 import { getSiteTexts } from "@/lib/site/site-texts";
+import { breadcrumbSchema, listSchema } from "@/lib/structured-data";
 import { getRepos } from "@/lib/github";
 import { formatDate } from "@/lib/utils";
 
@@ -16,7 +19,8 @@ export async function generateMetadata(props: PageProps<"/[lang]/projects">): Pr
   const { lang } = await props.params;
   if (!hasLocale(lang)) return {};
   const t = (await getSiteTexts(lang)).projects;
-  return { title: t.title, description: t.description };
+  const { profile } = await getContent(lang);
+  return pageMetadata({ lang, path: "/projects", title: t.title, description: t.description, profile });
 }
 
 export default async function ProjectsPage(props: PageProps<"/[lang]/projects">) {
@@ -30,8 +34,19 @@ export default async function ProjectsPage(props: PageProps<"/[lang]/projects">)
 
   const groups = (["work", "freelance", "research", "hobby"] as const).map((kind) => ({ kind, ...t.groups[kind] }));
 
+  const nav = (await getSiteTexts(lang)).nav;
+
   return (
     <div className="space-y-20">
+      <JsonLd
+        data={[
+          listSchema(profile, lang, t.title, projects.map((p) => ({ title: p.title, path: `/projects/${p.slug}` }))),
+          breadcrumbSchema(profile, lang, [
+            { name: nav.home, path: "/" },
+            { name: t.title, path: "/projects" },
+          ]),
+        ]}
+      />
       <PageHeader title={t.title} description={t.description} />
 
       {groups.map(({ kind, title, intro }) => {

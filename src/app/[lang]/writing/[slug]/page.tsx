@@ -5,7 +5,11 @@ import { notFound } from "next/navigation";
 import { Mdx } from "@/components/mdx";
 import { CategoryBadge } from "@/components/post-list";
 import { fmt, hasLocale, localize, locales } from "@/i18n/config";
+import { JsonLd } from "@/components/json-ld";
+import { getContent } from "@/content";
 import { getDictionary } from "@/i18n/dictionaries";
+import { pageMetadata } from "@/lib/seo";
+import { articleSchema, breadcrumbSchema } from "@/lib/structured-data";
 import { getAllPosts, getPost } from "@/lib/posts";
 import { formatDate } from "@/lib/utils";
 
@@ -19,11 +23,18 @@ export async function generateMetadata(props: PageProps<"/[lang]/writing/[slug]"
   if (!hasLocale(lang)) return {};
   const post = await getPost(slug, lang);
   if (!post) return {};
-  return {
+  const { profile } = await getContent(lang);
+  return pageMetadata({
+    lang,
+    path: `/writing/${post.slug}`,
     title: post.title,
     description: post.summary,
-    openGraph: { type: "article", title: post.title, description: post.summary, publishedTime: post.date },
-  };
+    profile,
+    type: "article",
+    publishedTime: post.date,
+    modifiedTime: post.date,
+    tags: post.tags,
+  });
 }
 
 export default async function PostPage(props: PageProps<"/[lang]/writing/[slug]">) {
@@ -31,10 +42,22 @@ export default async function PostPage(props: PageProps<"/[lang]/writing/[slug]"
   if (!hasLocale(lang)) notFound();
   const post = await getPost(slug, lang);
   if (!post) notFound();
-  const t = getDictionary(lang).writing;
+  const dict = getDictionary(lang);
+  const t = dict.writing;
+  const { profile } = await getContent(lang);
 
   return (
     <article lang={post.locale}>
+      <JsonLd
+        data={[
+          articleSchema(profile, lang, post),
+          breadcrumbSchema(profile, lang, [
+            { name: dict.nav.home, path: "/" },
+            { name: dict.nav.articles, path: "/writing" },
+            { name: post.title, path: `/writing/${post.slug}` },
+          ]),
+        ]}
+      />
       <Link
         href={localize(lang, "/writing")}
         className="no-print mb-10 inline-flex items-center gap-1.5 text-[13px] text-muted-foreground transition-colors hover:text-foreground"

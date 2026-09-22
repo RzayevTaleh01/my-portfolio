@@ -2,8 +2,10 @@ import type { MetadataRoute } from "next";
 import { getContent } from "@/content";
 
 export default async function robots(): Promise<MetadataRoute.Robots> {
+  const base = (await getContent("en")).profile.siteUrl.replace(/\/$/, "");
   return {
-    rules: { userAgent: "*", allow: "/", disallow: "/admin" },
-    sitemap: `${(await getContent("en")).profile.siteUrl.replace(/\/$/, "")}/sitemap.xml`,
+    rules: [{ userAgent: "*", allow: "/", disallow: ["/admin", "/api/"] }],
+    host: base,
+    sitemap: `${base}/sitemap.xml`,
   };
 }

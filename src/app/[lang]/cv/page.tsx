@@ -8,7 +8,10 @@ import { SkillList } from "@/components/skill-list";
 import { Timeline, TimelineDot } from "@/components/timeline";
 import { getContent, withRegion } from "@/content";
 import { fmt, hasLocale } from "@/i18n/config";
+import { JsonLd } from "@/components/json-ld";
 import { getDictionary } from "@/i18n/dictionaries";
+import { pageMetadata } from "@/lib/seo";
+import { breadcrumbSchema } from "@/lib/structured-data";
 import { getRegion } from "@/lib/region";
 import { cvDownloadName } from "@/lib/site/content";
 import { sortPublications } from "@/lib/utils";
@@ -17,7 +20,14 @@ export async function generateMetadata(props: PageProps<"/[lang]/cv">): Promise<
   const { lang } = await props.params;
   if (!hasLocale(lang)) return {};
   const t = getDictionary(lang).cv;
-  return { title: t.title, description: fmt(t.description, { name: (await getContent(lang)).profile.name }) };
+  const content = await getContent(lang);
+  return pageMetadata({
+    lang,
+    path: "/cv",
+    title: t.title,
+    description: fmt(t.description, { name: content.profile.name }),
+    profile: content.profile,
+  });
 }
 
 function CvSection({ title, children }: { title: string; children: React.ReactNode }) {
@@ -49,8 +59,16 @@ export default async function CvPage(props: PageProps<"/[lang]/cv">) {
   const education = region === "sk" ? content.education : content.educationIntl;
   const links = profile.socials.filter((s) => s.platform !== "email");
 
+  const nav = getDictionary(lang).nav;
+
   return (
     <div className="space-y-8 print:space-y-5 print:text-black">
+      <JsonLd
+        data={breadcrumbSchema(profile, lang, [
+          { name: nav.home, path: "/" },
+          { name: nav.cv, path: "/cv" },
+        ])}
+      />
       <header className="flex flex-wrap items-start justify-between gap-4">
         <div className="space-y-1.5">
           <h1 className="text-3xl font-semibold tracking-tight">{profile.name}</h1>

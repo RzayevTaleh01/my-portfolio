@@ -1,5 +1,6 @@
 import "server-only";
 import { createSign } from "node:crypto";
+import { unstable_cache } from "next/cache";
 
 const TOKEN_URL = "https://oauth2.googleapis.com/token";
 const SCOPE = "https://www.googleapis.com/auth/analytics.readonly";
@@ -40,12 +41,21 @@ export function propertyId() {
   return process.env.GA_PROPERTY_ID?.replace(/^properties\//, "").trim() || "";
 }
 
-export function analyticsConfigured() {
+export type AnalyticsStatus = { state: "ready" } | { state: "missing"; missing: string[] } | { state: "invalid"; message: string };
+
+export function analyticsStatus(): AnalyticsStatus {
+  const missing: string[] = [];
+  if (!propertyId()) missing.push("GA_PROPERTY_ID");
   try {
-    return Boolean(propertyId() && credentials());
+    if (!credentials()) missing.push("GA_SERVICE_ACCOUNT");
   } catch {
-    return false;
+    return { state: "invalid", message: "GA_SERVICE_ACCOUNT is set but is not valid JSON - paste the whole key file, including the outer braces." };
   }
+  if (missing.length) return { state: "missing", missing };
+  if (!/^\d+$/.test(propertyId())) {
+    return { state: "invalid", message: `GA_PROPERTY_ID should be the numeric property id (for example 501234567), not "${propertyId()}".` };
+  }
+  return { state: "ready" };
 }
 
 const base64url = (input: Buffer | string) => Buffer.from(input).toString("base64url");
@@ -63,7 +73,7 @@ async function accessToken() {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
     body: new URLSearchParams({ grant_type: "urn:ietf:params:oauth:grant-type:jwt-bearer", assertion: `${unsigned}.${signature}` }),
-    next: { revalidate: 1800 },
+    cache: "no-store",
   });
   const body = (await res.json()) as { access_token?: string; error_description?: string; error?: string };
   if (!res.ok || !body.access_token) throw new Error(body.error_description ?? body.error ?? `Google refused the key (HTTP ${res.status}).`);
@@ -81,7 +91,7 @@ async function runReport(body: Record<string, unknown>): Promise<ReportResponse[
     method: "POST",
     headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
     body: JSON.stringify(body),
-    next: { revalidate: REVALIDATE },
+    cache: "no-store",
   });
   const json = (await res.json()) as ReportResponse;
   if (!res.ok) throw new Error(json.error?.message ?? `Google Analytics refused the request (HTTP ${res.status}).`);
@@ -107,7 +117,7 @@ async function table(dimension: string, days: number, limit: number, extraDimens
   }));
 }
 
-export async function getAnalytics(days: number): Promise<AnalyticsSummary> {
+async function buildAnalytics(days: number): Promise<AnalyticsSummary> {
   const [totals, perDay, pages, countries, sources, devices] = await Promise.all([
     runReport({
       dateRanges: [{ startDate: `${days}daysAgo`, endDate: "today" }],
@@ -143,3 +153,6 @@ export async function getAnalytics(days: number): Promise<AnalyticsSummary> {
     devices,
   };
 }
+
+export const getAnalytics = (days: number) =>
+  unstable_cache(() => buildAnalytics(days), ["ga-report", String(days)], { revalidate: REVALIDATE })();

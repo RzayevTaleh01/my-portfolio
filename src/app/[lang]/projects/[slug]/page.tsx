@@ -11,7 +11,10 @@ import { Section } from "@/components/section";
 import { Button } from "@/components/ui/button";
 import { getContent } from "@/content";
 import { hasLocale, localize, locales } from "@/i18n/config";
+import { JsonLd } from "@/components/json-ld";
 import { getDictionary } from "@/i18n/dictionaries";
+import { pageMetadata } from "@/lib/seo";
+import { breadcrumbSchema, projectSchema } from "@/lib/structured-data";
 
 export async function generateStaticParams() {
   const all = await Promise.all(locales.map(async (lang) => (await getContent(lang)).projects.map((p) => ({ lang, slug: p.slug }))));
@@ -21,9 +24,18 @@ export async function generateStaticParams() {
 export async function generateMetadata(props: PageProps<"/[lang]/projects/[slug]">): Promise<Metadata> {
   const { lang, slug } = await props.params;
   if (!hasLocale(lang)) return {};
-  const project = await (await getContent(lang)).getProject(slug);
+  const content = await getContent(lang);
+  const project = content.getProject(slug);
   if (!project) return {};
-  return { title: project.title, description: project.tagline };
+  return pageMetadata({
+    lang,
+    path: `/projects/${project.slug}`,
+    title: project.title,
+    description: project.tagline,
+    profile: content.profile,
+    type: "article",
+    tags: project.stack.flatMap((g) => g.items).slice(0, 10),
+  });
 }
 
 function Bullet() {
@@ -33,8 +45,9 @@ function Bullet() {
 export default async function ProjectPage(props: PageProps<"/[lang]/projects/[slug]">) {
   const { lang, slug } = await props.params;
   if (!hasLocale(lang)) notFound();
-  const t = getDictionary(lang).caseStudy;
-  const { projects, getProject } = await getContent(lang);
+  const dict = getDictionary(lang);
+  const t = dict.caseStudy;
+  const { profile, projects, getProject } = await getContent(lang);
   const project = getProject(slug);
   if (!project) notFound();
 
@@ -57,6 +70,16 @@ export default async function ProjectPage(props: PageProps<"/[lang]/projects/[sl
 
   return (
     <article className="space-y-16">
+      <JsonLd
+        data={[
+          projectSchema(profile, lang, project),
+          breadcrumbSchema(profile, lang, [
+            { name: dict.nav.home, path: "/" },
+            { name: dict.nav.projects, path: "/projects" },
+            { name: project.title, path: `/projects/${project.slug}` },
+          ]),
+        ]}
+      />
       <header className="space-y-6">
         <Link
           href={localize(lang, "/projects")}

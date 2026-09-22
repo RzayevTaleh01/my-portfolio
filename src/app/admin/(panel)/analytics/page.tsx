@@ -1,13 +1,20 @@
 import Link from "next/link";
 import { isAdmin } from "@/lib/admin-auth";
-import { analyticsConfigured, getAnalytics, propertyId, type AnalyticsRow } from "@/lib/analytics";
+import { analyticsStatus, getAnalytics, propertyId, type AnalyticsRow, type AnalyticsStatus } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
 
 const RANGES = [7, 28, 90];
 
-function Setup() {
+function Setup({ status }: { status: AnalyticsStatus }) {
   return (
     <div className="space-y-4 px-5 py-6 text-sm lg:px-8">
+      {status.state === "missing" && (
+        <p className="rounded-lg bg-amber-50 px-3 py-2 text-[13px] text-amber-900">
+          The server does not see {status.missing.join(" and ")}. Add {status.missing.length > 1 ? "them" : "it"} in Vercel → Settings →
+          Environment Variables and redeploy - new variables only reach a new deployment.
+        </p>
+      )}
+      {status.state === "invalid" && <p className="rounded-lg bg-amber-50 px-3 py-2 text-[13px] text-amber-900">{status.message}</p>}
       <p className="text-muted-foreground">
         Connect a Google Analytics property to see visitor numbers here. The site itself already reports to Google Analytics as soon as the
         measurement ID is filled in under Profile.
@@ -90,14 +97,15 @@ export default async function AnalyticsPage(props: PageProps<"/admin/analytics">
   const { range } = await props.searchParams;
   const days = RANGES.includes(Number(range)) ? Number(range) : 28;
 
-  if (!analyticsConfigured()) {
+  const status = analyticsStatus();
+  if (status.state !== "ready") {
     return (
       <div>
         <header className="border-b px-5 py-3 lg:px-8">
           <h1 className="text-base font-semibold tracking-tight">Analytics</h1>
           <p className="text-xs text-muted-foreground">Google Analytics is not connected yet.</p>
         </header>
-        <Setup />
+        <Setup status={status} />
       </div>
     );
   }
@@ -136,7 +144,7 @@ export default async function AnalyticsPage(props: PageProps<"/admin/analytics">
       {error ? (
         <div className="space-y-3 px-5 py-6 lg:px-8">
           <p className="rounded-lg bg-amber-50 px-3 py-2 text-[13px] text-amber-900">{error}</p>
-          <Setup />
+          <Setup status={status} />
         </div>
       ) : (
         data && (

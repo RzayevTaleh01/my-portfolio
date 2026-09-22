@@ -7,14 +7,24 @@ import { PublicationList } from "@/components/publication";
 import { PageHeader, Section } from "@/components/section";
 import { getContent } from "@/content";
 import { hasLocale, localize } from "@/i18n/config";
+import { JsonLd } from "@/components/json-ld";
 import { getDictionary } from "@/i18n/dictionaries";
+import { pageMetadata } from "@/lib/seo";
+import { breadcrumbSchema, listSchema } from "@/lib/structured-data";
 import { getAllPosts } from "@/lib/posts";
 import { sortPublications } from "@/lib/utils";
 
 export async function generateMetadata(props: PageProps<"/[lang]/research">): Promise<Metadata> {
   const { lang } = await props.params;
   if (!hasLocale(lang)) return {};
-  return { title: getDictionary(lang).research.title, description: (await getContent(lang)).researchStatement };
+  const content = await getContent(lang);
+  return pageMetadata({
+    lang,
+    path: "/research",
+    title: getDictionary(lang).research.title,
+    description: content.researchStatement,
+    profile: content.profile,
+  });
 }
 
 export default async function ResearchPage(props: PageProps<"/[lang]/research">) {
@@ -27,6 +37,15 @@ export default async function ResearchPage(props: PageProps<"/[lang]/research">)
 
   return (
     <div className="space-y-20">
+      <JsonLd
+        data={[
+          listSchema(profile, lang, t.research.title, systems.map((p) => ({ title: p.title, path: `/projects/${p.slug}` }))),
+          breadcrumbSchema(profile, lang, [
+            { name: t.nav.home, path: "/" },
+            { name: t.research.title, path: "/research" },
+          ]),
+        ]}
+      />
       <PageHeader title={t.research.title} description={researchStatement} />
 
       <Section id="directions" title={t.research.directions}>

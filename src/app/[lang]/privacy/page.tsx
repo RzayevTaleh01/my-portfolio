@@ -5,12 +5,14 @@ import { PageHeader } from "@/components/section";
 import { getContent } from "@/content";
 import { fmt, hasLocale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
+import { pageMetadata } from "@/lib/seo";
 
 export async function generateMetadata(props: PageProps<"/[lang]/privacy">): Promise<Metadata> {
   const { lang } = await props.params;
   if (!hasLocale(lang)) return {};
   const t = getDictionary(lang).privacy;
-  return { title: t.title, description: t.description };
+  const { profile } = await getContent(lang);
+  return { ...pageMetadata({ lang, path: "/privacy", title: t.title, description: t.description, profile }), robots: { index: false, follow: true } };
 }
 
 function WithEmail({ text, email }: { text: string; email?: string }) {

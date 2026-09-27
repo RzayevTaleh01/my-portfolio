@@ -22,7 +22,7 @@ import {
   type CvRegionConfig,
   type CvSource,
 } from "@/lib/cv/model";
-import { cvDownloadName } from "@/lib/site/content";
+import { cvCompanyDownloadName } from "@/lib/site/content";
 import { cn } from "@/lib/utils";
 
 type Storage = "blob" | "file" | "none";
@@ -83,6 +83,7 @@ export function CvBuilder({ source, initialConfig, storage }: Props) {
   const [config, setConfig] = useState(() => ownCopies(source, initialConfig));
   const [region, setRegion] = useState<Region>("sk");
   const [saving, setSaving] = useState(false);
+  const [company, setCompany] = useState("");
   const [message, setMessage] = useState<{ tone: "ok" | "error"; text: string } | null>(null);
 
   const current = config.regions[region];
@@ -351,8 +352,21 @@ export function CvBuilder({ source, initialConfig, storage }: Props) {
                 <RefreshCw className="size-3.5" />
               </Button>
               {preview.url && (
+                <input
+                  value={company}
+                  onChange={(e) => setCompany(e.target.value)}
+                  placeholder="Company"
+                  aria-label="Company name for the file name"
+                  className={cn(inputClass, "h-8 w-36 text-[13px]")}
+                />
+              )}
+              {preview.url && (
                 <Button size="sm" variant="outline" asChild>
-                  <a href={preview.url} download={cvDownloadName(source.en.profile.name)}>
+                  <a
+                    href={preview.url}
+                    download={cvCompanyDownloadName(source.en.profile.name, company)}
+                    onClick={(e) => e.currentTarget.setAttribute("download", cvCompanyDownloadName(source.en.profile.name, company))}
+                  >
                     <Download className="size-3.5" /> Draft PDF
                   </a>
                 </Button>

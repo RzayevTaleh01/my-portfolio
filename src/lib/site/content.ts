@@ -51,11 +51,10 @@ export function cvDownloadName(name: string) {
   return `${name.trim().replace(/\s+/g, "_") || "Resume"}_Resume.pdf`;
 }
 
-export function cvCompanyDownloadName(name: string, company: string, at = new Date()) {
+export function cvStampedDownloadName(name: string, at = new Date()) {
   const pad = (n: number) => String(n).padStart(2, "0");
   const stamp = `${at.getFullYear()}-${pad(at.getMonth() + 1)}-${pad(at.getDate())}_${pad(at.getHours())}-${pad(at.getMinutes())}`;
-  const firm = company.trim().replace(/[\\/:*?"<>|]+/g, "").replace(/\s+/g, "_");
-  return cvDownloadName(name).replace(/\.pdf$/, `${firm ? `_${firm}` : ""}_${stamp}.pdf`);
+  return cvDownloadName(name).replace(/\.pdf$/, `_${stamp}.pdf`);
 }
 
 export function mediaUrl(key: string, version: number) {

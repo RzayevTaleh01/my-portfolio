@@ -13,7 +13,6 @@ import { getDictionary } from "@/i18n/dictionaries";
 import { pageMetadata } from "@/lib/seo";
 import { breadcrumbSchema } from "@/lib/structured-data";
 import { getRegion } from "@/lib/region";
-import { cvDownloadName } from "@/lib/site/content";
 import { sortPublications } from "@/lib/utils";
 
 export async function generateMetadata(props: PageProps<"/[lang]/cv">): Promise<Metadata> {
@@ -87,7 +86,7 @@ export default async function CvPage(props: PageProps<"/[lang]/cv">) {
             ))}
           </p>
         </div>
-        {profile.cvPdf && <DownloadButton href={profile.cvPdf} label={t.pdf} fileName={cvDownloadName(profile.name)} />}
+        {profile.cvPdf && <DownloadButton href={profile.cvPdf} label={t.pdf} name={profile.name} />}
       </header>
 
       <CvSection title={t.profile}>
